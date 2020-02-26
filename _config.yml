@@ -11,7 +11,7 @@
 carpentry: "ea"
 
 # Overall title for pages.
-title: "Lesson Title"
+title: "Parallel Programming in Python"
 
 # Life cycle stage of the lesson
 # possible values: "pre-alpha", "alpha", "beta", "stable"
@@ -27,10 +27,10 @@ kind: "lesson"
 # Magic to make URLs resolve both locally and on GitHub.
 # See https://help.github.com/articles/repository-metadata-on-github-pages/.
 # Please don't change it: <USERNAME>/<PROJECT> is correct.
-repository: <USERNAME>/<PROJECT>
+repository: escience-academy/lesson-python
 
 # Email address, no mailto:
-email: "team@carpentries.org"
+email: "j.hidding@esciencecenter.nl"
 
 # Sites.
 amy_site: "https://amy.carpentries.org/workshops"

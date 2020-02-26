@@ -1,0 +1,393 @@
+<?xml version="1.0"?>
+<minder>
+  <theme name="Solarized Dark" index="28"/>
+  <styles>
+    <style level="0" isset="true" linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="rounded" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="1" isset="true" linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="2" isset="true" linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="3" isset="true" linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="4" isset="true" linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="5" isset="true" linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="6" isset="true" linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="7" isset="true" linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="8" isset="true" linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="9" isset="true" linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+    <style level="10" isset="true" linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true" connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+  </styles>
+  <drawarea x="-888.76953125" y="-378.0078125" scale="1"/>
+  <images>
+    <image id="1" uri="file:///home/johannes/Code/academy/lesson-parallel-python/fig/snert.jpg" ext=".jpg"/>
+    <image id="2" uri="file:///home/johannes/Code/academy/lesson-parallel-python/fig/calc_pi_3.svg" ext=".svg"/>
+  </images>
+  <nodes>
+    <node id="0" posx="1049.140625" posy="734.89062500000068" maxwidth="200" width="202" height="64" side="left" fold="false" treesize="478" layout="Horizontal">
+      <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="rounded" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+      <formatting/>
+      <nodename>Parallel Programming in Python</nodename>
+      <nodenote></nodenote>
+      <nodes>
+        <node id="29" posx="1351.140625" posy="582.890625" maxwidth="200" width="160" height="46" side="right" fold="false" treesize="156" color="#b58900" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Bypassing the GIL</nodename>
+          <nodenote></nodenote>
+          <nodes>
+            <node id="39" posx="1611.1406249999986" posy="527.89062500000045" maxwidth="200" width="181" height="64" side="right" fold="false" treesize="64" color="#b58900" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Numba @jit(nopython=True)</nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="40" posx="1611.1406249999986" posy="591.890625" maxwidth="200" width="116" height="46" side="right" fold="false" treesize="46" color="#b58900" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>IO functions</nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="41" posx="1611.1406249999986" posy="637.89062499999977" maxwidth="200" width="154" height="46" side="right" fold="false" treesize="46" color="#b58900" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Foreign functions</nodename>
+              <nodenote></nodenote>
+              <nodes>
+                <node id="42" posx="1865.1406250000005" posy="637.89062499999977" maxwidth="200" width="80" height="46" side="right" fold="false" treesize="46" color="#b58900" layout="Horizontal">
+                  <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+                  <formatting/>
+                  <nodename>Numpy</nodename>
+                  <nodenote></nodenote>
+                </node>
+              </nodes>
+            </node>
+          </nodes>
+        </node>
+        <node id="43" posx="1351.140625" posy="729.89062500000068" maxwidth="200" width="141" height="46" side="right" fold="false" treesize="138" color="#859900" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Timing/profiling</nodename>
+          <nodenote></nodenote>
+          <nodes>
+            <node id="44" posx="1592.1406249999986" posy="683.89062500000023" maxwidth="200" width="146" height="46" side="right" fold="false" treesize="46" color="#859900" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Jupyter %%time</nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="45" posx="1592.1406249999986" posy="729.89062500000068" maxwidth="200" width="156" height="46" side="right" fold="false" treesize="46" color="#859900" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Jupyter %%timeit</nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="47" posx="1592.1406249999986" posy="775.89062499999977" maxwidth="200" width="82" height="46" side="right" fold="false" treesize="46" color="#859900" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>cProfile</nodename>
+              <nodenote></nodenote>
+            </node>
+          </nodes>
+        </node>
+        <node id="10" posx="1351.140625" posy="844.89062500000045" maxwidth="200" width="101" height="46" side="right" fold="false" treesize="92" color="#6c71c4" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Primitives</nodename>
+          <nodenote></nodenote>
+          <nodes>
+            <node id="11" posx="1552.1406250000005" posy="821.89062500000023" maxwidth="200" width="98" height="46" side="right" fold="false" treesize="46" color="#6c71c4" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>threading</nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="12" posx="1552.1406250000005" posy="867.890625" maxwidth="200" width="144" height="46" side="right" fold="false" treesize="46" color="#6c71c4" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>multiprocessing</nodename>
+              <nodenote></nodenote>
+            </node>
+          </nodes>
+        </node>
+        <node id="35" posx="1351.140625" posy="936.89062499999955" maxwidth="200" width="89" height="46" side="right" fold="false" treesize="92" color="#cb4b16" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Modules</nodename>
+          <nodenote></nodenote>
+          <nodes>
+            <node id="36" posx="1540.1406250000005" posy="913.890625" maxwidth="200" width="64" height="46" side="right" fold="false" treesize="46" color="#cb4b16" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Dask</nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="37" posx="1540.1406250000005" posy="959.89062499999955" maxwidth="200" width="43" height="46" side="right" fold="false" treesize="46" color="#cb4b16" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>...</nodename>
+              <nodenote></nodenote>
+            </node>
+          </nodes>
+        </node>
+      </nodes>
+    </node>
+    <node id="2" posx="1073.453125" posy="319.8671875" maxwidth="172.1953125" width="79" height="46" side="left" fold="false" treesize="322" layout="Horizontal">
+      <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="rounded" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+      <formatting/>
+      <nodename>Python</nodename>
+      <nodenote></nodenote>
+      <nodes>
+        <node id="5" posx="1252.453125" posy="204.8671875" maxwidth="200" width="191" height="46" side="right" fold="false" treesize="92" color="#b58900" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Accelerating functions</nodename>
+          <nodenote></nodenote>
+          <nodes>
+            <node id="7" posx="1543.4531249999986" posy="181.8671875" maxwidth="200" width="80" height="46" side="right" fold="false" treesize="46" color="#b58900" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Numba</nodename>
+              <nodenote></nodenote>
+              <nodes>
+                <node id="17" posx="1723.4531249999986" posy="181.8671875" maxwidth="200" width="57" height="46" side="right" fold="false" treesize="46" color="#b58900" layout="Horizontal">
+                  <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+                  <formatting/>
+                  <nodename>@jit</nodename>
+                  <nodenote></nodenote>
+                </node>
+              </nodes>
+            </node>
+            <node id="8" posx="1543.4531249999986" posy="227.8671875" maxwidth="200" width="80" height="46" side="right" fold="false" treesize="46" color="#b58900" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>NumPy</nodename>
+              <nodenote></nodenote>
+            </node>
+          </nodes>
+        </node>
+        <node id="6" posx="1252.453125" posy="342.8671875" maxwidth="200" width="174" height="46" side="right" fold="false" treesize="184" color="#859900" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Function decorators</nodename>
+          <nodenote></nodenote>
+          <nodes>
+            <node id="13" posx="1526.4531249999986" posy="273.8671875" maxwidth="200" width="109" height="46" side="right" fold="false" treesize="46" color="#859900" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>@ notation</nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="14" posx="1526.4531249999986" posy="319.8671875" maxwidth="200" width="150" height="46" side="right" fold="false" treesize="46" color="#859900" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>nested functions</nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="15" posx="1526.4531249999986" posy="365.8671875" maxwidth="200" width="168" height="46" side="right" fold="false" treesize="46" color="#859900" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>function as a value</nodename>
+              <nodenote></nodenote>
+            </node>
+            <node id="16" posx="1526.4531249999986" posy="411.8671875" maxwidth="200" width="82" height="46" side="right" fold="false" treesize="46" color="#859900" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>lambda</nodename>
+              <nodenote></nodenote>
+            </node>
+          </nodes>
+        </node>
+        <node id="28" posx="1252.453125" posy="457.8671875" maxwidth="200" width="196" height="46" side="right" fold="false" treesize="46" color="#268bd2" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Global Interpreter Lock</nodename>
+          <nodenote></nodenote>
+        </node>
+      </nodes>
+    </node>
+    <node id="19" posx="1079.0859375" posy="-215.4921875" maxwidth="200" width="100" height="46" side="left" fold="false" treesize="184" layout="Horizontal">
+      <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="rounded" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+      <formatting/>
+      <nodename>Compiling</nodename>
+      <nodenote></nodenote>
+      <nodes>
+        <node id="20" posx="1279.0859374999986" posy="-284.4921875" maxwidth="200" width="127" height="46" side="right" fold="false" treesize="46" color="#2aa198" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Native binary</nodename>
+          <nodenote></nodenote>
+        </node>
+        <node id="23" posx="1279.0859374999986" posy="-238.4921875" maxwidth="200" width="93" height="46" side="right" fold="false" treesize="46" color="#cb4b16" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Compiler</nodename>
+          <nodenote></nodenote>
+          <nodes>
+            <node id="25" posx="1472.0859374999986" posy="-238.4921875" maxwidth="200" width="111" height="46" side="right" fold="false" treesize="46" color="#cb4b16" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Just-in-time</nodename>
+              <nodenote></nodenote>
+            </node>
+          </nodes>
+        </node>
+        <node id="27" posx="1279.0859374999986" posy="-192.4921875" maxwidth="200" width="118" height="46" side="right" fold="false" treesize="46" color="#859900" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Source code</nodename>
+          <nodenote></nodenote>
+        </node>
+        <node id="22" posx="1279.0859374999986" posy="-146.4921875" maxwidth="200" width="200" height="46" side="right" fold="false" treesize="46" color="#dc322f" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Interpreted (byte) code</nodename>
+          <nodenote></nodenote>
+        </node>
+      </nodes>
+    </node>
+    <node id="30" posx="782.9375" posy="330.28515625" maxwidth="200" width="184" height="46" side="left" fold="false" treesize="184" layout="Horizontal">
+      <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="rounded" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+      <formatting/>
+      <nodename>Parallel Programming</nodename>
+      <nodenote></nodenote>
+      <nodes>
+        <node id="51" posx="495.9375" posy="261.28515625" maxwidth="200" width="187" height="46" side="left" fold="false" treesize="46" color="#6c71c4" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Task based workflows</nodename>
+          <nodenote></nodenote>
+          <nodes>
+            <node id="55" posx="293.9375" posy="261.28515625" maxwidth="200" width="102" height="46" side="left" fold="false" treesize="46" color="#6c71c4" layout="Horizontal">
+              <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+              <formatting/>
+              <nodename>Call-graph</nodename>
+              <nodenote></nodenote>
+            </node>
+          </nodes>
+        </node>
+        <node id="31" posx="491.9375" posy="307.28515625" maxwidth="200" width="191" height="46" side="left" fold="false" treesize="46" color="#d33682" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Embarrasingly Parallel</nodename>
+          <nodenote></nodenote>
+        </node>
+        <node id="32" posx="502.9375" posy="353.28515625" maxwidth="200" width="180" height="46" side="left" fold="false" treesize="46" color="#2aa198" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Worker/queue model</nodename>
+          <nodenote></nodenote>
+        </node>
+        <node id="33" posx="485.9375" posy="399.28515625" maxwidth="200" width="197" height="46" side="left" fold="false" treesize="46" color="#dc322f" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Message passing (MPI)</nodename>
+          <nodenote></nodenote>
+        </node>
+      </nodes>
+    </node>
+    <node id="50" posx="644.07421875" posy="-62.171875" maxwidth="200" width="228" height="202" side="left" fold="false" treesize="202" layout="Horizontal">
+      <nodeimage id="1" x="0" y="0" w="600" h="451"/>
+      <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+      <formatting/>
+      <nodename>Preparing Snert</nodename>
+      <nodenote>1. Pour broth and water into a soup pan, add the split peas and bay leaf and bring to boil.
+2. Remove the foam from the water with a skimmer and cover. Gently simmer for about 60 minutes.
+3. Clean the vegetables, cut the leeks, carrots and celeriac into pieces, peel and chop the onion and chop the celery.
+4. Remove the bay leaf from the soup. If the peas are not yet disintegrated after one hour, you may use a blender.
+5. Add the vegetables to the soup and simmer for another 20 minutes. Stir occasionally.
+6. Taste and bring the soup to flavour with salt and pepper.
+7. Let the soup rest for a day, and reheat before serving.</nodenote>
+      <nodes>
+        <node id="52" posx="421.07421875" posy="-48.171875" maxwidth="200" width="123" height="46" side="left" fold="false" treesize="46" color="#d33682" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Linear recipe</nodename>
+          <nodenote></nodenote>
+        </node>
+        <node id="53" posx="370.07421875" posy="-2.171875" maxwidth="200" width="174" height="46" side="left" fold="false" treesize="46" color="#2aa198" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Inherent parallelism</nodename>
+          <nodenote></nodenote>
+        </node>
+        <node id="54" posx="324.07421875" posy="43.828125" maxwidth="200" width="220" height="82" side="left" fold="false" treesize="82" color="#859900" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="squared" nodewidth="200" nodeborderwidth="4" nodefill="true" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Exercise: draw a graph indicating how this can be parallelised</nodename>
+          <nodenote></nodenote>
+        </node>
+      </nodes>
+    </node>
+    <node id="56" posx="663.09375" posy="528.67578125" maxwidth="200" width="228" height="352" side="left" fold="false" treesize="352" layout="Horizontal">
+      <nodeimage id="2" x="0" y="0" w="400" h="600"/>
+      <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+      <formatting/>
+      <nodename>Computing &#x3C0;</nodename>
+      <nodenote></nodenote>
+      <nodes>
+        <node id="57" posx="446.09375" posy="626.67578125" maxwidth="200" width="117" height="46" side="left" fold="false" treesize="46" color="#cb4b16" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Monte-Carlo</nodename>
+          <nodenote></nodenote>
+        </node>
+        <node id="58" posx="406.09375" posy="672.67578125" maxwidth="200" width="157" height="46" side="left" fold="false" treesize="46" color="#b58900" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="underlined" nodewidth="200" nodeborderwidth="4" nodefill="false" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Random numbers</nodename>
+          <nodenote></nodenote>
+        </node>
+        <node id="59" posx="345.09375" posy="718.67578125" maxwidth="200" width="218" height="64" side="left" fold="false" treesize="64" color="#859900" layout="Horizontal">
+          <style linktype="curved" linkwidth="4" linkarrow="false" linkdash="solid" nodeborder="squared" nodewidth="200" nodeborderwidth="4" nodefill="true" nodemargin="8" nodepadding="6" nodefont="Sans 11" nodemarkup="true"/>
+          <formatting/>
+          <nodename>Exercise: how can we parallelise this algorithm?</nodename>
+          <nodenote></nodenote>
+        </node>
+      </nodes>
+    </node>
+  </nodes>
+  <connections>
+    <connection from_id="2" to_id="0" drag_x="1131.5468750000068" drag_y="554.87890624999977" color="rgb(119,119,119)">
+      <style connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+      <title></title>
+      <note></note>
+    </connection>
+    <connection from_id="22" to_id="2" drag_x="1233.5195312500064" drag_y="109.68750000000136" color="rgb(119,119,119)">
+      <style connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+      <title></title>
+      <note></note>
+    </connection>
+    <connection from_id="25" to_id="17" drag_x="1639.7695312500086" drag_y="-5.3124999999987494" color="rgb(119,119,119)">
+      <style connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+      <title></title>
+      <note></note>
+    </connection>
+    <connection from_id="28" to_id="29" drag_x="1390.7968750000073" drag_y="543.37890625" color="rgb(119,119,119)">
+      <style connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+      <title></title>
+      <note></note>
+    </connection>
+    <connection from_id="30" to_id="0" drag_x="1012.5390625000043" drag_y="560.08789062500023" color="rgb(119,119,119)">
+      <style connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+      <title></title>
+      <note></note>
+    </connection>
+    <connection from_id="17" to_id="39" drag_x="1726.7968750000077" drag_y="382.37890625000182" color="rgb(96,96,96)">
+      <style connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+      <title></title>
+      <note></note>
+    </connection>
+    <connection from_id="51" to_id="50" drag_x="652.25585937499966" drag_y="122.556640625" color="rgb(96,96,96)">
+      <style connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+      <title></title>
+      <note></note>
+    </connection>
+    <connection from_id="55" to_id="54" drag_x="389.50585937499983" drag_y="184.55664062499909" color="rgb(96,96,96)">
+      <style connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+      <title></title>
+      <note></note>
+    </connection>
+    <connection from_id="31" to_id="56" drag_x="682.265625" drag_y="517.48046875" color="rgb(96,96,96)">
+      <style connectiondash="dotted" connectionwidth="2" connectionarrow="fromto" connectionpadding="3" connectionfont="Sans 10"/>
+      <title></title>
+      <note></note>
+    </connection>
+  </connections>
+</minder>
