@@ -10,8 +10,12 @@ FIXME: home page introduction
 {% comment %} This is a comment in Liquid {% endcomment %}
 
 > ## Prerequisites
+> The participant should be:
+> - familiar with basic Python
+> - comfortable working in Jupyter
 >
-> FIXME
+> Recommended:
+> - understand how NumPy works
 {: .prereq}
 
 {% include links.md %}
