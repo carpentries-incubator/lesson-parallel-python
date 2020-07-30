@@ -12,8 +12,6 @@ objectives:
 - "Recognize serial and parallel paterns"
 - "Identify problems that can be parallelized"
 - "Identify common pitfalls"
-- "View performance on system monitor"
-- "Do timing/benchmarking"
 keypoints:
 - "Programs are parallelizable if you can identify independent tasks."
 - "To make programs scalable, you need to chunk the work."
@@ -30,6 +28,23 @@ keypoints:
 Most problems will fit in one of two categories:
 - I wrote this code in Python and its not fast enough.
 - I run this code on my Laptop, but the target problem size is bigger than the RAM.
+
+In this course we will show several possible ways of speeding up your program and making it ready
+to function in parallel. We will be introducing the following modules
+
+1. `threading` speeding up a program on a single computer (shared memory)
+3. `dask` making things a lot easier
+4. `numba` speed up your procedures
+5. `memory_profile` monitor memory performance
+
+More importantly, we will show how to change the design of a program to fit parallel paradigms. This
+often involves techniques from **functional programming**.
+
+What we won't talk about: **distributed programming**, this is a huge can of worms. It is easy to
+show simple examples, but depending on the problem, solutions will be wildly different. Dask has a
+lot of functionality to help you in setting up for running on a network. The important bit is that,
+once you have made your code suitable for parallel computing, you'll have the right mind-set to get
+it to work in a distributed environment.
 
 # What is parallel computing?
 Suppose we have a computation, where each step **depends** on a previous one:
@@ -75,51 +90,9 @@ occasionally.
 > > - You can cut vegetables while simmering the split peas.
 > > - If you have help, you can parallelize cutting vegetables further.
 > > - There are two 'workers': the cook and the stove.
+> > ![dependency diagram](../fig/soup.png)
 > {: .solution}
 {: .challenge}
-
-# A first example with Dask
-We will get into creating parallel programs in Python later. First let's see a small example. Open
-your system monitor, and run the following:
-
-~~~python
-import numpy as np
-result = np.arange(10**8).sum()
-~~~
-{: .source}
-
-~~~python
-import dask.array as da
-work = da.arange(10**8).sum()
-result = work.compute()
-~~~
-{: .source}
-
-![System monitor](../fig/system-monitor.jpg)
-
-How can we test in a more rigorous way? In Jupyter we can use some line magics!
-
-~~~python
-%%time
-np.arange(10**8).sum()
-~~~
-{: .source}
-
-This was only a single run, how can we trust this?
-
-~~~python
-%%timeit
-np.arange(10**8).sum()
-~~~
-{: .source}
-
-This does not tell you anything about memory consumption or efficiency though.
-We will use the [`memory_profiler` package](https://github.com/pythonprofilers/memory_profiler) to track memory usage.
-
-~~~sh
-pip install memory_profiler
-~~~
-{: .source}
 
 {% include links.md %}
 

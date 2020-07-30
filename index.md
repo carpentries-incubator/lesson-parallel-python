@@ -15,7 +15,7 @@ FIXME: home page introduction
 > - comfortable working in Jupyter
 >
 > Recommended:
-> - understand how NumPy works
+> - understand how NumPy and/or Pandas work
 {: .prereq}
 
 {% include links.md %}
