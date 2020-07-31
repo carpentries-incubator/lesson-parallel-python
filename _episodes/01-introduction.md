@@ -1,7 +1,7 @@
 ---
 title: "Introduction"
-teaching: 0
-exercises: 0
+teaching: 20
+exercises: 10
 questions:
 - "How can I speed-up my program?"
 - "How can I scale my program to larger data sets?"
