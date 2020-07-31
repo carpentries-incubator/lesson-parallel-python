@@ -7,9 +7,11 @@ questions:
 - "How do we learn about efficiency?"
 objectives:
 - "View performance on system monitor"
+- "Find out how many cores your machine has"
 - "Use `%time` and `%timeit` line-magic"
 - "Use a memory profiler"
 - "Plot performance against number of work units"
+- "Understand the influence of hyper-threading on timings."
 keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
@@ -61,23 +63,22 @@ pip install memory_profiler
 
 FIXME: workout example in Jupyter, see gh:nlesc/noodles notebook
 
-{% include links.md %}
 
-#Alternate Profiling
+# Alternate Profiling
 
-Dash has a couple of rofiling options as well
+Dask has a couple of rofiling options as well
 
 ~~~python
 from dask.diagnostics import Profiler, ResourceProfiler
 work = da.arange(10**8).sum()
 with Profiler() as prof, ResourceProfiler(dt=0.001) as rprof:
     result2 = work.compute()
-    
+
 from bokeh.plotting import output_notebook
 from dask.diagnostics import visualize
 visualize([prof,rprof], output_notebook())
 ~~~
-FIXME: somehow the visualisation turns up in a separate file and in the notebook, I cannot disable the separate file atm. 
+FIXME: somehow the visualisation turns up in a separate file and in the notebook, I cannot disable the separate file atm.
 
 
 ~~~python
@@ -86,3 +87,43 @@ with ResourceProfiler(dt=0.001) as rprof2:
 visualize([rprof2], output_notebook())
 ~~~
 FIXME: without the Profiler, the time axis is not nicely scaled. Profiler does not work with dask commands.
+
+# How many cores?
+You can find out how many cores you have on your machine.
+
+On Linux:
+~~~bash
+lscpu
+~~~
+{: .source}
+
+FIXME: add respective commands on Windows and Mac
+
+On a machine with 8 listed cores doing this (admittedly oversimplistic) benchmark:
+
+~~~python
+import timeit
+x = [timeit.timeit(
+        stmt=f"da.arange(5*10**9).sum().compute(num_workers={n})",
+        setup="import dask.array as da",
+        number=1)
+     for n in range(1, 9)]
+~~~
+
+Gives the following result:
+
+~~~python
+import pandas as pd
+pd.DataFrame({"n": range(1, 9), "t": x})
+data.set_index("n").plot()
+~~~
+
+![Timings against number of cores](../fig/more-cores.svg)
+
+> # Discussion
+> Why is the runtime increasing if we add more than 4 cores?
+> This has to do with **hyper-threading**. On most architectures it makes not much sense to use more
+> workers than the number of physical cores you have.
+{: .discussion}
+
+{% include links.md %}

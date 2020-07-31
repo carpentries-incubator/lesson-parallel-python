@@ -3,12 +3,14 @@ title: "Computing Pi"
 teaching: 60
 exercises: 30
 questions:
-- "FIXME"
+- "What is the GIL?"
+- "How do I parallelize an elementary program?"
+- "What is vector-based parallelism?"
+- "What is task-based parallelism?"
+- "How do I use multiple threads in Python?"
 objectives:
 - "Understand the GIL"
-- "Apply `numba.jit`"
-- "Be creative with `dask.bag`"
-- "Extra: use `dask.delayed`"
+- "Apply `numba.jit` to lift the GIL"
 keypoints:
 - "Vectorized algorithms are both a blessing and a curse."
 - "Many problems fit a pattern of `map`, `filter` and `reduce` operations."
@@ -106,6 +108,21 @@ We can demonstrate that this is much faster than the 'naive' implementation. Thi
 {: .challenge}
 
 # The GIL
+The Global Interpreter Lock is an infamous feature of the Python interpreter. It both guarantees
+inner thread sanity, making programming Python safe, and prevents us from using multiple cores from
+a single Python instance. There are roughly two classes of solutions to circumvent/lift the GIL:
+
+- Run multiple Python instances: `multiprocessing`
+- Have important code outside Python: OS operations, C++ extensions, cython, numba
+
+The downside of running multilple Python instances is that we need to share program state between
+different processes. To this end, you need to serialize objects using `pickle`, `json` or similar,
+creating a large overhead. The alternative is to bring parts of our code outside Python. Numpy has
+many routines that are largely situated outside of the GIL. The only way to know for sure is trying
+out and profiling your application.
+
+To write your own routines that do not live under the GIL there are several options: fortunately
+`numba` makes this very easy.
 
 # Go Numba
 Numba makes it easier to create accellerated functions. You can use it with the decorator `numba.jit`.
@@ -166,58 +183,43 @@ And with Numba:
 > {: .solution}
 {: .challenge}
 
-# Parallelize using Dask bags
-We can run the Numba version of `comp_pi` in parallel using Dask bags.
-
-> ## Discussion
-> Open the Dask documentation on bags: https://docs.dask.org/en/latest/bag-api.html
-> Discuss the `map` and `filter` and `reduction` methods
-{: .discussion}
-
-> ## Challenge
-> Look at the `mean`, `pluck`, and `topk` methods, match them up with `map`, `filter` and
-> `reduction` methods.
-> > ## Solution
-> > `mean` is a reduction, `pluck` is a mapping, and `topk` is a filter.
-> {: .solution}
-{: .challenge}
-
-> ## Challenge
-> Rewrite the following program in terms of a Dask bag. Make it
-> spicy by using your favourite literature classic from project Gutenberg as input.
-> Example: Adventures of Sherlock Holmes, https://www.gutenberg.org/files/1661/1661-0.txt
->
-> ~~~python
-> text = "Lorem ipsum"
-> words = set()
-> for w in text.split():
->     words.insert(w)
-> print("This corpus contains {n} unique words.".format(n=len(w)))
-> ~~~
->
-> Tip: start by just counting all the words in the corpus, then expand from there.
-> Extra: use `nltk.stem` to count word stems in stead of different variants of the same word.
->
-> > ## Solution
-> > Use `read_text` to read the text efficiently, split the words and `flatten` to create a
-> > single bag, then `map` to capitalize all the words (or find their stems).
-> > To split the words, use `group_by` and finaly `count` to reduce to the number of
-> > words. Other option `distinct`.
-> > FIXME: add tested implementation
-> {: .solution}
-{: .challenge}
+# The `threading` module
+We now build a queue/worker model. This is the basis of multi-threading applications in Python. At
+this point creating a parallel program is quite involved. After we've done this, we'll see ways to
+do the same in Dask without mucking about with threads directly.
 
 ~~~python
-import dask.bag
-bag = dask.bag.from_sequence(repeat(10**7, 24))
-shots = bag.map(calc_pi)
-estimate = shots.mean()
-estimate.visualize()
-estimate.compute()
-~~~
-{: .source}
+import queue
+import threading
 
-FIXME: profile this program
+### We need to define a worker function that fetches jobs from the queue.
+def worker(q):
+    while True:
+        try:
+            x = q.get(block=False)
+            print(sum_primes(x), end=' ', flush=True)
+        except queue.Empty:
+            break
+
+### Create the queue, and fill it with input values
+work_queue = queue.Queue()
+for i in input_range:
+    work_queue.put(i)
+
+### Start a number of threads
+threads = [
+    threading.Thread(target=worker, args=(work_queue,))
+    for i in range(ncpus)]
+
+for t in threads:
+    t.start()
+
+### Wait until all of them are done
+for t in threads:
+    t.join()
+
+print()
+~~~
 
 > ## Discussion: where's the speed-up?
 > We still need to unlock the GIL
@@ -226,83 +228,4 @@ FIXME: profile this program
 > ## Challenge: profile the fixed program
 > FIXME: solution
 {: .challenge}
-
-# Extra: Dask Delayed
-FIXME: add output
-
-We can rewrite the same program using `dask.delayed`
-
-~~~python
-from dask import delayed
-~~~
-{: .source}
-
-The `delayed` decorator builds a dependency graph from function calls.
-
-~~~python
-@delayed
-def add(a, b):
-    return a + b
-~~~
-{: .source}
-
-~~~python
-x_p = add(1, 2)
-y_p = add(x, 3)
-z_p = add(x_p, y_p)
-z_p.visualize()
-~~~
-{: .source}
-
-> ## Note
-> It is often a good idea to suffix variables that you know are promises with `_p`. That way you
-> keep track of promises versus immediate values.
-{: .callout}
-
-We can also make a **promise** by directly calling `delayed`
-
-~~~python
-N = 10**7
-x_p = delayed(calc_pi)(N)
-~~~
-{: .source}
-
-It is now possible to call `visualize` or `compute` methods on `x_p`.
-
-We can build new primitives from the ground up.
-
-~~~python
-@delayed
-def gather(*args):
-    return list(args)
-~~~
-{: .source}
-
-> ## Challenge
-> Can you describe what the `gather` function does in terms of lists and promises?
-> > ## Solution
-> > It turns a list of promises into a promise of a list.
-> {: .solution}
-{: .challenge}
-
-> ## Challenge
-> Write a `delayed` function that computes the mean of its arguments. Complete the program to
-> compute pi in parallel.
->
-> > ## Solution
-> > ~~~python
-> > @delayed
-> > def mean(*args):
-> >     return sum(args) / len(args)
-> >
-> > pi_p = mean(*(delayed(calc_pi)(N) for i in range(10)))
-> > pi_p.compute()
-> > ~~~
-> > {: .source}
-> {: .solution}
-{: .challenge}
-
-In practice you may not need to use `@delayed` functions too often, but it does offer ultimate
-flexibility. You can build complex computational workflows in this manner, replacing shell
-scripting, make files and the likes.
 
