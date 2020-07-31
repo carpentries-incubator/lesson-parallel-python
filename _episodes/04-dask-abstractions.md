@@ -1,14 +1,22 @@
 ---
 title: "Dask abstractions: bags and delays"
-teaching: 0
-exercises: 0
+teaching: 60
+exercises: 30
 questions:
-- "How can I "
+- "What abstractions does Dask offer?"
+- "What programming patterns exist in the parallel universe?"
 objectives:
-- "First learning objective. (FIXME)"
+- "Recognize `map`, `filter` and `reduce` patterns."
+- "Create programs using these building blocks."
+- "Use the `visualize` method to create dependecy graphs."
+- "Understand the abstraction of delayed evaluation."
 keypoints:
-- "First key point. Brief Answer to questions. (FIXME)"
+- "Using abstractions keep programs managable."
 ---
+
+We've seen some use of Dask `array`, now we will also dive into `bag` and `delayed` sub-modules.
+(Dask also has Pandas-like `dataframe` and an advanced `futures` framework; `dataframe` is similar
+in character to `array`, while `futures` fall outside the scope of this tutorial.)
 
 # Parallelize using Dask bags
 We can run the Numba version of `comp_pi` in parallel using Dask bags.

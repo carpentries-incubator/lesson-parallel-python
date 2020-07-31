@@ -1,7 +1,7 @@
 ---
 title: "Benchmarking your code"
-teaching: 0
-exercises: 0
+teaching: 40
+exercises: 20
 questions:
 - "How do we know our program ran faster?"
 - "How do we learn about efficiency?"
@@ -13,7 +13,9 @@ objectives:
 - "Plot performance against number of work units"
 - "Understand the influence of hyper-threading on timings."
 keypoints:
-- "First key point. Brief Answer to questions. (FIXME)"
+- "It is often non-trivial to understand performance."
+- "Memory is just as important as speed."
+- "Measuring is knowing."
 ---
 
 # A first example with Dask

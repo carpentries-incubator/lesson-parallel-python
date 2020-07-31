@@ -1,10 +1,9 @@
 ---
 title: "Introduction"
 teaching: 20
-exercises: 10
+exercises: 15
 questions:
-- "How can I speed-up my program?"
-- "How can I scale my program to larger data sets?"
+- "What problems are we solving, and what are we **not** discussing?"
 - "Why do we still use Python?"
 - "What is parallel programming?"
 - "Why can it be hard to write a parallel program?"
