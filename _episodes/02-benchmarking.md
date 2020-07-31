@@ -63,3 +63,26 @@ FIXME: workout example in Jupyter, see gh:nlesc/noodles notebook
 
 {% include links.md %}
 
+#Alternate Profiling
+
+Dash has a couple of rofiling options as well
+
+~~~python
+from dask.diagnostics import Profiler, ResourceProfiler
+work = da.arange(10**8).sum()
+with Profiler() as prof, ResourceProfiler(dt=0.001) as rprof:
+    result2 = work.compute()
+    
+from bokeh.plotting import output_notebook
+from dask.diagnostics import visualize
+visualize([prof,rprof], output_notebook())
+~~~
+FIXME: somehow the visualisation turns up in a separate file and in the notebook, I cannot disable the separate file atm. 
+
+
+~~~python
+with ResourceProfiler(dt=0.001) as rprof2:
+    result = np.arange(10**8).sum()
+visualize([rprof2], output_notebook())
+~~~
+FIXME: without the Profiler, the time axis is not nicely scaled. Profiler does not work with dask commands.
