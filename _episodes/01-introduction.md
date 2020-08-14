@@ -50,11 +50,8 @@ it to work in a distributed environment.
 Suppose we have a computation, where each step **depends** on a previous one:
 
 ~~~python
-def f(x):
-    return x + 1
-
-x = 0
-for i in range(10):
+x = some_input
+for i in range(n):
   x = f(x)
 print(x)
 ~~~
