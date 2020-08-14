@@ -1,7 +1,7 @@
 ---
 title: "Introduction"
 teaching: 20
-exercises: 15
+exercises: 5
 questions:
 - "What problems are we solving, and what are we **not** discussing?"
 - "Why do we still use Python?"
@@ -31,12 +31,13 @@ Most problems will fit in one of two categories:
 In this course we will show several possible ways of speeding up your program and making it ready
 to function in parallel. We will be introducing the following modules
 
-1. `threading` speeding up a program on a single computer (shared memory)
-3. `dask` making things a lot easier
-4. `numba` speed up your procedures
+1. `threading` standard library module that allows different parts of your program to run concurrently on a single computer (with shared memory)
+3. `dask` makes scalable parallel computing easy
+4. `numba` speed up your python functions by translating them to optimized machine code
 5. `memory_profile` monitor memory performance
 6. `asyncio` python native asynchronous programming
 
+FIXME: Actually explain functional programming & distributed programming
 More importantly, we will show how to change the design of a program to fit parallel paradigms. This
 often involves techniques from **functional programming**.
 
