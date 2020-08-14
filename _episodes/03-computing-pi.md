@@ -19,6 +19,11 @@ keypoints:
 - "If we want the most efficient parallelism on a single machine, we need to unlock the GIL."
 - "Numba helps you both speeding up and lifting code from the GIL."
 ---
+FIXME: Vector-based parallelization is explained well, but task-based is
+actually missing from this lesson.
+
+FIXME: It would be nice to add timing to the Monte Carlo solutions,
+so we can actually see that the vectorized and parallel solutions are faster.
 
 # Monte Carlo
 In order to witness the advantages of parallelization we need an algorithm that is 1. parallelizable and 2. complex enough to take a few seconds of CPU time. In order to not scare away the interested reader, we need this algorithm to be understandable and, if possible, interesting. We chose a classical algorithm for demonstrating parallel programming: estimating the value of number π.
@@ -87,6 +92,9 @@ We can demonstrate that this is much faster than the 'naive' implementation. Thi
 > - monolithic approach, less composable?
 {: .discussion}
 
+FIXME: Before this, the student has not learned about dask at all. It could
+be that students will struggle with this excercise, while the
+solution is actually very simple. It might be better to just show it?
 > ## Challenge: Daskify
 > Write `calc_pi_dask` to make the Numpy version parallel. Compare speed and memory performance with
 > the Numpy version.
