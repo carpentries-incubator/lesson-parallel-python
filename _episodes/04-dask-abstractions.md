@@ -73,22 +73,55 @@ bag.reduction(sum, sum).visualize()
 > Example: Adventures of Sherlock Holmes, https://www.gutenberg.org/files/1661/1661-0.txt
 >
 > ~~~python
+> from nltk.stem.snowball import PorterStemmer
+> stemmer = PorterStemmer()
+>
+> def good_word(w):
+>     return len(w) > 0 and not any(i.isdigit() for i in w)
+>
+> def clean_word(w):
+>     return w.strip("*!?.:;'\",“’‘”()_").lower()
+> ~~~
+> {: .source}
+>
+> ~~~python
 > text = "Lorem ipsum"
 > words = set()
 > for w in text.split():
->     words.insert(w)
-> print("This corpus contains {n} unique words.".format(n=len(w)))
+>     cw = clean_word(w)
+>     if good_word(cw):
+>         words.insert(stemmer.stem(w))
+> print("This corpus contains {n} unique words.".format(n=len(words)))
 > ~~~
+> {: .source}
 >
 > Tip: start by just counting all the words in the corpus, then expand from there.
-> Extra: use `nltk.stem` to count word stems in stead of different variants of the same word.
+> Tip: a better version of this program would be
+>
+> ~~~python
+> words = set(map(stemmer.stem, filter(good_word, map(clean_word, text.split()))))
+> len(words)
+> ~~~
+> {: .source}
 >
 > > ## Solution
 > > Use `read_text` to read the text efficiently, split the words and `flatten` to create a
 > > single bag, then `map` to capitalize all the words (or find their stems).
 > > To split the words, use `group_by` and finaly `count` to reduce to the number of
 > > words. Other option `distinct`.
-> > FIXME: add tested implementation
+> >
+> > ~~~python
+> > bag = db.read_text("./1661-0.txt", blocksize="32k")
+> > raw_words = bag.str.split().flatten()
+> > clean_words = raw_words.map(clean_word).filter(good_word)
+> > stems = clean_words.map(stemmer.stem)
+> > unique_words = stems.distinct().count()
+> > unique_words.compute(scheduler="processes", num_workers=4)
+> > ~~~
+> >
+> > FIXME: I have yet to find a corpus large enough that this becomes more efficient than the native python
+> > version.
+> > {: .source}
 > {: .solution}
 {: .challenge}
 
