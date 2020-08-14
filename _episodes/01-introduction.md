@@ -1,7 +1,7 @@
 ---
 title: "Introduction"
 teaching: 20
-exercises: 15
+exercises: 5
 questions:
 - "What problems are we solving, and what are we **not** discussing?"
 - "Why do we still use Python?"
