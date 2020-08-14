@@ -94,9 +94,9 @@ We can demonstrate that this is much faster than the 'naive' implementation. Thi
 > - monolithic approach, less composable?
 {: .discussion}
 
-FIXME: Before this, the student has not learned about dask at all. It could
-be that students will struggle with this excercise, while the
-solution is actually very simple. It might be better to just show it?
+FIXME: Before this, we actually show the first dask examples in the benchmarking chapter.
+It should be explained there that dask.array mimics the numpy API. We could repeat that information
+here as a hint to the exercise.
 > ## Challenge: Daskify
 > Write `calc_pi_dask` to make the Numpy version parallel. Compare speed and memory performance with
 > the Numpy version.
@@ -143,7 +143,7 @@ Numba makes it easier to create accellerated functions. You can use it with the 
 import numba
 
 @numba.jit
-def numbified_sum_range(a: int):
+def numba_sum_range(a: int):
     """Compute the sum of the numbers in the range [0, a)."""
     x = 0
     for i in range(a):
@@ -178,7 +178,7 @@ Now with Numpy:
 And with Numba:
 
 ~~~python
-%timeit numbified_sum_range(10**7)
+%timeit numba_sum_range(10**7)
 ~~~
 {: .source}
 
