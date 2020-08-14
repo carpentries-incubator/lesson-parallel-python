@@ -1,33 +1,29 @@
 ---
-title: "Computing Pi"
+title: "Understanding parallelization in python"
 teaching: 60
 exercises: 30
 questions:
 - "What is the GIL?"
 - "How do I parallelize an elementary program?"
-- "What is vector-based parallelism?"
-- "What is task-based parallelism?"
+- "What is data parallelism?"
+- "What is task parallelism?"
 - "How do I use multiple threads in Python?"
 objectives:
+- "Know how to rewrite a program in a vectorized form."
+- "Understand the difference between data and task-based parallel programming."
 - "Understand the GIL"
 - "Apply `numba.jit` to lift the GIL"
-- "Understand the difference between vectorized and task-based parallel programming."
 - "Recognize the primitive components of the queue/worker based model of execution."
 keypoints:
 - "Vectorized algorithms are both a blessing and a curse."
 - "If we want the most efficient parallelism on a single machine, we need to unlock the GIL."
 - "Numba helps you both speeding up and lifting code from the GIL."
 ---
-FIXME: Vector-based parallelization is explained well, but task-based is
-actually missing from this chapter.
 
 FIXME: Maybe it makes sense to explain the difference between multiprocessing and
 multithreading in this chapter?
 
 # Monte Carlo
-FIXME: It would be nice to add timing to these examples,
-so we can actually see that the vectorized and parallel solutions are faster.
-
 In order to witness the advantages of parallelization we need an algorithm that is 1. parallelizable and 2. complex enough to take a few seconds of CPU time. In order to not scare away the interested reader, we need this algorithm to be understandable and, if possible, interesting. We chose a classical algorithm for demonstrating parallel programming: estimating the value of number π.
 
 The algorithm we are presenting is one of the classical examples of the power of Monte-Carlo methods. This is an umbrella term for several algorithms that use random numbers to approximate exact results. We chose this algorithm because of its simplicity and straightforward geometrical interpretation.
@@ -46,6 +42,7 @@ the blue circle M compared to the green square N. Then π is approximated by the
 >     """Computes the value of pi using N random samples."""
 >     pass
 > ~~~
+> Also make sure to time your function!
 > {: .source}
 >
 > > ## Solution
@@ -63,6 +60,9 @@ the blue circle M compared to the green square N. Then π is approximated by the
 > >         if x**2 + y**2 < 1.0:
 > >             M += 1
 > >     return 4 * M / N
+> >
+> > %timeit calc_pi(10**6)
+> >
 > > ~~~
 > > {: .source}
 > {: .solution}
@@ -80,12 +80,33 @@ def calc_pi_numpy(N):
     M = np.count_nonzero((pts**2).sum(axis=0) < 1)
     return 4 * M / N
 
-calc_pi_numpy(10**8)
+~~~
+{: .source}
+This is a **vectorized** version of the original algorithm. It nicely demonstrates **data parallelization**,
+where a **single operation** is replicated over collections of data.
+It contrasts to **task parallelization**, where **different independent** procedures are performed in
+parallel (think for example about cutting the vegetables while simmering the split peas).
+
+We can demonstrate that this is much faster than the 'naive' implementation:
+~~~python
+%timeit calc_pi(10**6)
 ~~~
 {: .source}
 
-We can demonstrate that this is much faster than the 'naive' implementation. This is a
-**vectorized** version of the original algorithm.
+~~~
+676 ms ± 6.39 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+~~~
+{: .output}
+
+~~~python
+%timeit calc_pi_numpy(10**6)
+~~~
+{: .source}
+
+~~~
+25.2 ms ± 1.54 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+~~~
+{: .output}
 
 > ## Discussion: is this all better?
 > What is the downside of this implementation?
@@ -94,12 +115,9 @@ We can demonstrate that this is much faster than the 'naive' implementation. Thi
 > - monolithic approach, less composable?
 {: .discussion}
 
-FIXME: Before this, we actually show the first dask examples in the benchmarking chapter.
-It should be explained there that dask.array mimics the numpy API. We could repeat that information
-here as a hint to the exercise.
 > ## Challenge: Daskify
 > Write `calc_pi_dask` to make the Numpy version parallel. Compare speed and memory performance with
-> the Numpy version.
+> the Numpy version. NB: Remember that dask.array mimics the numpy API.
 >
 > > ## Solution
 > >
@@ -113,9 +131,13 @@ here as a hint to the exercise.
 > >     M = da.count_nonzero((pts**2).sum(axis=0) < 1)
 > >     return 4 * M / N
 > >
-> > calc_pi_numpy(10**8).compute()
+> > %timeit calc_pi_dask(10**6).compute()
 > > ~~~
 > > {: .source}
+> >~~~
+> >4.68 ms ± 135 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+> >~~~
+> >{: .output}
 > {: .solution}
 {: .challenge}
 
@@ -209,7 +231,7 @@ def worker(q):
     while True:
         try:
             x = q.get(block=False)
-            print(sum_primes(x), end=' ', flush=True)
+            print(calc_pi(x), end=' ', flush=True)
         except queue.Empty:
             break
 

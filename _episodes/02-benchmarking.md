@@ -23,12 +23,15 @@ We will get into creating parallel programs in Python later. First let's see a s
 your system monitor, and run the following:
 
 ~~~python
+# Summation making use of numpy:
 import numpy as np
 result = np.arange(10**8).sum()
 ~~~
 {: .source}
 
 ~~~python
+# The same summation, but using dask to parallelize the code.
+# NB: the API for dask arrays mimics that of numpy
 import dask.array as da
 work = da.arange(10**8).sum()
 result = work.compute()
