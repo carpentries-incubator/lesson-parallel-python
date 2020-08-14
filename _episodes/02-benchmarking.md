@@ -94,7 +94,7 @@ plt.show()
 
 # Alternate Profiling
 
-Dask has a couple of rofiling options as well
+Dask has a couple of profiling options as well
 
 ~~~python
 from dask.diagnostics import Profiler, ResourceProfiler
