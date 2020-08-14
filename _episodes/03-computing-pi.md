@@ -25,7 +25,7 @@ actually missing from this chapter.
 FIXME: Related: `map`, `filter`, and `reduce` are not explained either.
 
 FIXME: Maybe it makes sense to explain the difference between multiprocessing and
- in this chapter?
+multithreading in this chapter?
 
 # Monte Carlo
 FIXME: It would be nice to add timing to these examples,
