@@ -63,8 +63,34 @@ pip install memory_profiler
 ~~~
 {: .source}
 
-FIXME: workout example in Jupyter, see gh:nlesc/noodles notebook
+In Jupyter, type the following lines to compare the memory usage of the serial and parallel versions of the code presented above:
+~~~python
+import numpy as np
+import dask.array as da
+from memory_profiler import memory_usage
+import matplotlib.pyplot as plt
 
+def sum_with_numpy():
+    # Serial implementation
+    np.arange(10**8).sum()
+
+def sum_with_dask():
+    # Parallel implementation
+    work = da.arange(10**8).sum()
+    work.compute()
+
+memory_numpy = memory_usage(sum_with_numpy, interval=0.01)
+memory_dask = memory_usage(sum_with_dask, interval=0.01)
+
+# Plot results
+plt.plot(memory_numpy, label='numpy')
+plt.plot(memory_dask, label='dask')
+plt.xlabel('Time step')
+plt.ylabel('Memory / MB')
+plt.legend()
+plt.show()
+~~~
+{: .source}
 
 # Alternate Profiling
 
