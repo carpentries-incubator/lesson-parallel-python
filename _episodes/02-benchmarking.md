@@ -68,7 +68,7 @@ FIXME: workout example in Jupyter, see gh:nlesc/noodles notebook
 
 # Alternate Profiling
 
-Dask has a couple of rofiling options as well
+Dask has a couple of profiling options as well
 
 ~~~python
 from dask.diagnostics import Profiler, ResourceProfiler

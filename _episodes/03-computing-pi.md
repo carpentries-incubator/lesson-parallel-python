@@ -15,12 +15,19 @@ objectives:
 - "Recognize the primitive components of the queue/worker based model of execution."
 keypoints:
 - "Vectorized algorithms are both a blessing and a curse."
-- "Many problems fit a pattern of `map`, `filter` and `reduce` operations."
 - "If we want the most efficient parallelism on a single machine, we need to unlock the GIL."
 - "Numba helps you both speeding up and lifting code from the GIL."
 ---
+FIXME: Vector-based parallelization is explained well, but task-based is
+actually missing from this chapter.
+
+FIXME: Maybe it makes sense to explain the difference between multiprocessing and
+multithreading in this chapter?
 
 # Monte Carlo
+FIXME: It would be nice to add timing to these examples,
+so we can actually see that the vectorized and parallel solutions are faster.
+
 In order to witness the advantages of parallelization we need an algorithm that is 1. parallelizable and 2. complex enough to take a few seconds of CPU time. In order to not scare away the interested reader, we need this algorithm to be understandable and, if possible, interesting. We chose a classical algorithm for demonstrating parallel programming: estimating the value of number π.
 
 The algorithm we are presenting is one of the classical examples of the power of Monte-Carlo methods. This is an umbrella term for several algorithms that use random numbers to approximate exact results. We chose this algorithm because of its simplicity and straightforward geometrical interpretation.
@@ -87,6 +94,9 @@ We can demonstrate that this is much faster than the 'naive' implementation. Thi
 > - monolithic approach, less composable?
 {: .discussion}
 
+FIXME: Before this, we actually show the first dask examples in the benchmarking chapter.
+It should be explained there that dask.array mimics the numpy API. We could repeat that information
+here as a hint to the exercise.
 > ## Challenge: Daskify
 > Write `calc_pi_dask` to make the Numpy version parallel. Compare speed and memory performance with
 > the Numpy version.
@@ -133,7 +143,7 @@ Numba makes it easier to create accellerated functions. You can use it with the 
 import numba
 
 @numba.jit
-def sum_range(a: int):
+def numba_sum_range(a: int):
     """Compute the sum of the numbers in the range [0, a)."""
     x = 0
     for i in range(a):
@@ -168,7 +178,7 @@ Now with Numpy:
 And with Numba:
 
 ~~~python
-%timeit sum_range(10**7)
+%timeit numba_sum_range(10**7)
 ~~~
 {: .source}
 
