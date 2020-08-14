@@ -1,5 +1,5 @@
 ---
-title: "Understanding parallel python programs"
+title: "Understanding parallelization in python"
 teaching: 60
 exercises: 30
 questions:
