@@ -15,14 +15,11 @@ objectives:
 - "Recognize the primitive components of the queue/worker based model of execution."
 keypoints:
 - "Vectorized algorithms are both a blessing and a curse."
-- "Many problems fit a pattern of `map`, `filter` and `reduce` operations."
 - "If we want the most efficient parallelism on a single machine, we need to unlock the GIL."
 - "Numba helps you both speeding up and lifting code from the GIL."
 ---
 FIXME: Vector-based parallelization is explained well, but task-based is
 actually missing from this chapter.
-
-FIXME: Related: `map`, `filter`, and `reduce` are not explained either.
 
 FIXME: Maybe it makes sense to explain the difference between multiprocessing and
 multithreading in this chapter?
