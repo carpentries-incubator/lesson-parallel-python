@@ -31,11 +31,12 @@ Most problems will fit in one of two categories:
 In this course we will show several possible ways of speeding up your program and making it ready
 to function in parallel. We will be introducing the following modules
 
-1. `threading` speeding up a program on a single computer (shared memory)
-3. `dask` making things a lot easier
-4. `numba` speed up your procedures
+1. `threading` standard library module that allows different parts of your program to run concurrently on a single computer (with shared memory)
+3. `dask` makes scalable parallel computing easy
+4. `numba` speed up your python functions by translating them to optimized machine code
 5. `memory_profile` monitor memory performance
 
+FIXME: Actually explain functional programming & distributed programming
 More importantly, we will show how to change the design of a program to fit parallel paradigms. This
 often involves techniques from **functional programming**.
 
@@ -49,8 +50,11 @@ it to work in a distributed environment.
 Suppose we have a computation, where each step **depends** on a previous one:
 
 ~~~python
-x = some_input
-for i in range(n):
+def f(x):
+    return x + 1
+
+x = 0
+for i in range(10):
   x = f(x)
 print(x)
 ~~~
