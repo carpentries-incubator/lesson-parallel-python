@@ -96,12 +96,9 @@ parallel (think for example about cutting the vegetables while simmering the spl
 > - monolithic approach, less composable?
 {: .discussion}
 
-FIXME: Before this, we actually show the first dask examples in the benchmarking chapter.
-It should be explained there that dask.array mimics the numpy API. We could repeat that information
-here as a hint to the exercise.
 > ## Challenge: Daskify
 > Write `calc_pi_dask` to make the Numpy version parallel. Compare speed and memory performance with
-> the Numpy version.
+> the Numpy version. NB: Remember that dask.array mimics the numpy API.
 >
 > > ## Solution
 > >
