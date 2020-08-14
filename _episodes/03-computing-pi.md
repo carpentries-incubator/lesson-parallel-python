@@ -9,9 +9,10 @@ questions:
 - "What is task parallelism?"
 - "How do I use multiple threads in Python?"
 objectives:
+- Know how to rewrite a program in a vectorized form
+- "Understand the difference between data and task-based parallel programming."
 - "Understand the GIL"
 - "Apply `numba.jit` to lift the GIL"
-- "Understand the difference between vectorized and task-based parallel programming."
 - "Recognize the primitive components of the queue/worker based model of execution."
 keypoints:
 - "Vectorized algorithms are both a blessing and a curse."
