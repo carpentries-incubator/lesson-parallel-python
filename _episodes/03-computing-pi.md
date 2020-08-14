@@ -5,8 +5,8 @@ exercises: 30
 questions:
 - "What is the GIL?"
 - "How do I parallelize an elementary program?"
-- "What is vector-based parallelism?"
-- "What is task-based parallelism?"
+- "What is data parallelism?"
+- "What is task parallelism?"
 - "How do I use multiple threads in Python?"
 objectives:
 - "Understand the GIL"
@@ -18,8 +18,6 @@ keypoints:
 - "If we want the most efficient parallelism on a single machine, we need to unlock the GIL."
 - "Numba helps you both speeding up and lifting code from the GIL."
 ---
-FIXME: Vector-based parallelization is explained well, but task-based is
-actually missing from this chapter.
 
 FIXME: Maybe it makes sense to explain the difference between multiprocessing and
 multithreading in this chapter?
@@ -85,7 +83,10 @@ calc_pi_numpy(10**8)
 {: .source}
 
 We can demonstrate that this is much faster than the 'naive' implementation. This is a
-**vectorized** version of the original algorithm.
+**vectorized** version of the original algorithm. It nicely demonstrates **data parallelization**,
+where a **single operation** is replicated over collections of data.
+It contrasts to **task parallelization**, where **different independent** procedures are performed in
+parallel (think for example about cutting the vegetables while simmering the split peas).
 
 > ## Discussion: is this all better?
 > What is the downside of this implementation?
