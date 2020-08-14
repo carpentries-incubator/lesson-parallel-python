@@ -24,13 +24,13 @@ your system monitor, and run the following:
 
 ~~~python
 import numpy as np
-result = np.arange(10**8).sum()
+result = np.arange(10**9).sum()
 ~~~
 {: .source}
 
 ~~~python
 import dask.array as da
-work = da.arange(10**8).sum()
+work = da.arange(10**9).sum()
 result = work.compute()
 ~~~
 {: .source}
@@ -41,7 +41,7 @@ How can we test in a more rigorous way? In Jupyter we can use some line magics!
 
 ~~~python
 %%time
-np.arange(10**8).sum()
+np.arange(10**9).sum()
 ~~~
 {: .source}
 
@@ -49,7 +49,7 @@ This was only a single run, how can we trust this?
 
 ~~~python
 %%timeit
-np.arange(10**8).sum()
+np.arange(10**9).sum()
 ~~~
 {: .source}
 
@@ -72,11 +72,11 @@ import matplotlib.pyplot as plt
 
 def sum_with_numpy():
     # Serial implementation
-    np.arange(10**8).sum()
+    np.arange(10**9).sum()
 
 def sum_with_dask():
     # Parallel implementation
-    work = da.arange(10**8).sum()
+    work = da.arange(10**9).sum()
     work.compute()
 
 memory_numpy = memory_usage(sum_with_numpy, interval=0.01)
@@ -98,7 +98,7 @@ Dask has a couple of profiling options as well
 
 ~~~python
 from dask.diagnostics import Profiler, ResourceProfiler
-work = da.arange(10**8).sum()
+work = da.arange(10**9).sum()
 with Profiler() as prof, ResourceProfiler(dt=0.001) as rprof:
     result2 = work.compute()
 
@@ -111,7 +111,7 @@ FIXME: somehow the visualisation turns up in a separate file and in the notebook
 
 ~~~python
 with ResourceProfiler(dt=0.001) as rprof2:
-    result = np.arange(10**8).sum()
+    result = np.arange(10**9).sum()
 visualize([rprof2], output_notebook())
 ~~~
 FIXME: without the Profiler, the time axis is not nicely scaled. Profiler does not work with dask commands.
