@@ -222,7 +222,6 @@ We now build a queue/worker model. This is the basis of multi-threading applicat
 this point creating a parallel program is quite involved. After we've done this, we'll see ways to
 do the same in Dask without mucking about with threads directly.
 
-FIXME: Define the `sum_primes` function
 ~~~python
 import queue
 import threading
@@ -232,7 +231,7 @@ def worker(q):
     while True:
         try:
             x = q.get(block=False)
-            print(sum_primes(x), end=' ', flush=True)
+            print(calc_pi(x), end=' ', flush=True)
         except queue.Empty:
             break
 
