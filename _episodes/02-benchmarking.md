@@ -125,7 +125,13 @@ lscpu
 ~~~
 {: .source}
 
-FIXME: add respective commands on Windows and Mac
+On Mac:
+~~~bash
+sysctl -n hw.physicalcpu
+~~~
+{: .source}
+
+FIXME: add respective commands on Windows
 
 On a machine with 8 listed cores doing this (admittedly oversimplistic) benchmark:
 
