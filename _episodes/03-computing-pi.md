@@ -20,12 +20,17 @@ keypoints:
 - "Numba helps you both speeding up and lifting code from the GIL."
 ---
 FIXME: Vector-based parallelization is explained well, but task-based is
-actually missing from this lesson.
+actually missing from this chapter.
 
-FIXME: It would be nice to add timing to the Monte Carlo solutions,
-so we can actually see that the vectorized and parallel solutions are faster.
+FIXME: Related: `map`, `filter`, and `reduce` are not explained either.
+
+FIXME: Maybe it makes sense to explain the difference between multiprocessing and
+ in this chapter?
 
 # Monte Carlo
+FIXME: It would be nice to add timing to these examples,
+so we can actually see that the vectorized and parallel solutions are faster.
+
 In order to witness the advantages of parallelization we need an algorithm that is 1. parallelizable and 2. complex enough to take a few seconds of CPU time. In order to not scare away the interested reader, we need this algorithm to be understandable and, if possible, interesting. We chose a classical algorithm for demonstrating parallel programming: estimating the value of number π.
 
 The algorithm we are presenting is one of the classical examples of the power of Monte-Carlo methods. This is an umbrella term for several algorithms that use random numbers to approximate exact results. We chose this algorithm because of its simplicity and straightforward geometrical interpretation.
@@ -141,7 +146,7 @@ Numba makes it easier to create accellerated functions. You can use it with the 
 import numba
 
 @numba.jit
-def sum_range(a: int):
+def numbified_sum_range(a: int):
     """Compute the sum of the numbers in the range [0, a)."""
     x = 0
     for i in range(a):
@@ -176,7 +181,7 @@ Now with Numpy:
 And with Numba:
 
 ~~~python
-%timeit sum_range(10**7)
+%timeit numbified_sum_range(10**7)
 ~~~
 {: .source}
 
