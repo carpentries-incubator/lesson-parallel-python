@@ -23,7 +23,7 @@ We will get into creating parallel programs in Python later. First let's see a s
 your system monitor, and run the following:
 
 ~~~python
-# A simple summation making use of numpy's vectorization:
+# Summation making use of numpy:
 import numpy as np
 result = np.arange(10**8).sum()
 ~~~
