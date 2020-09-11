@@ -47,6 +47,14 @@ np.arange(10**7).sum()
 
 This was only a single run, how can we trust this?
 
+The `%%time` line magic checks how long it took for a computation to finish. It does nothing to
+change the computation itself. In this it is very similar to the `time` shell command.
+
+The `%%timeit` line magic however, first measures how long it takes to run a command one time, then
+repeats it enough times to get an average run-time. Also, `%%timeit` can measure run times without
+the time it takes to setup a problem, measuring only the performance of the code in the cell.
+This way we can trust the outcome better.
+
 ~~~python
 %%timeit
 np.arange(10**7).sum()
@@ -54,6 +62,9 @@ np.arange(10**7).sum()
 {: .source}
 
 This does not tell you anything about memory consumption or efficiency though.
+The act of systematically testing performance under different conditions is called **benchmarking**.
+Analysing what parts of a program contribute to the total performance, and identifying possible
+bottlenecks is **profiling**.
 
 # Memory profiling
 We will use the [`memory_profiler` package](https://github.com/pythonprofilers/memory_profiler) to track memory usage.
@@ -131,7 +142,11 @@ sysctl -n hw.physicalcpu
 ~~~
 {: .source}
 
-FIXME: add respective commands on Windows
+On Windows:
+~~~bash
+WMIC CPU Get DeviceID,NumberOfCores,NumberOfLogicalProcessors
+~~~
+{: .source}
 
 On a machine with 8 listed cores doing this (admittedly oversimplistic) benchmark:
 
