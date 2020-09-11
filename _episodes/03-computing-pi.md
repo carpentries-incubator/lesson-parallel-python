@@ -233,6 +233,10 @@ And with Numba:
 > {: .solution}
 {: .challenge}
 
+> ## Measuring == knowing
+> Always profile your code to see which parallelization method works best.
+{: .callout}
+
 > ## `numba.jit` is not a magical command to solve are your problems
 > Using numba to accelerate your code often outperforms other methods, but
 >  it is not always trivial to rewrite your code so that you can use numba with it.
