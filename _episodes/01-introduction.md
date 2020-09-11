@@ -4,13 +4,13 @@ teaching: 20
 exercises: 5
 questions:
 - "What problems are we solving, and what are we **not** discussing?"
-- "Why do we still use Python?"
+- "Why do we use Python?"
 - "What is parallel programming?"
 - "Why can it be hard to write a parallel program?"
 objectives:
-- "Recognize serial and parallel paterns"
+- "Recognize serial and parallel patterns"
 - "Identify problems that can be parallelized"
-- "Identify common pitfalls"
+- "Understand a dependency diagram"
 keypoints:
 - "Programs are parallelizable if you can identify independent tasks."
 - "To make programs scalable, you need to chunk the work."
