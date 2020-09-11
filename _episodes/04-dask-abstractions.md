@@ -159,7 +159,7 @@ def add(a, b):
 
 ~~~python
 x_p = add(1, 2)
-y_p = add(x, 3)
+y_p = add(x_p, 3)
 z_p = add(x_p, y_p)
 z_p.visualize()
 ~~~
