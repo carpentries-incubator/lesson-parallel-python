@@ -92,15 +92,6 @@ It contrasts to **task parallelization**, where **different independent** proced
 parallel (think for example about cutting the vegetables while simmering the split peas).
 
 We can demonstrate that this is much faster than the 'naive' implementation:
-~~~python
-%timeit calc_pi(10**6)
-~~~
-{: .source}
-
-~~~
-676 ms ± 6.39 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
-~~~
-{: .output}
 
 ~~~python
 %timeit calc_pi_numpy(10**6)
