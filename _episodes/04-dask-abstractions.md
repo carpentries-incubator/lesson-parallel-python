@@ -90,7 +90,7 @@ bag.reduction(sum, sum).visualize()
 > for w in text.split():
 >     cw = clean_word(w)
 >     if good_word(cw):
->         words.insert(stemmer.stem(w))
+>         words.add(stemmer.stem(cw))
 > print("This corpus contains {n} unique words.".format(n=len(words)))
 > ~~~
 > {: .source}
