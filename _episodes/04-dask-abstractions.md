@@ -36,7 +36,7 @@ Operations on this level can be distinguished in several categories
   further processing the results of those chunks.
 
 ~~~python
-import dask
+import dask.bag
 
 def f(x):
     return x**2
