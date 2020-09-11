@@ -104,10 +104,10 @@ We can demonstrate that this is much faster than the 'naive' implementation:
 {: .output}
 
 > ## Discussion: is this all better?
-> What is the downside of this implementation?
-> - memory use
-> - less intuitive
-> - monolithic approach, less composable?
+> What is the downside of the vectorized implementation?
+> - It uses more memory
+> - It is less intuitive
+> - It is a more monolithic approach, i.e. you cannot break it up in several parts
 {: .discussion}
 
 > ## Challenge: Daskify
