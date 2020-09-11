@@ -76,11 +76,14 @@ print(x)
 ~~~
 {: .source}
 
-This computation is **inherently serial**. We can show a diagram showing the dependencies for each function
-call:
+This computation is **inherently serial**. We can show the dependencies for each function
+call in a diagram like this, known as a dependency diagram:
+
 ![Serial computation](../fig/serial.png)
 
-Here we see a block for each function call, indicating some work for the CPU, and the arrows
+In these diagrams the inputs and outputs of each function are specified as inward and outward arrows. Note that the output of one function can become the input of another one. 
+
+In the example above we see a block for each function call, indicating some work for the CPU, and the arrows
 show that the evaluation of a function depends on a previous result.
 
 In many cases however, the computation involves **independent work**, like in this pseudo snippet:
@@ -118,4 +121,3 @@ occasionally.
 {: .challenge}
 
 {% include links.md %}
-
