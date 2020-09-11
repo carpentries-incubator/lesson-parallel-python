@@ -25,7 +25,7 @@ your system monitor, and run the following:
 ~~~python
 # Summation making use of numpy:
 import numpy as np
-result = np.arange(10**8).sum()
+result = np.arange(10**7).sum()
 ~~~
 {: .source}
 
@@ -33,7 +33,7 @@ result = np.arange(10**8).sum()
 # The same summation, but using dask to parallelize the code.
 # NB: the API for dask arrays mimics that of numpy
 import dask.array as da
-work = da.arange(10**8).sum()
+work = da.arange(10**7).sum()
 result = work.compute()
 ~~~
 {: .source}
@@ -44,7 +44,7 @@ How can we test in a more rigorous way? In Jupyter we can use some line magics!
 
 ~~~python
 %%time
-np.arange(10**8).sum()
+np.arange(10**7).sum()
 ~~~
 {: .source}
 
@@ -52,7 +52,7 @@ This was only a single run, how can we trust this?
 
 ~~~python
 %%timeit
-np.arange(10**8).sum()
+np.arange(10**7).sum()
 ~~~
 {: .source}
 
@@ -66,8 +66,34 @@ pip install memory_profiler
 ~~~
 {: .source}
 
-FIXME: workout example in Jupyter, see gh:nlesc/noodles notebook
+In Jupyter, type the following lines to compare the memory usage of the serial and parallel versions of the code presented above:
+~~~python
+import numpy as np
+import dask.array as da
+from memory_profiler import memory_usage
+import matplotlib.pyplot as plt
 
+def sum_with_numpy():
+    # Serial implementation
+    np.arange(10**7).sum()
+
+def sum_with_dask():
+    # Parallel implementation
+    work = da.arange(10**7).sum()
+    work.compute()
+
+memory_numpy = memory_usage(sum_with_numpy, interval=0.01)
+memory_dask = memory_usage(sum_with_dask, interval=0.01)
+
+# Plot results
+plt.plot(memory_numpy, label='numpy')
+plt.plot(memory_dask, label='dask')
+plt.xlabel('Time step')
+plt.ylabel('Memory / MB')
+plt.legend()
+plt.show()
+~~~
+{: .source}
 
 # Alternate Profiling
 
@@ -75,7 +101,7 @@ Dask has a couple of profiling options as well
 
 ~~~python
 from dask.diagnostics import Profiler, ResourceProfiler
-work = da.arange(10**8).sum()
+work = da.arange(10**7).sum()
 with Profiler() as prof, ResourceProfiler(dt=0.001) as rprof:
     result2 = work.compute()
 
@@ -88,7 +114,7 @@ FIXME: somehow the visualisation turns up in a separate file and in the notebook
 
 ~~~python
 with ResourceProfiler(dt=0.001) as rprof2:
-    result = np.arange(10**8).sum()
+    result = np.arange(10**7).sum()
 visualize([rprof2], output_notebook())
 ~~~
 FIXME: without the Profiler, the time axis is not nicely scaled. Profiler does not work with dask commands.
@@ -102,14 +128,20 @@ lscpu
 ~~~
 {: .source}
 
-FIXME: add respective commands on Windows and Mac
+On Mac:
+~~~bash
+sysctl -n hw.physicalcpu
+~~~
+{: .source}
+
+FIXME: add respective commands on Windows
 
 On a machine with 8 listed cores doing this (admittedly oversimplistic) benchmark:
 
 ~~~python
 import timeit
 x = [timeit.timeit(
-        stmt=f"da.arange(5*10**9).sum().compute(num_workers={n})",
+        stmt=f"da.arange(5*10**7).sum().compute(num_workers={n})",
         setup="import dask.array as da",
         number=1)
      for n in range(1, 9)]
