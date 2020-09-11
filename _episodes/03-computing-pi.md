@@ -3,19 +3,18 @@ title: "Understanding parallelization in python"
 teaching: 60
 exercises: 30
 questions:
-- "What is the GIL?"
 - "How do I parallelize an elementary program?"
-- "What is data parallelism?"
-- "What is task parallelism?"
-- "How do I use multiple threads in Python?"
+- "What is the difference between data parallelism and task parallelism?"
+- "What is the python GIL?"
 objectives:
-- "Know how to rewrite a program in a vectorized form."
+- "Rewrite a program in a vectorized form."
 - "Understand the difference between data and task-based parallel programming."
 - "Understand the GIL"
 - "Apply `numba.jit` to lift the GIL"
 - "Recognize the primitive components of the queue/worker based model of execution."
 keypoints:
 - "Vectorized algorithms are both a blessing and a curse."
+- "Always profile your code to see which parellelization method works best"
 - "If we want the most efficient parallelism on a single machine, we need to unlock the GIL."
 - "Numba helps you both speeding up and lifting code from the GIL."
 ---
