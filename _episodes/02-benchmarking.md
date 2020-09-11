@@ -151,7 +151,7 @@ Gives the following result:
 
 ~~~python
 import pandas as pd
-pd.DataFrame({"n": range(1, 9), "t": x})
+data = pd.DataFrame({"n": range(1, 9), "t": x})
 data.set_index("n").plot()
 ~~~
 
