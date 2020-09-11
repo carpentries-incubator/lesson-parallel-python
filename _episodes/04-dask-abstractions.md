@@ -118,9 +118,6 @@ bag.reduction(sum, sum).visualize()
 > > unique_words = stems.distinct().count()
 > > unique_words.compute(scheduler="processes", num_workers=4)
 > > ~~~
-> >
-> > FIXME: I have yet to find a corpus large enough that this becomes more efficient than the native python
-> > version.
 > > {: .source}
 > {: .solution}
 {: .challenge}
