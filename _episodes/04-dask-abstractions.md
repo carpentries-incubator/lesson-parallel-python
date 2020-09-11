@@ -36,12 +36,12 @@ Operations on this level can be distinguished in several categories
   further processing the results of those chunks.
 
 ~~~python
-import dask.bag
+import dask.bag as db
 
 def f(x):
     return x**2
 
-bag = dask.bag.from_sequence(range(6))
+bag = db.from_sequence(range(6))
 bag.map(f).visualize()
 ~~~
 {: .source}
