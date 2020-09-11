@@ -8,10 +8,10 @@ questions:
 objectives:
 - "Recognize `map`, `filter` and `reduce` patterns."
 - "Create programs using these building blocks."
-- "Use the `visualize` method to create dependecy graphs."
+- "Use the `visualize` method to create dependency graphs."
 - "Understand the abstraction of delayed evaluation."
 keypoints:
-- "Using abstractions keep programs managable."
+- "Using abstractions keep programs manageable."
 ---
 
 We've seen some use of Dask `array`, now we will also dive into `bag` and `delayed` sub-modules.
