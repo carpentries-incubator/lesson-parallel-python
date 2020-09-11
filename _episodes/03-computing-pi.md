@@ -198,17 +198,36 @@ And with Numba:
 %timeit sum_range_numba(1e7)
 ~~~
 {: .source}
-
 ~~~
 162 ns ± 0.885 ns per loop (mean ± std. dev. of 7 runs, 10000000 loops each)
 ~~~
 {: .output}
 
 > ## Challenge: Numbify `comp_pi`
-> Create a Numba version of `comp_pi`. Measure its performance.
+> Create a Numba version of `comp_pi`. Time and profile it.
 >
 > > ## Solution
 > > Add the `@numba.jit` decorator to the first 'naive' implementation.
+> > ~~~python
+> > @numba.jit
+> > def calc_pi_numba(N):
+> >     M = 0
+> >     for i in range(N):
+> >         # Simulate impact coordinates
+> >         x = random.uniform(-1, 1)
+> >         y = random.uniform(-1, 1)
+> >
+> >         # True if impact happens inside the circle
+> >         if x**2 + y**2 < 1.0:
+> >             M += 1
+> >     return 4 * M / N
+> >
+> > %timeit calc_pi_numba(1e6)
+> > ~~~
+> > ~~~
+> > 13.5 ms ± 634 µs per loop (mean ± std. dev. of 7 runs, 1 loop each)
+> > ~~~
+> > {: .output}
 > {: .solution}
 {: .challenge}
 
