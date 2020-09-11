@@ -133,6 +133,10 @@ visualize([rprof2], output_notebook())
 FIXME: without the Profiler, the time axis is not nicely scaled. Profiler does not work with dask commands.
 
 # How many cores?
+Using more cores for a computation can decrease the run time. However, even with very simple
+examples performance may scale unexpectedly. The number of visible CPUs is often not equal to the
+number of physical cores due to a feature called *hyper-threading*.
+
 You can find out how many cores you have on your machine.
 
 On Linux:
