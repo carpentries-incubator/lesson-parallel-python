@@ -134,7 +134,11 @@ sysctl -n hw.physicalcpu
 ~~~
 {: .source}
 
-FIXME: add respective commands on Windows
+On Windows:
+~~~bash
+WMIC CPU Get NumberOfCores,NumberOfLogicalProcessors
+~~~
+{: .source}
 
 On a machine with 8 listed cores doing this (admittedly oversimplistic) benchmark:
 
