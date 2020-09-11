@@ -35,6 +35,10 @@ result = work.compute()
 ~~~
 {: .source}
 
+> It could be that a task this small does not register on your radar: slowly increase the amount of
+> `10**7` to see what happens.
+{: .callout}
+
 ![System monitor](../fig/system-monitor.jpg)
 
 How can we test in a more rigorous way? In Jupyter we can use some line magics!
