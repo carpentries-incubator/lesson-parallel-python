@@ -28,7 +28,7 @@ We can run the Numba version of `comp_pi` in parallel using Dask bags.
 
 Operations on this level can be distinguished in several categories
 
-- **map** (N to N) applies a function *one-to-one* on a list of arguments. This operation is **embarassingly
+- **map** (N to N) applies a function *one-to-one* on a list of arguments. This operation is **embarrassingly
   parallel**.
 - **filter** (N to <N) selects a subset from the data.
 - **reduce** (N to 1) computes an aggregate from a sequence of data; if the operation permits it
