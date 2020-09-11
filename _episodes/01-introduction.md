@@ -89,16 +89,19 @@ It may be tempting to think that using three cores instead of one would multiply
 
 ## Parallelizable and non-parallelizable tasks
 
-It is important to know that some tasks are fundamentally non-parallelizable, also known as **inherently serial**. An example could be the brute-force computation of the factorial of an integer (example: the factorial of 4, usually written as $4!$ is obtained by multiplying all the integers smaller or equal to $6$, that is: $4! = 4 \cdot 3 \cdot 2 \cdot 1 = 24$ )
+It is important to know that some tasks are fundamentally non-parallelizable, also known as **inherently serial**. An example could be the brute-force computation of the factorial of an integer (example: the factorial of 4, usually written as $4!$ is obtained by multiplying all the integers smaller or equal to $6$, that is: $4! = 4 \cdot 3 \cdot 2 \cdot 1 = 24$ ).
 
 ~~~python
-def serial_factorial(n): # FIXME: shall I use a function or just a loop?
-  temp = 1 # Initialize as 1
-  for i in range(n): # Multiply by 2, 3, ..., up to n
-    temp = temp * (i + 1)
+n = 4 # This the input
 
-  return temp
+temp = 1 # Initialize temporary variable as 1. It will act as intermediate input - output
+for i in range(n): # Multiply by 2, 3, ..., up to n
+  temp = temp * (i + 1) # This is the function, it gets called n times
+
+output = temp
 ~~~
+
+Note that each successive loop needs the result of the previous one in order to be executed.
 
 FIXME: create diagram with Dask?
 
