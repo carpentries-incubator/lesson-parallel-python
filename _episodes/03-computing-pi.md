@@ -206,7 +206,7 @@ And with Numba:
 {: .output}
 
 > ## Challenge: Numbify `comp_pi`
-> Create a Numba version of `comp_pi`. Time and profile it.
+> Create a Numba version of `comp_pi`. Time it.
 >
 > > ## Solution
 > > Add the `@numba.jit` decorator to the first 'naive' implementation.
