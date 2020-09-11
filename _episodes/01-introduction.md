@@ -66,27 +66,48 @@ formalism.
   in terms of tasks or workflows. This is `dask.delayed`.
 
 # What is parallel computing?
-Suppose we have a computation, where each step **depends** on a previous one:
 
-~~~python
-x = some_input
-for i in range(n):
-  x = f(x)
-print(x)
-~~~
-{: .source}
+## Dependency diagrams
 
-This computation is **inherently serial**. We can show the dependencies for each function
-call in a diagram like this, known as a dependency diagram:
+Suppose we have a computation, where each step **depends** on a previous one. We can represent this situation like in the figure below, known as a dependency diagram:
 
 ![Serial computation](../fig/serial.png)
 
-In these diagrams the inputs and outputs of each function are specified as inward and outward arrows. Note that the output of one function can become the input of another one. 
+In these diagrams the inputs and outputs of each function are specified as inward and outward arrows. Note that the output of one function can become the input of another one. The diagram above is the typical diagram of a **serial computation**. If you ever used a loop to update a value, you used serial computation.
+
+If our computation involves **independent work** (that is, the results of the application of each function are independent of the results of the application of the rest), we can structure our computation like this:
+
+![Parallel computation](../fig/parallel.png)
+
+This scheme corresponds to a **parallel computation**.
+
+### How can parallel computing improve our code execution speed?
+
+Nowadays, most personal computers have 4 or 8 processors (also known as cores). In the diagram above, we can assign each of the three functions to one core, so they can be performed simultaneously.
+
+It may be tempting to think that using three cores instead of one would multiply the execution speed by three. For now, it's ok to use this a first approximation to reality. Later in the course we'll see that things are actually more complicated than that.
+
+## Parallelizable and non-parallelizable tasks
+
+It is important to know that some tasks are fundamentally non-parallelizable, also known as **inherently serial**. An example could be the brute-force computation of the factorial of an integer (example: the factorial of 4, usually written as $4!$ is obtained by multiplying all the integers smaller or equal to $6$, that is: $4! = 4 \cdot 3 \cdot 2 \cdot 1 = 24$ )
+
+~~~python
+def serial_factorial(n): # FIXME: shall I use a function or just a loop?
+  temp = 1 # Initialize as 1
+  for i in range(n): # Multiply by 2, 3, ..., up to n
+    temp = temp * (i + 1)
+
+  return temp
+~~~
+
+FIXME: create diagram with Dask?
 
 In the example above we see a block for each function call, indicating some work for the CPU, and the arrows
 show that the evaluation of a function depends on a previous result.
 
 In many cases however, the computation involves **independent work**, like in this pseudo snippet:
+
+FIXME: find a more specific example
 
 ~~~python
 for i in range(n):
@@ -95,9 +116,6 @@ print(collect(x))
 ~~~
 {: .source}
 
-Now we have the potential for doing things in **parallel**. The **dependency graph** looks different:
-
-![Parallel computation](../fig/parallel.png)
 
 > ## Challenge: Parallelised Pea Soup
 > We have the following recipe:
