@@ -233,6 +233,11 @@ And with Numba:
 > {: .solution}
 {: .challenge}
 
+> ## `numba.jit` is not a magical command to solve are your problems
+> Using numba to accelerate your code often outperforms other methods, but
+>  it is not always trivial to rewrite your code so that you can use numba with it.
+{: .callout}
+
 # The `threading` module
 We now build a queue/worker model. This is the basis of multi-threading applications in Python. At
 this point creating a parallel program is quite involved. After we've done this, we'll see ways to
