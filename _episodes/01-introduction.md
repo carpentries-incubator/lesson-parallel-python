@@ -99,6 +99,8 @@ for i in range(n): # Multiply by 2, 3, ..., up to n
   temp = temp * (i + 1) # This is the function, it gets called n times
 
 output = temp
+
+print(output)
 ~~~
 
 Note that each successive loop needs the result of the previous one in order to be executed.
@@ -110,14 +112,25 @@ show that the evaluation of a function depends on a previous result.
 
 In many cases however, the computation involves **independent work**, like in this pseudo snippet:
 
-FIXME: find a more specific example
-
 ~~~python
-for i in range(n):
-  x[i] = f(some_input[i])
-print(collect(x))
+x = [1, 2, 3, 4] # Write input
+
+y = [] # Initialize (empty) output
+
+for i in range(len(x)):
+  y.append(x[i]**2) # Apply a function to each element in the input (square it)
+
+print(y) # Print output
 ~~~
 {: .source}
+
+FIXME: create diagram with Dask?
+
+Although we are performing the loops in a serial way in the snippet above,
+nothing avoids us from performing doing this calculation in parallel.
+The value of applying our function to any of the elements in the input `x` is completely independent of the values
+of the rest elements on `x`. This kind of problems are known as
+[embarrassingly parallel](https://en.wikipedia.org/wiki/Embarrassingly_parallel).
 
 
 > ## Challenge: Parallelised Pea Soup
