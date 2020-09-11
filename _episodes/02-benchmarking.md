@@ -36,7 +36,8 @@ result = work.compute()
 {: .source}
 
 > It could be that a task this small does not register on your radar: slowly increase the amount of
-> `10**7` to see what happens.
+> `10**7` to see what happens. But be careful, asking for too much memory can make your computer
+> slow to a crawl.
 {: .callout}
 
 ![System monitor](../fig/system-monitor.jpg)
@@ -78,7 +79,7 @@ pip install memory_profiler
 ~~~
 {: .source}
 
-In Jupyter, type the following lines to compare the memory usage of the serial and parallel versions of the code presented above:
+In Jupyter, type the following lines to compare the memory usage of the serial and parallel versions of the code presented above (again, change the value of `10**7` to something higher if needed):
 ~~~python
 import numpy as np
 import dask.array as da
