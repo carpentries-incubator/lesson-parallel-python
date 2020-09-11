@@ -60,7 +60,7 @@ the blue circle M compared to the green square N. Then π is approximated by the
 > >             M += 1
 > >     return 4 * M / N
 > >
-> > %timeit calc_pi(10**6)
+> > %timeit calc_pi(1e6)
 > > ~~~
 > > {: .source}
 > >
@@ -94,7 +94,7 @@ parallel (think for example about cutting the vegetables while simmering the spl
 We can demonstrate that this is much faster than the 'naive' implementation:
 
 ~~~python
-%timeit calc_pi_numpy(10**6)
+%timeit calc_pi_numpy(1e6)
 ~~~
 {: .source}
 
@@ -160,7 +160,7 @@ Numba makes it easier to create accellerated functions. You can use it with the 
 import numba
 
 @numba.jit
-def numba_sum_range(a: int):
+def sum_range_numba(a: int):
     """Compute the sum of the numbers in the range [0, a)."""
     x = 0
     for i in range(a):
@@ -171,7 +171,7 @@ def numba_sum_range(a: int):
 Let's time three versions of the same test. First, native Python iterators:
 
 ~~~python
-%timeit sum(range(10**7))
+%timeit sum(range(1e7))
 ~~~
 {: .source}
 
@@ -183,7 +183,7 @@ Let's time three versions of the same test. First, native Python iterators:
 Now with Numpy:
 
 ~~~python
-%timeit np.arange(10**7).sum()
+%timeit np.arange(1e7).sum()
 ~~~
 {: .source}
 
@@ -195,7 +195,7 @@ Now with Numpy:
 And with Numba:
 
 ~~~python
-%timeit numba_sum_range(10**7)
+%timeit sum_range_numba(1e7)
 ~~~
 {: .source}
 
