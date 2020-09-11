@@ -80,7 +80,10 @@ This computation is **inherently serial**. We can show a diagram showing the dep
 call:
 ![Serial computation](../fig/serial.png)
 
-If however, the computation involves **independent work**, we can do things in **parallel**:
+Here we see a block for each function call, indicating some work for the CPU, and the arrows
+show that the evaluation of a function depends on a previous result.
+
+In many cases however, the computation involves **independent work**, like in this pseudo snippet:
 
 ~~~python
 for i in range(n):
@@ -89,7 +92,8 @@ print(collect(x))
 ~~~
 {: .source}
 
-Now the **dependency graph** looks different
+Now we have the potential for doing things in **parallel**. The **dependency graph** looks different:
+
 ![Parallel computation](../fig/parallel.png)
 
 > ## Challenge: Parallelised Pea Soup
