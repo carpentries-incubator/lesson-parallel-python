@@ -20,9 +20,6 @@ keypoints:
 - "Numba helps you both speeding up and lifting code from the GIL."
 ---
 
-FIXME: Maybe it makes sense to explain the difference between multiprocessing and
-multithreading in this chapter?
-
 # Monte Carlo
 In order to witness the advantages of parallelization we need an algorithm that is 1. parallelizable and 2. complex enough to take a few seconds of CPU time. In order to not scare away the interested reader, we need this algorithm to be understandable and, if possible, interesting. We chose a classical algorithm for demonstrating parallel programming: estimating the value of number π.
 
@@ -42,7 +39,9 @@ the blue circle M compared to the green square N. Then π is approximated by the
 >     """Computes the value of pi using N random samples."""
 >     pass
 > ~~~
+>
 > Also make sure to time your function!
+>
 > {: .source}
 >
 > > ## Solution
@@ -62,9 +61,14 @@ the blue circle M compared to the green square N. Then π is approximated by the
 > >     return 4 * M / N
 > >
 > > %timeit calc_pi(10**6)
-> >
 > > ~~~
 > > {: .source}
+> >
+> > ~~~
+> > 676 ms ± 6.39 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+> > ~~~
+> >{: .output}
+> >
 > {: .solution}
 {: .challenge}
 
