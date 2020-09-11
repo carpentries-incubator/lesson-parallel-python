@@ -1,5 +1,5 @@
 ---
-title: "Benchmarking your code"
+title: "Measuring performance"
 teaching: 40
 exercises: 20
 questions:
