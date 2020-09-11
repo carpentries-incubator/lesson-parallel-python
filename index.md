@@ -11,7 +11,7 @@ FIXME: home page introduction
 
 > ## Prerequisites
 > The participant should be:
-> - familiar with basic Python
+> - familiar with basic Python: control flow, functions, numpy
 > - comfortable working in Jupyter
 >
 > Recommended:
