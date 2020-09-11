@@ -145,7 +145,10 @@ a single Python instance. There are roughly two classes of solutions to circumve
 
 The downside of running multilple Python instances is that we need to share program state between
 different processes. To this end, you need to serialize objects using `pickle`, `json` or similar,
-creating a large overhead. The alternative is to bring parts of our code outside Python. Numpy has
+creating a large overhead. A solution for `calc_pi` using `multiprocessing` is therefore not any
+faster and we will not show it here.
+
+The alternative for multiprocessing is to bring parts of our code outside Python. Numpy has
 many routines that are largely situated outside of the GIL. The only way to know for sure is trying
 out and profiling your application.
 
