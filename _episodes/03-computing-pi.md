@@ -59,7 +59,7 @@ the blue circle M compared to the green square N. Then π is approximated by the
 > >             M += 1
 > >     return 4 * M / N
 > >
-> > %timeit calc_pi(1e6)
+> > %timeit calc_pi(10**6)
 > > ~~~
 > > {: .source}
 > >
@@ -93,7 +93,7 @@ parallel (think for example about cutting the vegetables while simmering the spl
 We can demonstrate that this is much faster than the 'naive' implementation:
 
 ~~~python
-%timeit calc_pi_numpy(1e6)
+%timeit calc_pi_numpy(10**6)
 ~~~
 {: .source}
 
@@ -224,7 +224,7 @@ And with Numba:
 > >             M += 1
 > >     return 4 * M / N
 > >
-> > %timeit calc_pi_numba(1e6)
+> > %timeit calc_pi_numba(10**6)
 > > ~~~
 > > ~~~
 > > 13.5 ms ± 634 µs per loop (mean ± std. dev. of 7 runs, 1 loop each)
