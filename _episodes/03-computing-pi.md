@@ -173,7 +173,7 @@ def sum_range_numba(a: int):
 Let's time three versions of the same test. First, native Python iterators:
 
 ~~~python
-%timeit sum(range(1e7))
+%timeit sum(range(10**7))
 ~~~
 {: .source}
 
@@ -185,7 +185,7 @@ Let's time three versions of the same test. First, native Python iterators:
 Now with Numpy:
 
 ~~~python
-%timeit np.arange(1e7).sum()
+%timeit np.arange(10**7).sum()
 ~~~
 {: .source}
 
@@ -197,7 +197,7 @@ Now with Numpy:
 And with Numba:
 
 ~~~python
-%timeit sum_range_numba(1e7)
+%timeit sum_range_numba(10**7)
 ~~~
 {: .source}
 ~~~
