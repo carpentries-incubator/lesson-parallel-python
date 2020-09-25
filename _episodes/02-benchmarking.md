@@ -1,5 +1,5 @@
 ---
-title: "Benchmarking your code"
+title: "Measuring performance"
 teaching: 40
 exercises: 20
 questions:
@@ -40,6 +40,11 @@ result = work.compute()
 ~~~
 {: .source}
 
+> It could be that a task this small does not register on your radar: slowly increase the amount of
+> `10**7` to see what happens. But be careful, asking for too much memory can make your computer
+> slow to a crawl.
+{: .callout}
+
 ![System monitor](../fig/system-monitor.jpg)
 
 How can we test in a more rigorous way? In Jupyter we can use some line magics!
@@ -52,6 +57,14 @@ np.arange(10**7).sum()
 
 This was only a single run, how can we trust this?
 
+The `%%time` line magic checks how long it took for a computation to finish. It does nothing to
+change the computation itself. In this it is very similar to the `time` shell command.
+
+The `%%timeit` line magic however, first measures how long it takes to run a command one time, then
+repeats it enough times to get an average run-time. Also, `%%timeit` can measure run times without
+the time it takes to setup a problem, measuring only the performance of the code in the cell.
+This way we can trust the outcome better.
+
 ~~~python
 %%timeit
 np.arange(10**7).sum()
@@ -59,6 +72,9 @@ np.arange(10**7).sum()
 {: .source}
 
 This does not tell you anything about memory consumption or efficiency though.
+The act of systematically testing performance under different conditions is called **benchmarking**.
+Analysing what parts of a program contribute to the total performance, and identifying possible
+bottlenecks is **profiling**.
 
 # Memory profiling
 We will use the [`memory_profiler` package](https://github.com/pythonprofilers/memory_profiler) to track memory usage.
@@ -68,7 +84,7 @@ pip install memory_profiler
 ~~~
 {: .source}
 
-In Jupyter, type the following lines to compare the memory usage of the serial and parallel versions of the code presented above:
+In Jupyter, type the following lines to compare the memory usage of the serial and parallel versions of the code presented above (again, change the value of `10**7` to something higher if needed):
 ~~~python
 import numpy as np
 import dask.array as da
@@ -124,6 +140,10 @@ visualize([rprof2], output_notebook())
 FIXME: without the Profiler, the time axis is not nicely scaled. Profiler does not work with dask commands.
 
 # How many cores?
+Using more cores for a computation can decrease the run time. However, even with very simple
+examples performance may scale unexpectedly. The number of visible CPUs is often not equal to the
+number of physical cores due to a feature called *hyper-threading*.
+
 You can find out how many cores you have on your machine.
 
 On Linux:
