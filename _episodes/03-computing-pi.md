@@ -9,19 +9,17 @@ questions:
 - "What is task parallelism?"
 - "How do I use multiple threads in Python?"
 objectives:
-- "Know how to rewrite a program in a vectorized form."
+- "Rewrite a program in a vectorized form."
 - "Understand the difference between data and task-based parallel programming."
 - "Understand the GIL."
 - "Apply `numba.jit` to accelerate Python."
 - "Recognize the primitive components of the queue/worker model of execution."
 keypoints:
+- "Always profile your code to see which parellelization method works best"
 - "Vectorized algorithms are both a blessing and a curse."
 - "If we want the most efficient parallelism on a single machine, we need to circumvent the GIL."
 - "Numba helps you both speeding up code and circumventing the GIL."
 ---
-
-FIXME: Maybe it makes sense to explain the difference between multiprocessing and
-multithreading in this chapter?
 
 # Parallelizing a Python application
 In order to recognize the advantages of parallelization we need an algorithm that is easy to parallelize, but still complex enough to take a few seconds of CPU time.
@@ -46,7 +44,9 @@ Then π is approximated by the ration 4M/N.
 >     """Computes the value of pi using N random samples."""
 >     pass
 > ~~~
+>
 > Also make sure to time your function!
+>
 > {: .source}
 >
 > > ## Solution
@@ -66,9 +66,14 @@ Then π is approximated by the ration 4M/N.
 > >     return 4 * M / N
 > >
 > > %timeit calc_pi(10**6)
-> >
 > > ~~~
 > > {: .source}
+> >
+> > ~~~
+> > 676 ms ± 6.39 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+> > ~~~
+> >{: .output}
+> >
 > {: .solution}
 {: .challenge}
 
@@ -92,15 +97,6 @@ It contrasts to **task parallelization**, where **different independent** proced
 parallel (think for example about cutting the vegetables while simmering the split peas).
 
 We can demonstrate that this is much faster than the 'naive' implementation:
-~~~python
-%timeit calc_pi(10**6)
-~~~
-{: .source}
-
-~~~
-676 ms ± 6.39 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
-~~~
-{: .output}
 
 ~~~python
 %timeit calc_pi_numpy(10**6)
@@ -113,10 +109,10 @@ We can demonstrate that this is much faster than the 'naive' implementation:
 {: .output}
 
 > ## Discussion: is this all better?
-> What is the downside of this implementation?
-> - memory use
-> - less intuitive
-> - monolithic approach, less composable?
+> What is the downside of the vectorized implementation?
+> - It uses more memory
+> - It is less intuitive
+> - It is a more monolithic approach, i.e. you cannot break it up in several parts
 {: .discussion}
 
 > ## Challenge: Daskify
@@ -169,7 +165,7 @@ Numba makes it easier to create accelerated functions. You can use it with the d
 import numba
 
 @numba.jit
-def numba_sum_range(a: int):
+def sum_range_numba(a: int):
     """Compute the sum of the numbers in the range [0, a)."""
     x = 0
     for i in range(a):
@@ -204,22 +200,50 @@ Now with Numpy:
 And with Numba:
 
 ~~~python
-%timeit numba_sum_range(10**7)
+%timeit sum_range_numba(10**7)
 ~~~
 {: .source}
-
 ~~~
 162 ns ± 0.885 ns per loop (mean ± std. dev. of 7 runs, 10000000 loops each)
 ~~~
 {: .output}
 
 > ## Challenge: Numbify `comp_pi`
-> Create a Numba version of `comp_pi`. Measure its performance.
+> Create a Numba version of `comp_pi`. Time it.
 >
 > > ## Solution
 > > Add the `@numba.jit` decorator to the first 'naive' implementation.
+> > ~~~python
+> > @numba.jit
+> > def calc_pi_numba(N):
+> >     M = 0
+> >     for i in range(N):
+> >         # Simulate impact coordinates
+> >         x = random.uniform(-1, 1)
+> >         y = random.uniform(-1, 1)
+> >
+> >         # True if impact happens inside the circle
+> >         if x**2 + y**2 < 1.0:
+> >             M += 1
+> >     return 4 * M / N
+> >
+> > %timeit calc_pi_numba(10**6)
+> > ~~~
+> > ~~~
+> > 13.5 ms ± 634 µs per loop (mean ± std. dev. of 7 runs, 1 loop each)
+> > ~~~
+> > {: .output}
 > {: .solution}
 {: .challenge}
+
+> ## Measuring == knowing
+> Always profile your code to see which parallelization method works best.
+{: .callout}
+
+> ## `numba.jit` is not a magical command to solve are your problems
+> Using numba to accelerate your code often outperforms other methods, but
+>  it is not always trivial to rewrite your code so that you can use numba with it.
+{: .callout}
 
 # The `threading` module
 We now build a queue/worker model.
