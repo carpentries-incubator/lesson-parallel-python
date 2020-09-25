@@ -3,29 +3,35 @@ title: "Understanding parallelization in python"
 teaching: 60
 exercises: 30
 questions:
-- "How do I parallelize an elementary program?"
-- "What is the difference between data parallelism and task parallelism?"
-- "What is the python GIL?"
+- "What is the Global Interpreter Lock (GIL)?"
+- "How do I parallelize a Python application?"
+- "What is data parallelism?"
+- "What is task parallelism?"
+- "How do I use multiple threads in Python?"
 objectives:
 - "Rewrite a program in a vectorized form."
 - "Understand the difference between data and task-based parallel programming."
-- "Understand the GIL"
-- "Apply `numba.jit` to lift the GIL"
-- "Recognize the primitive components of the queue/worker based model of execution."
+- "Understand the GIL."
+- "Apply `numba.jit` to accelerate Python."
+- "Recognize the primitive components of the queue/worker model of execution."
 keypoints:
-- "Vectorized algorithms are both a blessing and a curse."
 - "Always profile your code to see which parellelization method works best"
-- "If we want the most efficient parallelism on a single machine, we need to unlock the GIL."
-- "Numba helps you both speeding up and lifting code from the GIL."
+- "Vectorized algorithms are both a blessing and a curse."
+- "If we want the most efficient parallelism on a single machine, we need to circumvent the GIL."
+- "Numba helps you both speeding up code and circumventing the GIL."
 ---
 
-# Monte Carlo
-In order to witness the advantages of parallelization we need an algorithm that is 1. parallelizable and 2. complex enough to take a few seconds of CPU time. In order to not scare away the interested reader, we need this algorithm to be understandable and, if possible, interesting. We chose a classical algorithm for demonstrating parallel programming: estimating the value of number π.
+# Parallelizing a Python application
+In order to recognize the advantages of parallelization we need an algorithm that is easy to parallelize, but still complex enough to take a few seconds of CPU time.
+To not scare away the interested reader, we need this algorithm to be understandable and, if possible, also interesting.
+We chose a classical algorithm for demonstrating parallel programming: estimating the value of number π.
 
-The algorithm we are presenting is one of the classical examples of the power of Monte-Carlo methods. This is an umbrella term for several algorithms that use random numbers to approximate exact results. We chose this algorithm because of its simplicity and straightforward geometrical interpretation.
+The algorithm we present is one of the classical examples of the power of Monte-Carlo methods.
+This is an umbrella term for several algorithms that use random numbers to approximate exact results.
+We chose this algorithm because of its simplicity and straightforward geometrical interpretation.
 
-We can compute the value of π using a random number generator. We count the points falling inside
-the blue circle M compared to the green square N. Then π is approximated by the ration 4M/N.
+We can compute the value of π using a random number generator. We count the points falling inside the blue circle M compared to the green square N.
+Then π is approximated by the ration 4M/N.
 
 ![Computing Pi](../fig/calc_pi_3_wide.svg)
 
@@ -135,28 +141,25 @@ We can demonstrate that this is much faster than the 'naive' implementation:
 > {: .solution}
 {: .challenge}
 
-# The GIL
-The Global Interpreter Lock is an infamous feature of the Python interpreter. It both guarantees
-inner thread sanity, making programming Python safe, and prevents us from using multiple cores from
-a single Python instance. There are roughly two classes of solutions to circumvent/lift the GIL:
+# A few words about the Global Interpreter Lock
+The Global Interpreter Lock (GIL) is an infamous feature of the Python interpreter.
+It both guarantees inner thread sanity, making programming in Python safer, and prevents us from using multiple cores from
+a single Python instance.
+There are roughly two classes of solutions to circumvent/lift the GIL:
 
 - Run multiple Python instances: `multiprocessing`
 - Have important code outside Python: OS operations, C++ extensions, cython, numba
 
-The downside of running multilple Python instances is that we need to share program state between
-different processes. To this end, you need to serialize objects using `pickle`, `json` or similar,
-creating a large overhead. A solution for `calc_pi` using `multiprocessing` is therefore not any
-faster and we will not show it here.
+The downside of running multiple Python instances is that we need to share program state between different processes.
+To this end, you need to serialize objects using `pickle`, `json` or similar, creating a large overhead.
+The alternative is to bring parts of our code outside Python.
+Numpy has many routines that are largely situated outside of the GIL.
+The only way to know for sure is trying out and profiling your application.
 
-The alternative for multiprocessing is to bring parts of our code outside Python. Numpy has
-many routines that are largely situated outside of the GIL. The only way to know for sure is trying
-out and profiling your application.
+To write your own routines that do not live under the GIL there are several options: fortunately `numba` makes this very easy.
 
-To write your own routines that do not live under the GIL there are several options: fortunately
-`numba` makes this very easy.
-
-# Go Numba
-Numba makes it easier to create accellerated functions. You can use it with the decorator `numba.jit`.
+# Using Numba to accelerate Python code
+Numba makes it easier to create accelerated functions. You can use it with the decorator `numba.jit`.
 
 ~~~python
 import numba
@@ -243,9 +246,10 @@ And with Numba:
 {: .callout}
 
 # The `threading` module
-We now build a queue/worker model. This is the basis of multi-threading applications in Python. At
-this point creating a parallel program is quite involved. After we've done this, we'll see ways to
-do the same in Dask without mucking about with threads directly.
+We now build a queue/worker model.
+This is the basis of multi-threading applications in Python.
+At this point creating a parallel program is quite involved.
+After we've done this, we'll see ways to do the same in Dask without mucking about with threads directly.
 
 ~~~python
 import queue
