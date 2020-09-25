@@ -3,25 +3,21 @@ title: "Understanding parallelization in python"
 teaching: 60
 exercises: 30
 questions:
-- "What is the GIL?"
 - "How do I parallelize an elementary program?"
-- "What is data parallelism?"
-- "What is task parallelism?"
-- "How do I use multiple threads in Python?"
+- "What is the difference between data parallelism and task parallelism?"
+- "What is the python GIL?"
 objectives:
-- "Know how to rewrite a program in a vectorized form."
+- "Rewrite a program in a vectorized form."
 - "Understand the difference between data and task-based parallel programming."
 - "Understand the GIL"
 - "Apply `numba.jit` to lift the GIL"
 - "Recognize the primitive components of the queue/worker based model of execution."
 keypoints:
 - "Vectorized algorithms are both a blessing and a curse."
+- "Always profile your code to see which parellelization method works best"
 - "If we want the most efficient parallelism on a single machine, we need to unlock the GIL."
 - "Numba helps you both speeding up and lifting code from the GIL."
 ---
-
-FIXME: Maybe it makes sense to explain the difference between multiprocessing and
-multithreading in this chapter?
 
 # Monte Carlo
 In order to witness the advantages of parallelization we need an algorithm that is 1. parallelizable and 2. complex enough to take a few seconds of CPU time. In order to not scare away the interested reader, we need this algorithm to be understandable and, if possible, interesting. We chose a classical algorithm for demonstrating parallel programming: estimating the value of number π.
@@ -42,7 +38,9 @@ the blue circle M compared to the green square N. Then π is approximated by the
 >     """Computes the value of pi using N random samples."""
 >     pass
 > ~~~
+>
 > Also make sure to time your function!
+>
 > {: .source}
 >
 > > ## Solution
@@ -62,9 +60,14 @@ the blue circle M compared to the green square N. Then π is approximated by the
 > >     return 4 * M / N
 > >
 > > %timeit calc_pi(10**6)
-> >
 > > ~~~
 > > {: .source}
+> >
+> > ~~~
+> > 676 ms ± 6.39 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+> > ~~~
+> >{: .output}
+> >
 > {: .solution}
 {: .challenge}
 
@@ -88,15 +91,6 @@ It contrasts to **task parallelization**, where **different independent** proced
 parallel (think for example about cutting the vegetables while simmering the split peas).
 
 We can demonstrate that this is much faster than the 'naive' implementation:
-~~~python
-%timeit calc_pi(10**6)
-~~~
-{: .source}
-
-~~~
-676 ms ± 6.39 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
-~~~
-{: .output}
 
 ~~~python
 %timeit calc_pi_numpy(10**6)
@@ -109,10 +103,10 @@ We can demonstrate that this is much faster than the 'naive' implementation:
 {: .output}
 
 > ## Discussion: is this all better?
-> What is the downside of this implementation?
-> - memory use
-> - less intuitive
-> - monolithic approach, less composable?
+> What is the downside of the vectorized implementation?
+> - It uses more memory
+> - It is less intuitive
+> - It is a more monolithic approach, i.e. you cannot break it up in several parts
 {: .discussion}
 
 > ## Challenge: Daskify
@@ -151,7 +145,10 @@ a single Python instance. There are roughly two classes of solutions to circumve
 
 The downside of running multilple Python instances is that we need to share program state between
 different processes. To this end, you need to serialize objects using `pickle`, `json` or similar,
-creating a large overhead. The alternative is to bring parts of our code outside Python. Numpy has
+creating a large overhead. A solution for `calc_pi` using `multiprocessing` is therefore not any
+faster and we will not show it here.
+
+The alternative for multiprocessing is to bring parts of our code outside Python. Numpy has
 many routines that are largely situated outside of the GIL. The only way to know for sure is trying
 out and profiling your application.
 
@@ -165,7 +162,7 @@ Numba makes it easier to create accellerated functions. You can use it with the 
 import numba
 
 @numba.jit
-def numba_sum_range(a: int):
+def sum_range_numba(a: int):
     """Compute the sum of the numbers in the range [0, a)."""
     x = 0
     for i in range(a):
@@ -200,22 +197,50 @@ Now with Numpy:
 And with Numba:
 
 ~~~python
-%timeit numba_sum_range(10**7)
+%timeit sum_range_numba(10**7)
 ~~~
 {: .source}
-
 ~~~
 162 ns ± 0.885 ns per loop (mean ± std. dev. of 7 runs, 10000000 loops each)
 ~~~
 {: .output}
 
 > ## Challenge: Numbify `comp_pi`
-> Create a Numba version of `comp_pi`. Measure its performance.
+> Create a Numba version of `comp_pi`. Time it.
 >
 > > ## Solution
 > > Add the `@numba.jit` decorator to the first 'naive' implementation.
+> > ~~~python
+> > @numba.jit
+> > def calc_pi_numba(N):
+> >     M = 0
+> >     for i in range(N):
+> >         # Simulate impact coordinates
+> >         x = random.uniform(-1, 1)
+> >         y = random.uniform(-1, 1)
+> >
+> >         # True if impact happens inside the circle
+> >         if x**2 + y**2 < 1.0:
+> >             M += 1
+> >     return 4 * M / N
+> >
+> > %timeit calc_pi_numba(10**6)
+> > ~~~
+> > ~~~
+> > 13.5 ms ± 634 µs per loop (mean ± std. dev. of 7 runs, 1 loop each)
+> > ~~~
+> > {: .output}
 > {: .solution}
 {: .challenge}
+
+> ## Measuring == knowing
+> Always profile your code to see which parallelization method works best.
+{: .callout}
+
+> ## `numba.jit` is not a magical command to solve are your problems
+> Using numba to accelerate your code often outperforms other methods, but
+>  it is not always trivial to rewrite your code so that you can use numba with it.
+{: .callout}
 
 # The `threading` module
 We now build a queue/worker model. This is the basis of multi-threading applications in Python. At
