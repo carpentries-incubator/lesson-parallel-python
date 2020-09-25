@@ -4,7 +4,7 @@ teaching: 60
 exercises: 30
 questions:
 - "What is the Global Interpreter Lock (GIL)?"
-- "How do I parallelize a simple program?"
+- "How do I parallelize a Python application?"
 - "What is data parallelism?"
 - "What is task parallelism?"
 - "How do I use multiple threads in Python?"
@@ -23,8 +23,8 @@ keypoints:
 FIXME: Maybe it makes sense to explain the difference between multiprocessing and
 multithreading in this chapter?
 
-# Parallelizing a simple application
-In order to recognize the advantages of parallelization we need an algorithm that is simple to parallelize, but still complex enough to take a few seconds of CPU time.
+# Parallelizing a Python application
+In order to recognize the advantages of parallelization we need an algorithm that is easy to parallelize, but still complex enough to take a few seconds of CPU time.
 To not scare away the interested reader, we need this algorithm to be understandable and, if possible, also interesting.
 We chose a classical algorithm for demonstrating parallel programming: estimating the value of number π.
 
