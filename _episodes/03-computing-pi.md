@@ -1,21 +1,20 @@
 ---
-title: "Computing Pi"
+title: "Understanding parallelization in python"
 teaching: 60
 exercises: 30
 questions:
-- "What is the GIL?"
 - "How do I parallelize an elementary program?"
-- "What is vector-based parallelism?"
-- "What is task-based parallelism?"
-- "How do I use multiple threads in Python?"
+- "What is the difference between data parallelism and task parallelism?"
+- "What is the python GIL?"
 objectives:
+- "Rewrite a program in a vectorized form."
+- "Understand the difference between data and task-based parallel programming."
 - "Understand the GIL"
 - "Apply `numba.jit` to lift the GIL"
-- "Understand the difference between vectorized and task-based parallel programming."
 - "Recognize the primitive components of the queue/worker based model of execution."
 keypoints:
 - "Vectorized algorithms are both a blessing and a curse."
-- "Many problems fit a pattern of `map`, `filter` and `reduce` operations."
+- "Always profile your code to see which parellelization method works best"
 - "If we want the most efficient parallelism on a single machine, we need to unlock the GIL."
 - "Numba helps you both speeding up and lifting code from the GIL."
 ---
@@ -39,6 +38,9 @@ the blue circle M compared to the green square N. Then π is approximated by the
 >     """Computes the value of pi using N random samples."""
 >     pass
 > ~~~
+>
+> Also make sure to time your function!
+>
 > {: .source}
 >
 > > ## Solution
@@ -56,8 +58,16 @@ the blue circle M compared to the green square N. Then π is approximated by the
 > >         if x**2 + y**2 < 1.0:
 > >             M += 1
 > >     return 4 * M / N
+> >
+> > %timeit calc_pi(10**6)
 > > ~~~
 > > {: .source}
+> >
+> > ~~~
+> > 676 ms ± 6.39 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+> > ~~~
+> >{: .output}
+> >
 > {: .solution}
 {: .challenge}
 
@@ -73,23 +83,35 @@ def calc_pi_numpy(N):
     M = np.count_nonzero((pts**2).sum(axis=0) < 1)
     return 4 * M / N
 
-calc_pi_numpy(10**8)
+~~~
+{: .source}
+This is a **vectorized** version of the original algorithm. It nicely demonstrates **data parallelization**,
+where a **single operation** is replicated over collections of data.
+It contrasts to **task parallelization**, where **different independent** procedures are performed in
+parallel (think for example about cutting the vegetables while simmering the split peas).
+
+We can demonstrate that this is much faster than the 'naive' implementation:
+
+~~~python
+%timeit calc_pi_numpy(10**6)
 ~~~
 {: .source}
 
-We can demonstrate that this is much faster than the 'naive' implementation. This is a
-**vectorized** version of the original algorithm.
+~~~
+25.2 ms ± 1.54 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+~~~
+{: .output}
 
 > ## Discussion: is this all better?
-> What is the downside of this implementation?
-> - memory use
-> - less intuitive
-> - monolithic approach, less composable?
+> What is the downside of the vectorized implementation?
+> - It uses more memory
+> - It is less intuitive
+> - It is a more monolithic approach, i.e. you cannot break it up in several parts
 {: .discussion}
 
 > ## Challenge: Daskify
 > Write `calc_pi_dask` to make the Numpy version parallel. Compare speed and memory performance with
-> the Numpy version.
+> the Numpy version. NB: Remember that dask.array mimics the numpy API.
 >
 > > ## Solution
 > >
@@ -103,9 +125,13 @@ We can demonstrate that this is much faster than the 'naive' implementation. Thi
 > >     M = da.count_nonzero((pts**2).sum(axis=0) < 1)
 > >     return 4 * M / N
 > >
-> > calc_pi_numpy(10**8).compute()
+> > %timeit calc_pi_dask(10**6).compute()
 > > ~~~
 > > {: .source}
+> >~~~
+> >4.68 ms ± 135 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+> >~~~
+> >{: .output}
 > {: .solution}
 {: .challenge}
 
@@ -119,7 +145,10 @@ a single Python instance. There are roughly two classes of solutions to circumve
 
 The downside of running multilple Python instances is that we need to share program state between
 different processes. To this end, you need to serialize objects using `pickle`, `json` or similar,
-creating a large overhead. The alternative is to bring parts of our code outside Python. Numpy has
+creating a large overhead. A solution for `calc_pi` using `multiprocessing` is therefore not any
+faster and we will not show it here.
+
+The alternative for multiprocessing is to bring parts of our code outside Python. Numpy has
 many routines that are largely situated outside of the GIL. The only way to know for sure is trying
 out and profiling your application.
 
@@ -133,7 +162,7 @@ Numba makes it easier to create accellerated functions. You can use it with the 
 import numba
 
 @numba.jit
-def sum_range(a: int):
+def sum_range_numba(a: int):
     """Compute the sum of the numbers in the range [0, a)."""
     x = 0
     for i in range(a):
@@ -168,22 +197,50 @@ Now with Numpy:
 And with Numba:
 
 ~~~python
-%timeit sum_range(10**7)
+%timeit sum_range_numba(10**7)
 ~~~
 {: .source}
-
 ~~~
 162 ns ± 0.885 ns per loop (mean ± std. dev. of 7 runs, 10000000 loops each)
 ~~~
 {: .output}
 
 > ## Challenge: Numbify `comp_pi`
-> Create a Numba version of `comp_pi`. Measure its performance.
+> Create a Numba version of `comp_pi`. Time it.
 >
 > > ## Solution
 > > Add the `@numba.jit` decorator to the first 'naive' implementation.
+> > ~~~python
+> > @numba.jit
+> > def calc_pi_numba(N):
+> >     M = 0
+> >     for i in range(N):
+> >         # Simulate impact coordinates
+> >         x = random.uniform(-1, 1)
+> >         y = random.uniform(-1, 1)
+> >
+> >         # True if impact happens inside the circle
+> >         if x**2 + y**2 < 1.0:
+> >             M += 1
+> >     return 4 * M / N
+> >
+> > %timeit calc_pi_numba(10**6)
+> > ~~~
+> > ~~~
+> > 13.5 ms ± 634 µs per loop (mean ± std. dev. of 7 runs, 1 loop each)
+> > ~~~
+> > {: .output}
 > {: .solution}
 {: .challenge}
+
+> ## Measuring == knowing
+> Always profile your code to see which parallelization method works best.
+{: .callout}
+
+> ## `numba.jit` is not a magical command to solve are your problems
+> Using numba to accelerate your code often outperforms other methods, but
+>  it is not always trivial to rewrite your code so that you can use numba with it.
+{: .callout}
 
 # The `threading` module
 We now build a queue/worker model. This is the basis of multi-threading applications in Python. At
@@ -199,7 +256,7 @@ def worker(q):
     while True:
         try:
             x = q.get(block=False)
-            print(sum_primes(x), end=' ', flush=True)
+            print(calc_pi(x), end=' ', flush=True)
         except queue.Empty:
             break
 

@@ -8,10 +8,10 @@ questions:
 objectives:
 - "Recognize `map`, `filter` and `reduce` patterns."
 - "Create programs using these building blocks."
-- "Use the `visualize` method to create dependecy graphs."
+- "Use the `visualize` method to create dependency graphs."
 - "Understand the abstraction of delayed evaluation."
 keypoints:
-- "Using abstractions keep programs managable."
+- "Using abstractions keep programs manageable."
 ---
 
 We've seen some use of Dask `array`, now we will also dive into `bag` and `delayed` sub-modules.
@@ -28,7 +28,7 @@ We can run the Numba version of `comp_pi` in parallel using Dask bags.
 
 Operations on this level can be distinguished in several categories
 
-- **map** (N to N) applies a function *one-to-one* on a list of arguments. This operation is **embarassingly
+- **map** (N to N) applies a function *one-to-one* on a list of arguments. This operation is **embarrassingly
   parallel**.
 - **filter** (N to <N) selects a subset from the data.
 - **reduce** (N to 1) computes an aggregate from a sequence of data; if the operation permits it
@@ -36,12 +36,12 @@ Operations on this level can be distinguished in several categories
   further processing the results of those chunks.
 
 ~~~python
-import dask
+import dask.bag as db
 
 def f(x):
     return x**2
 
-bag = dask.bag.from_sequence(range(6))
+bag = db.from_sequence(range(6))
 bag.map(f).visualize()
 ~~~
 {: .source}
@@ -73,22 +73,52 @@ bag.reduction(sum, sum).visualize()
 > Example: Adventures of Sherlock Holmes, https://www.gutenberg.org/files/1661/1661-0.txt
 >
 > ~~~python
+> from nltk.stem.snowball import PorterStemmer
+> stemmer = PorterStemmer()
+>
+> def good_word(w):
+>     return len(w) > 0 and not any(i.isdigit() for i in w)
+>
+> def clean_word(w):
+>     return w.strip("*!?.:;'\",“’‘”()_").lower()
+> ~~~
+> {: .source}
+>
+> ~~~python
 > text = "Lorem ipsum"
 > words = set()
 > for w in text.split():
->     words.insert(w)
-> print("This corpus contains {n} unique words.".format(n=len(w)))
+>     cw = clean_word(w)
+>     if good_word(cw):
+>         words.add(stemmer.stem(cw))
+> print("This corpus contains {n} unique words.".format(n=len(words)))
 > ~~~
+> {: .source}
 >
 > Tip: start by just counting all the words in the corpus, then expand from there.
-> Extra: use `nltk.stem` to count word stems in stead of different variants of the same word.
+> Tip: a better version of this program would be
+>
+> ~~~python
+> words = set(map(stemmer.stem, filter(good_word, map(clean_word, text.split()))))
+> len(words)
+> ~~~
+> {: .source}
 >
 > > ## Solution
 > > Use `read_text` to read the text efficiently, split the words and `flatten` to create a
 > > single bag, then `map` to capitalize all the words (or find their stems).
 > > To split the words, use `group_by` and finaly `count` to reduce to the number of
 > > words. Other option `distinct`.
-> > FIXME: add tested implementation
+> >
+> > ~~~python
+> > bag = db.read_text("./1661-0.txt", blocksize="32k")
+> > raw_words = bag.str.split().flatten()
+> > clean_words = raw_words.map(clean_word).filter(good_word)
+> > stems = clean_words.map(stemmer.stem)
+> > unique_words = stems.distinct().count()
+> > unique_words.compute(scheduler="processes", num_workers=4)
+> > ~~~
+> > {: .source}
 > {: .solution}
 {: .challenge}
 
@@ -129,7 +159,7 @@ def add(a, b):
 
 ~~~python
 x_p = add(1, 2)
-y_p = add(x, 3)
+y_p = add(x_p, 3)
 z_p = add(x_p, y_p)
 z_p.visualize()
 ~~~

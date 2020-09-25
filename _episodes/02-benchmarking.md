@@ -20,15 +20,20 @@ keypoints:
 
 # A first example with Dask
 We will get into creating parallel programs in Python later. First let's see a small example. Open
-your system monitor, and run the following:
+your system monitor, and run the following code examples. Depending on your computer you will have
+to raise the power to ``10**8``, ``10**9`` etc. to make sure that it runs long enough to observe the
+effect.
 
 ~~~python
+# Summation making use of numpy:
 import numpy as np
 result = np.arange(10**7).sum()
 ~~~
 {: .source}
 
 ~~~python
+# The same summation, but using dask to parallelize the code.
+# NB: the API for dask arrays mimics that of numpy
 import dask.array as da
 work = da.arange(10**7).sum()
 result = work.compute()
@@ -110,7 +115,9 @@ plt.show()
 
 # Alternate Profiling
 
-Dask has a couple of profiling options as well
+Dask has a couple of profiling options as well. Depending on your computer you will have
+to raise the power in the following code examples to ``10**8``, ``10**9`` etc. to make 
+sure that it runs long enough to observe the effect.
 
 ~~~python
 from dask.diagnostics import Profiler, ResourceProfiler
@@ -153,7 +160,7 @@ sysctl -n hw.physicalcpu
 
 On Windows:
 ~~~bash
-WMIC CPU Get DeviceID,NumberOfCores,NumberOfLogicalProcessors
+WMIC CPU Get NumberOfCores,NumberOfLogicalProcessors
 ~~~
 {: .source}
 
@@ -172,7 +179,7 @@ Gives the following result:
 
 ~~~python
 import pandas as pd
-pd.DataFrame({"n": range(1, 9), "t": x})
+data = pd.DataFrame({"n": range(1, 9), "t": x})
 data.set_index("n").plot()
 ~~~
 
