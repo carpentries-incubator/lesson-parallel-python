@@ -89,7 +89,14 @@ It may be tempting to think that using three cores instead of one would multiply
 
 ## Parallelizable and non-parallelizable tasks
 
-It is important to know that some tasks are fundamentally non-parallelizable, also known as **inherently serial**. An example could be the brute-force computation of the factorial of an integer (example: the factorial of 4, usually written as $4!$ is obtained by multiplying all the integers smaller or equal to $6$, that is: $4! = 4 \cdot 3 \cdot 2 \cdot 1 = 24$ ).
+It is important to know that some tasks are fundamentally non-parallelizable,
+also known as **inherently serial**. An example could be the brute-force computation of
+the factorial of an integer.
+
+Example: the factorial of 4,
+usually written as <img src="https://latex.codecogs.com/svg.latex?4!">
+ is obtained by multiplying all the integers smaller or equal to 4, that is:
+ <img src="https://latex.codecogs.com/svg.latex?4! = 4 \cdot 3 \cdot 2 \cdot 1 = 24">
 
 ~~~python
 n = 4 # This the input
