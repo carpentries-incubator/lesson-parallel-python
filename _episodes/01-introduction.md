@@ -112,12 +112,13 @@ print(output)
 
 Note that each successive loop needs the result of the previous one in order to be executed.
 
-FIXME: create diagram with Dask?
+![serial execution](../fig/serial.svg)
 
 In the example above we see a block for each function call, indicating some work for the CPU, and the arrows
 show that the evaluation of a function depends on a previous result.
 
-In many cases however, the computation involves **independent work**, like in this pseudo snippet:
+In many cases however, the computation involves **independent work**. However, the difference can be
+hard to spot. Look at this pseudo snippet:
 
 ~~~python
 x = [1, 2, 3, 4] # Write input
@@ -131,13 +132,22 @@ print(y) # Print output
 ~~~
 {: .source}
 
-FIXME: create diagram with Dask?
-
 Although we are performing the loops in a serial way in the snippet above,
 nothing avoids us from performing doing this calculation in parallel.
 The value of applying our function to any of the elements in the input `x` is completely independent of the values
 of the rest elements on `x`. This kind of problems are known as
 [embarrassingly parallel](https://en.wikipedia.org/wiki/Embarrassingly_parallel).
+
+If we rewrite this into a list-comprehension,
+
+~~~python
+y = [n**2 for n in x]
+~~~
+{: .source}
+
+It becomes more visible that each task (of squaring a number) is indeed independent.
+
+![parallel execution](../fig/parallel.svg)
 
 
 > ## Challenge: Parallelised Pea Soup
