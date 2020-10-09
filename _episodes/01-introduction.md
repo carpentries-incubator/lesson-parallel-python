@@ -94,9 +94,12 @@ also known as **inherently serial**. An example could be the brute-force computa
 the factorial of an integer.
 
 Example: the factorial of 4,
-usually written as <img src="https://latex.codecogs.com/svg.latex?4!">
- is obtained by multiplying all the integers smaller or equal to 4, that is:
- <img src="https://latex.codecogs.com/svg.latex?4! = 4 \cdot 3 \cdot 2 \cdot 1 = 24">
+usually written as $4!$,
+is obtained by multiplying all the integers smaller or equal to 4, that is:
+
+$$
+4! = 4 \cdot 3 \cdot 2 \cdot 1 = 24
+$$
 
 ~~~python
 n = 4 # This the input
