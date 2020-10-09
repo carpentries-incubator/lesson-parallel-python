@@ -139,8 +139,6 @@ bag.reduction(sum, sum).visualize()
 FIXME: profile this program
 
 # Dask Delayed
-FIXME: add output
-
 We can rewrite the same program using `dask.delayed`
 
 ~~~python
@@ -153,22 +151,78 @@ The `delayed` decorator builds a dependency graph from function calls.
 ~~~python
 @delayed
 def add(a, b):
+    result = a + b
+    print(f"{a} + {b} = {result}")
     return a + b
 ~~~
 {: .source}
 
+A `delayed` function stores the requested function call inside a **promise**. Nothing is being done
+yet.
+
 ~~~python
 x_p = add(1, 2)
-y_p = add(x_p, 3)
-z_p = add(x_p, y_p)
-z_p.visualize()
 ~~~
 {: .source}
+
+We can check that `x_p` is now a `Delayed` value.
+
+~~~python
+type(x_p)
+~~~
+{: .source}
+~~~
+[out]: dask.delayed.Delayed
+~~~
+{: .output}
 
 > ## Note
 > It is often a good idea to suffix variables that you know are promises with `_p`. That way you
 > keep track of promises versus immediate values.
 {: .callout}
+
+Only when we evaluate the computation, do we get an output.
+
+~~~python
+x_p.compute()
+~~~
+{:.source}
+~~~
+1 + 2 = 3
+[out]: 3
+~~~
+{:.output}
+
+From `Delayed` values we can create larger workflows.
+
+~~~python
+x_p = add(1, 2)
+y_p = add(x_p, 3)
+z_p = add(x_p, y_p)
+z_p.visualize(rankdir="LR")
+~~~
+{: .source}
+
+![Dask workflow graph](../fig/dask-workflow-example.svg)
+{: .output}
+
+> ## Challenge: run the workflow
+> Run the workflow. How many times is `x_p` computed? We needed it twice.
+> > ## Solution
+> > ~~~python
+> > z_p.compute()
+> > ~~~
+> > {: .source}
+> > ~~~
+> > 1 + 2 = 3
+> > 3 + 3 = 6
+> > 3 + 6 = 9
+> > [out]: 9
+> > ~~~
+> > {: .output}
+> > The computation of `x_p` (1 + 2) appears only once.
+> {: .solution}
+{: .challenge}
 
 We can also make a **promise** by directly calling `delayed`
 
@@ -195,6 +249,28 @@ def gather(*args):
 > > It turns a list of promises into a promise of a list.
 > {: .solution}
 {: .challenge}
+
+We can visualize what `gather` does by this small example.
+
+~~~python
+x_p = gather(*(add(n, n) for n in range(10)))
+x_p.visualize()
+~~~
+{: .source}
+
+![a gather pattern](../fig/dask-gather-example.svg)
+{: .output}
+
+Computing the result,
+
+~~~python
+x_p.compute()
+~~~
+{: .source}
+~~~
+[out]: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+~~~
+{: .output}
 
 > ## Challenge: design a `mean` function
 > Write a `delayed` function that computes the mean of its arguments. Complete the program to
