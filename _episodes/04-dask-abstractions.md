@@ -19,7 +19,7 @@ We've seen some use of Dask `array`, now we will also dive into `bag` and `delay
 in character to `array`, while `futures` fall outside the scope of this tutorial.)
 
 # Parallelize using Dask bags
-We can run the Numba version of `comp_pi` in parallel using Dask bags.
+Dask bags let you compose functionality using several primitive patterns: the most important of these are `map`, `filter`, `fold` and `groupby`.
 
 > ## Discussion
 > Open the Dask documentation on bags: https://docs.dask.org/en/latest/bag-api.html
@@ -30,7 +30,8 @@ Operations on this level can be distinguished in several categories
 
 - **map** (N to N) applies a function *one-to-one* on a list of arguments. This operation is **embarrassingly
   parallel**.
-- **filter** (N to <N) selects a subset from the data.
+- **filter** (N to &lt;N) selects a subset from the data.
+- **groupby** (N to &lt;N) groups data in subcatagories.
 - **reduce** (N to 1) computes an aggregate from a sequence of data; if the operation permits it
   (summing, maximizing, etc) this can be done in parallel by reducing chunks of data and then
   further processing the results of those chunks.
@@ -45,25 +46,34 @@ bag = db.from_sequence(range(6))
 bag.map(f).visualize()
 ~~~
 {: .source}
+![A map operation.](../fig/dask-bag-map.svg)
+{: .output}
 
 ~~~python
 def pred(x):
     return x % 2 == 0
 
-bag.filter(pred).visualize()
+bag.filter(pred)
+bag.compute()
 ~~~
 {: .source}
+~~~
+[out]: [0, 2, 4]
+~~~
+{: .output}
 
 ~~~python
 bag.reduction(sum, sum).visualize()
 ~~~
 {: .source}
+![A reduction.](../fig/dask-bag-reduction.svg)
+{: .output}
 
 > ## Challenge
-> Look at the `mean`, `pluck`, and `topk` methods, match them up with `map`, `filter` and
+> Look at the `mean`, `pluck`, `distinct`, and `topk` methods, match them up with `map`, `filter` and
 > `reduction` methods.
 > > ## Solution
-> > `mean` is a reduction, `pluck` is a mapping, and `topk` is a filter.
+> > `mean` is a reduction, `pluck` is a mapping, and `topk` is a filter. `distinct` could be implemented by getting the length (`count`) after a `groupby`.
 > {: .solution}
 {: .challenge}
 
@@ -96,10 +106,12 @@ bag.reduction(sum, sum).visualize()
 > {: .source}
 >
 > Tip: start by just counting all the words in the corpus, then expand from there.
-> Tip: a better version of this program would be
+> Tip: a "better"/different version of this program would be
 >
 > ~~~python
-> words = set(map(stemmer.stem, filter(good_word, map(clean_word, text.split()))))
+> words = set(map(stemmer.stem,
+>                 filter(good_word,
+>                        map(clean_word, text.split()))))
 > len(words)
 > ~~~
 > {: .source}
@@ -129,17 +141,18 @@ bag.reduction(sum, sum).visualize()
 > > bag = dask.bag.from_sequence(repeat(10**7, 24))
 > > shots = bag.map(calc_pi)
 > > estimate = shots.mean()
-> > estimate.visualize()
 > > estimate.compute()
 > > ~~~
 > > {: .source}
 > {: .solution}
 {: .challenge}
 
-FIXME: profile this program
+> ## Note
+> By default Dask runs a bag using multi-processing. This alleviates problems with the GIL, but also means a larger overhead.
+{: .callout}
 
 # Dask Delayed
-We can rewrite the same program using `dask.delayed`
+A lot of the functionality in Dask is based on top of a framework of *delayed evaluation*. The concept of delayed evaluation is very important in understanding how Dask functions, which is why we will go a bit deeper into `dask.delayed`.
 
 ~~~python
 from dask import delayed
@@ -224,7 +237,7 @@ z_p.visualize(rankdir="LR")
 > {: .solution}
 {: .challenge}
 
-We can also make a **promise** by directly calling `delayed`
+We can also make a promise by directly calling `delayed`
 
 ~~~python
 N = 10**7
@@ -244,9 +257,9 @@ def gather(*args):
 {: .source}
 
 > ## Challenge: understand `gather`
-> Can you describe what the `gather` function does in terms of lists and promises?
+> Can you describe what the `gather` function does in terms of lists and promises? How would you classify `gather` in terms of parallel programming patterns?
 > > ## Solution
-> > It turns a list of promises into a promise of a list.
+> > It turns a list of promises into a promise of a list. This computes from many values to a single object and should be considered a *reduction*.
 > {: .solution}
 {: .challenge}
 
@@ -290,8 +303,7 @@ x_p.compute()
 {: .challenge}
 
 In practice you may not need to use `@delayed` functions too often, but it does offer ultimate
-flexibility. You can build complex computational workflows in this manner, replacing shell
+flexibility. You can build complex computational workflows in this manner, sometimes replacing shell
 scripting, make files and the likes.
 
 {% include links.md %}
-

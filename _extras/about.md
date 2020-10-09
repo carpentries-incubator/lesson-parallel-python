@@ -2,7 +2,6 @@
 title: About
 ---
 {% include escience_academy.html %}
-{% include links.md %}
 
 This lesson material is developed and maintained by the Netherlands eScience Center.
 
@@ -17,3 +16,5 @@ This lesson material is developed and maintained by the Netherlands eScience Cen
 - Sven van der Burg <s.vanderburg@esciencecenter.nl>
 - Florian Huber <f.huber@esciencecenter.nl>
 - Evert Rol <e.rol@esciencecenter.nl>
+
+{% include links.md %}
