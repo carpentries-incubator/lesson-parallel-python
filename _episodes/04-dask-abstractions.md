@@ -16,7 +16,16 @@ keypoints:
 
 We've seen some use of Dask `array`, now we will also dive into `bag` and `delayed` sub-modules.
 (Dask also has Pandas-like `dataframe` and an advanced `futures` framework; `dataframe` is similar
-in character to `array`, while `futures` fall outside the scope of this tutorial.)
+in character to `array`, while `futures` fall outside the scope of this tutorial.) Dask has a lot of
+components, so here's an overview.
+
+| Dask module      | Abstraction          | Keywords                             |
+| ---------------- | -------------------- | ------------------------------------ |
+| `dask.array`     | `numpy`              | Numerical analysis                   |
+| `dask.dataframe` | `pandas`             | Generic data analysis                |
+| `dask.bag`       | `itertools`          | Map-reduce, workflows                |
+| `dask.delayed`   | functions            | Anything that doesn't fit the above  |
+| `dask.futures`   | `concurrent.futures` | Control execution, low-level         |
 
 # Parallelize using Dask bags
 Dask bags let you compose functionality using several primitive patterns: the most important of these are `map`, `filter`, `fold` and `groupby`.
