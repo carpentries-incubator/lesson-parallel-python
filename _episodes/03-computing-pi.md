@@ -42,7 +42,11 @@ Then π is approximated by the ration 4M/N.
 > import random
 > def calc_pi(N):
 >     """Computes the value of pi using N random samples."""
->     pass
+>     ...
+>     for i in range(N):
+>         # take a sample
+>         ...
+>     return ...
 > ~~~
 >
 > Also make sure to time your function!
@@ -77,7 +81,11 @@ Then π is approximated by the ration 4M/N.
 > {: .solution}
 {: .challenge}
 
-We now demonstrate a Numpy version of this algorithm.
+Before we start to parallelize this program, we need to do our best to make the inner function as
+efficient as we can. We show two techniques for doing this: *vectorization* using `numpy` and
+*native code generation* using `numba`.
+
+We first demonstrate a Numpy version of this algorithm.
 
 ~~~python
 import numpy as np
@@ -88,9 +96,9 @@ def calc_pi_numpy(N):
     # Count number of impacts inside the circle
     M = np.count_nonzero((pts**2).sum(axis=0) < 1)
     return 4 * M / N
-
 ~~~
 {: .source}
+
 This is a **vectorized** version of the original algorithm. It nicely demonstrates **data parallelization**,
 where a **single operation** is replicated over collections of data.
 It contrasts to **task parallelization**, where **different independent** procedures are performed in
@@ -141,22 +149,6 @@ We can demonstrate that this is much faster than the 'naive' implementation:
 > {: .solution}
 {: .challenge}
 
-# A few words about the Global Interpreter Lock
-The Global Interpreter Lock (GIL) is an infamous feature of the Python interpreter.
-It both guarantees inner thread sanity, making programming in Python safer, and prevents us from using multiple cores from
-a single Python instance.
-There are roughly two classes of solutions to circumvent/lift the GIL:
-
-- Run multiple Python instances: `multiprocessing`
-- Have important code outside Python: OS operations, C++ extensions, cython, numba
-
-The downside of running multiple Python instances is that we need to share program state between different processes.
-To this end, you need to serialize objects using `pickle`, `json` or similar, creating a large overhead.
-The alternative is to bring parts of our code outside Python.
-Numpy has many routines that are largely situated outside of the GIL.
-The only way to know for sure is trying out and profiling your application.
-
-To write your own routines that do not live under the GIL there are several options: fortunately `numba` makes this very easy.
 
 # Using Numba to accelerate Python code
 Numba makes it easier to create accelerated functions. You can use it with the decorator `numba.jit`.
@@ -172,6 +164,7 @@ def sum_range_numba(a: int):
         x += i
     return x
 ~~~
+{: .source}
 
 Let's time three versions of the same test. First, native Python iterators:
 
@@ -246,10 +239,15 @@ And with Numba:
 {: .callout}
 
 # The `threading` module
-We now build a queue/worker model.
-This is the basis of multi-threading applications in Python.
-At this point creating a parallel program is quite involved.
-After we've done this, we'll see ways to do the same in Dask without mucking about with threads directly.
+We will now parallelise the computation of pi using the `threading` module that is built into
+Python.
+
+We now build a queue/worker model. This is the basis of multi-threading applications in Python. At
+this point creating a parallel program is quite involved. After we've done this, we'll see ways to
+do the same in Dask without mucking about with threads directly.
+
+On the one hand we have a `Queue` to which we push work units. On the other hand we have any number
+of *workers* that pull jobs from the queue. More workers should get the job done in less time!
 
 ~~~python
 import queue
@@ -260,7 +258,7 @@ def worker(q):
     while True:
         try:
             x = q.get(block=False)
-            print(calc_pi(x), end=' ', flush=True)
+            print(calc_pi_numba(x), end=' ', flush=True)
         except queue.Empty:
             break
 
@@ -285,10 +283,48 @@ print()
 ~~~
 
 > ## Discussion: where's the speed-up?
-> We still need to unlock the GIL
+> While mileage may vary, parallelizing `calc_pi`, `calc_pi_numpy` and `calc_pi_numba` this way will
+> not give the expected speed-up. `calc_pi_numba` should give *some* speed-up, but nowhere near the
+> ideal scaling over the number of cores. This is because Python only allows one thread to access the
+> interperter at any given time, a feature also known as the Global Interpreter Lock.
 {: .discussion}
 
+
+# A few words about the Global Interpreter Lock
+The Global Interpreter Lock (GIL) is an infamous feature of the Python interpreter.
+It both guarantees inner thread sanity, making programming in Python safer, and prevents us from using multiple cores from
+a single Python instance.
+There are roughly two classes of solutions to circumvent/lift the GIL:
+
+- Run multiple Python instances: `multiprocessing`
+- Have important code outside Python: OS operations, C++ extensions, cython, numba
+
+The downside of running multiple Python instances is that we need to share program state between different processes.
+To this end, you need to serialize objects using `pickle`, `json` or similar, creating a large overhead.
+The alternative is to bring parts of our code outside Python.
+Numpy has many routines that are largely situated outside of the GIL.
+The only way to know for sure is trying out and profiling your application.
+
+To write your own routines that do not live under the GIL there are several options: fortunately `numba` makes this very easy.
+
+~~~python
+@numba.jit(nopython=True, nogil=True)
+def calc_pi_numba(N):
+    M = 0
+    for i in range(N):
+        x = random.uniform(-1, 1)
+        y = random.uniform(-1, 1)
+
+        if x**2 + y**2 < 1.0:
+            M += 1
+    return 4 * M / N
+~~~
+{: .source}
+
+The `nopython` argument forces Numba to compile the code without referencing any Python objects,
+while the `nogil` argument enables lifting the GIL during the execution of the function.
+
 > ## Challenge: profile the fixed program
-> FIXME: solution
+> The nogil version of `calc_pi_numba` should scale nicely with the number of cores used.
 {: .challenge}
 
