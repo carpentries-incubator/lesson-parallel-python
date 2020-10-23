@@ -157,6 +157,20 @@ It becomes more visible that each task (of squaring a number) is indeed independ
 
 ![parallel execution](../fig/parallel.svg)
 
+> ## Embarrassingly parallel problems
+> Although we talked about embarrassingly parallel problems, it would be more correct to talk about
+embarrasingly parallel algorithms.
+>
+> Often, the parallelizability of a problem depends on its specific implementation. For instance, in our
+first example of a non-parallelizable task, we mentioned the calculation of the factorial of 4 using
+the algorithm of multiplying, one by one, by all the integers below that number (that is, 4, 3, 2, 1).
+If, instead, we use another algorithm, such as the gamma function, the same problem accepts parallelization.
+>
+> Last but not least, don't let the name fool you: if your algorithm happens to be embarrassingly parallel,
+that's good news for you! The "embarrassingly" refers to the feeling of "this is great!,
+how did I not notice before?!"
+{: .callout}
+
 
 > ## Challenge: Parallelised Pea Soup
 > We have the following recipe:
