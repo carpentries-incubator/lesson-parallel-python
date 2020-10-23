@@ -1,7 +1,6 @@
 ---
 title: About
 ---
-{% include escience_academy.html %}
 
 This lesson material is developed and maintained by the Netherlands eScience Center.
 
