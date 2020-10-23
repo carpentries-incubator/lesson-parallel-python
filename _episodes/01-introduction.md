@@ -88,7 +88,7 @@ This scheme corresponds to a **parallel computation**.
 
 Nowadays, most personal computers have 4 or 8 processors (also known as cores). In the diagram above, we can assign each of the three functions to one core, so they can be performed simultaneously.
 
-> # Do 8 processors work 8 times faster than one?
+> ## Do 8 processors work 8 times faster than one?
 > It may be tempting to think that using eight cores instead of one would multiply the execution speed by eight. For now, it's ok to use this a first approximation to reality. Later in the course we'll see that things are actually more complicated than that.
 {: .callout}
 
