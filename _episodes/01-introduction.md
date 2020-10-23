@@ -25,31 +25,34 @@ keypoints:
 {: .discussion}
 
 Most problems will fit in one of two categories:
-- I wrote this code in Python and its not fast enough.
+- I wrote this code in Python and it is not fast enough.
 - I run this code on my Laptop, but the target problem size is bigger than the RAM.
 
 In this course we will show several possible ways of speeding up your program and making it ready
 to function in parallel. We will be introducing the following modules
 
-1. `threading` standard library module that allows different parts of your program to run concurrently on a single computer (with shared memory)
+1. `threading` allows different parts of your program to run concurrently on a single computer (with shared memory)
 3. `dask` makes scalable parallel computing easy
-4. `numba` speed up your python functions by translating them to optimized machine code
-5. `memory_profile` monitor memory performance
-6. `asyncio` python native asynchronous programming
+4. `numba` speeds up your python functions by translating them to optimized machine code
+5. `memory_profile` monitors memory performance
+6. `asyncio` Python's native asynchronous programming
 
 FIXME: Actually explain functional programming & distributed programming
 More importantly, we will show how to change the design of a program to fit parallel paradigms. This
 often involves techniques from **functional programming**.
 
-What we won't talk about: **distributed programming**, this is a huge can of worms. It is easy to
+> ## What we won't talk about
+> In this course we will not talk about **distributed programming**. This is a huge can of worms. It is easy to
 show simple examples, but depending on the problem, solutions will be wildly different. Dask has a
 lot of functionality to help you in setting up for running on a network. The important bit is that,
 once you have made your code suitable for parallel computing, you'll have the right mind-set to get
 it to work in a distributed environment.
+{: .callout}
+
 
 # FIXME: Overview and rationale
 This is an advanced course. Why is it advanced? We (hopefully) saw in the discussion that although
-many of your problems share similar characteristics, it is the details that will determine different
+many of your problems share similar characteristics, it is the details what will determine different
 solutions. We all need our algorithms, models, analysis to run in a way that many hands make light
 work. When such a situation arises with a group of people, we start with a meeting discussing who
 does what, when do we meet again to sync up, etc. After a while you can get the feeling that all you
@@ -62,14 +65,14 @@ computing the number Pi later on.
 - Map/filter/reduce: This is a method where we combine different functionals to create a larger
   program. We will use `dask.bag` to count the number of unique words in a novel using this
 formalism.
-- Task-based parallism: this may be the most generic abstraction as all the others can be expressed
+- Task-based parallelization: this may be the most generic abstraction as all the others can be expressed
   in terms of tasks or workflows. This is `dask.delayed`.
 
 # What is parallel computing?
 
 ## Dependency diagrams
 
-Suppose we have a computation, where each step **depends** on a previous one. We can represent this situation like in the figure below, known as a dependency diagram:
+Suppose we have a computation where each step **depends** on a previous one. We can represent this situation like in the figure below, known as a dependency diagram:
 
 ![Serial computation](../fig/serial.png)
 
@@ -85,7 +88,9 @@ This scheme corresponds to a **parallel computation**.
 
 Nowadays, most personal computers have 4 or 8 processors (also known as cores). In the diagram above, we can assign each of the three functions to one core, so they can be performed simultaneously.
 
-It may be tempting to think that using three cores instead of one would multiply the execution speed by three. For now, it's ok to use this a first approximation to reality. Later in the course we'll see that things are actually more complicated than that.
+> # Do 8 processors work 8 times faster than one?
+> It may be tempting to think that using eight cores instead of one would multiply the execution speed by eight. For now, it's ok to use this a first approximation to reality. Later in the course we'll see that things are actually more complicated than that.
+{: .callout}
 
 ## Parallelizable and non-parallelizable tasks
 
@@ -120,7 +125,7 @@ Note that each successive loop needs the result of the previous one in order to 
 In the example above we see a block for each function call, indicating some work for the CPU, and the arrows
 show that the evaluation of a function depends on a previous result.
 
-In many cases however, the computation involves **independent work**. However, the difference can be
+In many cases, the computation involves **independent work**. However, the difference can be
 hard to spot. Look at this pseudo snippet:
 
 ~~~python
