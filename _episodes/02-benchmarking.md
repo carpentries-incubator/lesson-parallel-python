@@ -20,9 +20,7 @@ keypoints:
 
 # A first example with Dask
 We will get into creating parallel programs in Python later. First let's see a small example. Open
-your system monitor, and run the following code examples. Depending on your computer you will have
-to raise the power to ``10**8``, ``10**9`` etc. to make sure that it runs long enough to observe the
-effect.
+your system monitor, and run the following code examples.
 
 ~~~python
 # Summation making use of numpy:
@@ -40,14 +38,16 @@ result = work.compute()
 ~~~
 {: .source}
 
-> It could be that a task this small does not register on your radar: slowly increase the amount of
-> `10**7` to see what happens. But be careful, asking for too much memory can make your computer
-> slow to a crawl.
+> ## Try a heavy enough task
+> It could be that a task this small does not register on your radar. Depending on your computer you will 
+have to raise the power to ``10**8`` or ``10**9`` to make sure that it runs long enough to observe the effect.
+But be careful and increase slowly. Asking for too much memory can make your computer slow to a crawl.
 {: .callout}
 
 ![System monitor](../fig/system-monitor.jpg)
 
-How can we test in a more rigorous way? In Jupyter we can use some line magics!
+How can we test this in a more practical way? In Jupyter we can use some line magics, small "magic words" preceded
+by the symbol `%%` that modify the behaviour of the cell.
 
 ~~~python
 %%time
@@ -60,7 +60,7 @@ This was only a single run, how can we trust this?
 The `%%time` line magic checks how long it took for a computation to finish. It does nothing to
 change the computation itself. In this it is very similar to the `time` shell command.
 
-The `%%timeit` line magic however, first measures how long it takes to run a command one time, then
+The `%%timeit` line magic, however, first measures how long it takes to run a command one time, then
 repeats it enough times to get an average run-time. Also, `%%timeit` can measure run times without
 the time it takes to setup a problem, measuring only the performance of the code in the cell.
 This way we can trust the outcome better.
@@ -71,13 +71,15 @@ np.arange(10**7).sum()
 ~~~
 {: .source}
 
-This does not tell you anything about memory consumption or efficiency though.
-The act of systematically testing performance under different conditions is called **benchmarking**.
-Analysing what parts of a program contribute to the total performance, and identifying possible
-bottlenecks is **profiling**.
+Note that this does not tell you anything about memory consumption or efficiency.
 
 # Memory profiling
+The act of systematically testing performance under different conditions is called **benchmarking**.
+Analysing what parts of a program contribute to the total performance, and identifying possible
+bottlenecks is **profiling**. 
+
 We will use the [`memory_profiler` package](https://github.com/pythonprofilers/memory_profiler) to track memory usage.
+It can be installed executing the code below in the console:
 
 ~~~sh
 pip install memory_profiler
@@ -115,9 +117,7 @@ plt.show()
 
 # Alternate Profiling
 
-Dask has a couple of profiling options as well. Depending on your computer you will have
-to raise the power in the following code examples to ``10**8``, ``10**9`` etc. to make 
-sure that it runs long enough to observe the effect.
+Dask has a couple of profiling options as well.
 
 ~~~python
 from dask.diagnostics import Profiler, ResourceProfiler
@@ -139,30 +139,31 @@ visualize([rprof2], output_notebook())
 ~~~
 FIXME: without the Profiler, the time axis is not nicely scaled. Profiler does not work with dask commands.
 
-# How many cores?
+# Using many cores
 Using more cores for a computation can decrease the run time. However, even with very simple
 examples performance may scale unexpectedly. The number of visible CPUs is often not equal to the
 number of physical cores due to a feature called *hyper-threading*.
 
-You can find out how many cores you have on your machine.
-
-On Linux:
-~~~bash
-lscpu
-~~~
-{: .source}
-
-On Mac:
-~~~bash
-sysctl -n hw.physicalcpu
-~~~
-{: .source}
-
-On Windows:
-~~~bash
-WMIC CPU Get NumberOfCores,NumberOfLogicalProcessors
-~~~
-{: .source}
+> ## Find out how many cores your machine has
+> 
+> On Linux:
+> ~~~bash
+> lscpu
+> ~~~
+> {: .source}
+>
+> On Mac:
+> ~~~bash
+>sysctl -n hw.physicalcpu
+> ~~~
+> {: .source}
+> 
+> On Windows:
+> ~~~bash
+> WMIC CPU Get NumberOfCores,NumberOfLogicalProcessors
+> ~~~
+> {: .source}
+{: .callout}
 
 On a machine with 8 listed cores doing this (admittedly oversimplistic) benchmark:
 
@@ -185,7 +186,7 @@ data.set_index("n").plot()
 
 ![Timings against number of cores](../fig/more-cores.svg)
 
-> # Discussion
+> ## Discussion
 > Why is the runtime increasing if we add more than 4 cores?
 > This has to do with **hyper-threading**. On most architectures it makes not much sense to use more
 > workers than the number of physical cores you have.
