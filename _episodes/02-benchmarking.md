@@ -39,7 +39,7 @@ result = work.compute()
 {: .source}
 
 > ## Try a heavy enough task
-> It could be that a task this small does not register on your radar. Depending on your computer you will 
+> It could be that a task this small does not register on your radar. Depending on your computer you will
 have to raise the power to ``10**8`` or ``10**9`` to make sure that it runs long enough to observe the effect.
 But be careful and increase slowly. Asking for too much memory can make your computer slow to a crawl.
 {: .callout}
@@ -76,7 +76,7 @@ Note that this does not tell you anything about memory consumption or efficiency
 # Memory profiling
 The act of systematically testing performance under different conditions is called **benchmarking**.
 Analysing what parts of a program contribute to the total performance, and identifying possible
-bottlenecks is **profiling**. 
+bottlenecks is **profiling**.
 
 We will use the [`memory_profiler` package](https://github.com/pythonprofilers/memory_profiler) to track memory usage.
 It can be installed executing the code below in the console:
@@ -115,6 +115,10 @@ plt.show()
 ~~~
 {: .source}
 
+The figure should be similar to the one below:
+
+![Memory performance](../fig/memory.png)
+
 # Alternate Profiling
 
 Dask has a couple of profiling options as well.
@@ -145,7 +149,7 @@ examples performance may scale unexpectedly. The number of visible CPUs is often
 number of physical cores due to a feature called *hyper-threading*.
 
 > ## Find out how many cores your machine has
-> 
+>
 > On Linux:
 > ~~~bash
 > lscpu
@@ -157,7 +161,7 @@ number of physical cores due to a feature called *hyper-threading*.
 >sysctl -n hw.physicalcpu
 > ~~~
 > {: .source}
-> 
+>
 > On Windows:
 > ~~~bash
 > WMIC CPU Get NumberOfCores,NumberOfLogicalProcessors
