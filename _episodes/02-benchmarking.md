@@ -20,7 +20,7 @@ keypoints:
 
 # A first example with Dask
 We will get into creating parallel programs in Python later. First let's see a small example. Open
-your system monitor, and run the following code examples.
+your system monitor (this will differ among specific operative systems), and run the following code examples.
 
 ~~~python
 # Summation making use of numpy:

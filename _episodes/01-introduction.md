@@ -21,7 +21,7 @@ keypoints:
 # Common problems
 
 > ## What problem(s) are we solving?
-> Ask around what problems participants encountered, "why did you sign up?".
+> Ask around what problems participants encountered: "Why did you sign up?"
 {: .discussion}
 
 Most problems will fit in one of two categories:
@@ -29,11 +29,11 @@ Most problems will fit in one of two categories:
 - I run this code on my Laptop, but the target problem size is bigger than the RAM.
 
 In this course we will show several possible ways of speeding up your program and making it ready
-to function in parallel. We will be introducing the following modules
+to function in parallel. We will be introducing the following modules:
 
 1. `threading` allows different parts of your program to run concurrently on a single computer (with shared memory)
 3. `dask` makes scalable parallel computing easy
-4. `numba` speeds up your python functions by translating them to optimized machine code
+4. `numba` speeds up your Python functions by translating them to optimized machine code
 5. `memory_profile` monitors memory performance
 6. `asyncio` Python's native asynchronous programming
 
@@ -94,8 +94,8 @@ Nowadays, most personal computers have 4 or 8 processors (also known as cores). 
 
 ## Parallelizable and non-parallelizable tasks
 
-It is important to know that some tasks are fundamentally non-parallelizable,
-also known as **inherently serial**. An example could be the brute-force computation of
+It is important to know that some tasks are fundamentally non-parallelizable.
+These tasks are also known as **inherently serial**. An example could be the brute-force computation of
 the factorial of an integer.
 
 Example: the factorial of 4,
@@ -105,6 +105,8 @@ is obtained by multiplying all the integers smaller or equal to 4, that is:
 $$
 4! = 4 \cdot 3 \cdot 2 \cdot 1 = 24
 $$
+
+A possible implementation in Python could be the following:
 
 ~~~python
 n = 4 # This the input
@@ -159,7 +161,7 @@ It becomes more visible that each task (of squaring a number) is indeed independ
 
 > ## Embarrassingly parallel problems
 > Although we talked about embarrassingly parallel problems, it would be more correct to talk about
-embarrasingly parallel algorithms.
+embarrassingly parallel algorithms.
 >
 > Often, the parallelizability of a problem depends on its specific implementation. For instance, in our
 first example of a non-parallelizable task, we mentioned the calculation of the factorial of 4 using
