@@ -62,8 +62,7 @@ bag.map(f).visualize()
 def pred(x):
     return x % 2 == 0
 
-bag.filter(pred)
-bag.compute()
+bag.filter(pred).compute()
 ~~~
 {: .source}
 ~~~
