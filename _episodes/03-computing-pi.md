@@ -104,7 +104,7 @@ where a **single operation** is replicated over collections of data.
 It contrasts to **task parallelization**, where **different independent** procedures are performed in
 parallel (think for example about cutting the vegetables while simmering the split peas).
 
-We can demonstrate that this is much faster than the 'naive' implementation:
+If we compare with the 'naive' implementation above, we see that our new one is much faster:
 
 ~~~python
 %timeit calc_pi_numpy(10**6)
@@ -239,8 +239,9 @@ And with Numba:
 {: .callout}
 
 # The `threading` module
-We will now parallelise the computation of pi using the `threading` module that is built into
-Python.
+Another possibility for parallelization is to use the `threading` module.
+This module is built into Python. In this section, we'll use it to estimate pi
+once again.
 
 We now build a queue/worker model. This is the basis of multi-threading applications in Python. At
 this point creating a parallel program is quite involved. After we've done this, we'll see ways to
