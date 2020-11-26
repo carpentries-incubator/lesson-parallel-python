@@ -76,7 +76,7 @@ Suppose we have a computation where each step **depends** on a previous one. We 
 
 ![Serial computation](../fig/serial.png)
 
-In these diagrams the inputs and outputs of each function are specified as inward and outward arrows. Note that the output of one function can become the input of another one. The diagram above is the typical diagram of a **serial computation**. If you ever used a loop to update a value, you used serial computation.
+In these diagrams the inputs and outputs of each function are represented as rectangles. The inward and outward arrows indicate their flow. Note that the output of one function can become the input of another one. The diagram above is the typical diagram of a **serial computation**. If you ever used a loop to update a value, you used serial computation.
 
 If our computation involves **independent work** (that is, the results of the application of each function are independent of the results of the application of the rest), we can structure our computation like this:
 
