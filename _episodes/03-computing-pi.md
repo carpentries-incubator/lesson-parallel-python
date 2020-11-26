@@ -238,6 +238,85 @@ And with Numba:
 >  it is not always trivial to rewrite your code so that you can use numba with it.
 {: .callout}
 
+# Calling C and C++ libraries
+External C and C++ libraries can be called from Python code using a number of options, e.g. Cython, pybind11 and ctypes.
+We will discuss the last two, because they require the least amount of boilerplate. Consider this simple C program, test.c:
+
+~~~c
+#include <pybind11/pybind11.h>
+namespace py = pybind11;
+
+long long sum_range(long long high)
+{
+  long long i;
+  long long s = 0LL;
+ 
+  for (i = 0LL; i < high; i++)
+      s += (long long)i;
+
+  return s;
+}
+
+PYBIND11_MODULE(test_pybind, m) {
+    m.doc() = "Export the sum_range function as sum_range"; 
+
+    m.def("sum_range", &sum_range, "Adds upp consecutive integer numbers from 0 up to and including high-1");
+}
+
+~~~
+{: .source}
+
+You can easily compile and link it into a shared object (.so) file:
+
+~~~bash
+pip install pybind11
+c++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` test.c -o test_pybind.so
+~~~
+{: .source}
+
+which generates a `test_pybind.so` shared object which you can call from a Python program, like this:
+
+~~~python
+import test_pybind
+sum_range=test_pybind.sum_range
+
+high=1000000000
+
+sum_from_formula=high*(high-1)/2
+
+print("According to a simple formula, this should be the sum of {0} consecutive numbers,".format(high))
+print("starting at zero: {0}".format(sum_from_formula))
+print()
+print("Simply adding up the numbers should yield the same result: {0}".format(sum_range(high))
+~~~
+{: .source}
+
+~~~bash
+gcc -O3 -g -fPIC -c -o test.o test.c
+ld -shared -o libtest.so test.o
+~~~
+{: .source}
+
+~~~python
+import ctypes
+
+testlib = ctypes.cdll.LoadLibrary("./libtest.so")
+
+sum_range = testlib.sum_range
+sum_range.argtypes = [ctypes.c_longlong]
+sum_range.restype = ctypes.c_longlong
+
+high=1000000000
+
+sum_from_formula=high*(high-1)/2
+
+print("According to a simple formula, this should be the sum of {0} consecutive numbers,".format(high))
+print("starting at zero: {0}".format(sum_from_formula))
+print()
+print("Simply adding up the numbers should yield the same result: {0}".format(sum_range(high))
+~~~
+{: .source}
+
 # The `threading` module
 We will now parallelise the computation of pi using the `threading` module that is built into
 Python.
