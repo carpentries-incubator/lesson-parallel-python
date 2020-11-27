@@ -332,7 +332,6 @@ In the Python script some boilerplate needs to be added:
 
 ~~~python
 import ctypes
-import test_pybind
 testlib = ctypes.cdll.LoadLibrary("./libtest.so")  
 
 sum_range = testlib.sum_range
@@ -357,6 +356,22 @@ print()
 ~~~
 {: .source}
 
+Now we can time our compiled `sum_range` C library, e.g. from the iPython interface:
+~~~python
+import ctypes
+testlib = ctypes.cdll.LoadLibrary("./libtest.so")
+sum_range = testlib.sum_range
+sum_range.argtypes = [ctypes.c_longlong]
+sum_range.restype = ctypes.c_longlong 
+%timeit sum_range(10**7)
+~~~
+{: .source}
+~~~
+2.69 ms ± 6.01 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+~~~
+
+If you compare with the numbers above, you will see that the C library for `sum_range` is faster than 
+the numpy computation but significantly slower than the `numba.jit` decorated function.
 
 # The `threading` module
 We will now parallelise the computation of pi using the `threading` module that is built into
