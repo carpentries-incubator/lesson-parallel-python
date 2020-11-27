@@ -19,19 +19,19 @@ We've seen some use of Dask `array`, now we will also dive into `bag` and `delay
 in character to `array`, while `futures` fall outside the scope of this tutorial.) Dask has a lot of
 components, so here's an overview.
 
-| Dask module      | Abstraction          | Keywords                             |
-| ---------------- | -------------------- | ------------------------------------ |
-| `dask.array`     | `numpy`              | Numerical analysis                   |
-| `dask.dataframe` | `pandas`             | Generic data analysis                |
-| `dask.bag`       | `itertools`          | Map-reduce, workflows                |
-| `dask.delayed`   | functions            | Anything that doesn't fit the above  |
-| `dask.futures`   | `concurrent.futures` | Control execution, low-level         |
+| Dask module      | Abstraction          | Keywords                            |
+|:-----------------|:---------------------|:------------------------------------|
+| `dask.array`     | `numpy`              | Numerical analysis                  |
+| `dask.dataframe` | `pandas`             | Generic data analysis               |
+| `dask.bag`       | `itertools`          | Map-reduce, workflows               |
+| `dask.delayed`   | functions            | Anything that doesn't fit the above |
+| `dask.futures`   | `concurrent.futures` | Control execution, low-level        |
 
 # Parallelize using Dask bags
 Dask bags let you compose functionality using several primitive patterns: the most important of these are `map`, `filter`, `fold` and `groupby`.
 
 > ## Discussion
-> Open the Dask documentation on bags: https://docs.dask.org/en/latest/bag-api.html
+> Open the [Dask documentation on bags](https://docs.dask.org/en/latest/bag-api.html)
 > Discuss the `map` and `filter` and `reduction` methods
 {: .discussion}
 
@@ -40,7 +40,7 @@ Operations on this level can be distinguished in several categories
 - **map** (N to N) applies a function *one-to-one* on a list of arguments. This operation is **embarrassingly
   parallel**.
 - **filter** (N to &lt;N) selects a subset from the data.
-- **groupby** (N to &lt;N) groups data in subcatagories.
+- **groupby** (N to &lt;N) groups data in subcategories.
 - **reduce** (N to 1) computes an aggregate from a sequence of data; if the operation permits it
   (summing, maximizing, etc) this can be done in parallel by reducing chunks of data and then
   further processing the results of those chunks.
@@ -62,8 +62,7 @@ bag.map(f).visualize()
 def pred(x):
     return x % 2 == 0
 
-bag.filter(pred)
-bag.compute()
+bag.filter(pred).compute()
 ~~~
 {: .source}
 ~~~

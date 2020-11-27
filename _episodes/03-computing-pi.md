@@ -1,5 +1,5 @@
 ---
-title: "Understanding parallelization in python"
+title: "Understanding parallelization in Python"
 teaching: 60
 exercises: 30
 questions:
@@ -104,7 +104,7 @@ where a **single operation** is replicated over collections of data.
 It contrasts to **task parallelization**, where **different independent** procedures are performed in
 parallel (think for example about cutting the vegetables while simmering the split peas).
 
-We can demonstrate that this is much faster than the 'naive' implementation:
+If we compare with the 'naive' implementation above, we see that our new one is much faster:
 
 ~~~python
 %timeit calc_pi_numpy(10**6)
@@ -239,8 +239,9 @@ And with Numba:
 {: .callout}
 
 # The `threading` module
-We will now parallelise the computation of pi using the `threading` module that is built into
-Python.
+Another possibility for parallelization is to use the `threading` module.
+This module is built into Python. In this section, we'll use it to estimate pi
+once again.
 
 We now build a queue/worker model. This is the basis of multi-threading applications in Python. At
 this point creating a parallel program is quite involved. After we've done this, we'll see ways to
@@ -294,6 +295,7 @@ print()
 The Global Interpreter Lock (GIL) is an infamous feature of the Python interpreter.
 It both guarantees inner thread sanity, making programming in Python safer, and prevents us from using multiple cores from
 a single Python instance.
+When we want to perform parallel computations, this becomes an obvious problem.
 There are roughly two classes of solutions to circumvent/lift the GIL:
 
 - Run multiple Python instances: `multiprocessing`
@@ -327,4 +329,3 @@ while the `nogil` argument enables lifting the GIL during the execution of the f
 > ## Challenge: profile the fixed program
 > The nogil version of `calc_pi_numba` should scale nicely with the number of cores used.
 {: .challenge}
-
