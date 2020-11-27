@@ -239,8 +239,9 @@ And with Numba:
 {: .callout}
 
 # Calling C and C++ libraries
-External C and C++ libraries can be called from Python code using a number of options, e.g. Cython, pybind11 and ctypes.
-We will discuss the last two, because they require the least amount of boilerplate. Consider this simple C program, test.c:
+External C and C++ libraries can be called from Python code using a number of options, using e.g. Cython, CFFI, pybind11 and ctypes.
+We will discuss the last two, because they require the least amount of boilerplate, for simple cases - 
+for more complex examples that may not be the case. Consider this simple C program, test.c, which adds up consecutive numbers:
 
 ~~~c
 #include <pybind11/pybind11.h>
@@ -266,10 +267,14 @@ PYBIND11_MODULE(test_pybind, m) {
 ~~~
 {: .source}
 
-You can easily compile and link it into a shared object (.so) file:
+You can easily compile and link it into a shared object (.so) file. First you need pybind11. You can install it in
+a number of ways, like pip, but I prefer creating virtual environments using pipenv.
 
 ~~~bash
-pip install pybind11
+pip install pipenv
+pipenv install pybind11
+pipenv shell
+
 c++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` test.c -o test_pybind.so
 ~~~
 {: .source}
@@ -282,40 +287,76 @@ sum_range=test_pybind.sum_range
 
 high=1000000000
 
-sum_from_formula=high*(high-1)/2
+sum_from_formula=high*(high-1)//2
+brute_force_sum=sum_range(high) 
+difference=sum_from_formula-brute_force_sum
 
+print()
 print("According to a simple formula, this should be the sum of {0} consecutive numbers,".format(high))
 print("starting at zero: {0}".format(sum_from_formula))
 print()
-print("Simply adding up the numbers should yield the same result: {0}".format(sum_range(high))
+print("Simply adding up the numbers should yield the same result: {0}".format(brute_force_sum))
+print()
+print("The two methods should yield the same answer, so this should be zero: {}".format(difference))
+print()
 ~~~
 {: .source}
 
+Give this script a suitable name, like `call_C_libraries.py`.
+The same thing can be done using ctypes instead of pybind11, but requires slightly more boilerplate
+on the Python side of the code and slightly less on the C side. test.c will be just the algorithm:
+
+~~~c
+long long sum_range(long long high)
+{
+  long long i;
+  long long s = 0LL;
+ 
+  for (i = 0LL; i < high; i++)
+      s += (long long)i;
+
+  return s;
+}
+~~~
+{: .source}
+
+Compile and link using
 ~~~bash
 gcc -O3 -g -fPIC -c -o test.o test.c
 ld -shared -o libtest.so test.o
 ~~~
 {: .source}
 
+which generates a libtest.so file.
+In the Python script some boilerplate needs to be added:
+
 ~~~python
 import ctypes
-
-testlib = ctypes.cdll.LoadLibrary("./libtest.so")
+import test_pybind
+testlib = ctypes.cdll.LoadLibrary("./libtest.so")  
 
 sum_range = testlib.sum_range
-sum_range.argtypes = [ctypes.c_longlong]
-sum_range.restype = ctypes.c_longlong
+sum_range.argtypes = [ctypes.c_longlong]  
+sum_range.restype = ctypes.c_longlong 
 
 high=1000000000
 
-sum_from_formula=high*(high-1)/2
+sum_from_formula=high*(high-1)//2
+brute_force_sum=sum_range(high) 
+difference=sum_from_formula-brute_force_sum
 
+print()
 print("According to a simple formula, this should be the sum of {0} consecutive numbers,".format(high))
 print("starting at zero: {0}".format(sum_from_formula))
 print()
-print("Simply adding up the numbers should yield the same result: {0}".format(sum_range(high))
+print("Simply adding up the numbers should yield the same result: {0}".format(brute_force_sum))
+print()
+print("The two methods should yield the same answer, so this should be zero: {}".format(difference))
+print()
+
 ~~~
 {: .source}
+
 
 # The `threading` module
 We will now parallelise the computation of pi using the `threading` module that is built into
