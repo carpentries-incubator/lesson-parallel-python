@@ -373,6 +373,73 @@ sum_range.restype = ctypes.c_longlong
 If you compare with the numbers above, you will see that the C library for `sum_range` is faster than 
 the numpy computation but significantly slower than the `numba.jit` decorated function.
 
+
+> ## Challenge: Check if the Numba version of this conditional `sum range` function outperforms its C counterpart:
+>  
+> Insprired by [a blog by Christopher Swenson](http://caswenson.com/2009_06_13_bypassing_the_python_gil_with_ctypes.html).
+>
+> ~~~C
+> long long conditional_sum_range(long long to)
+> {
+>   long long i;
+>   long long s = 0LL;
+> 
+>   for (i = 0LL; i < to; i++)
+>     if (i % 3 == 0)
+>       s += i;
+> 
+>   return s;
+> }
+> ~~~
+> {: .source}
+> > ## Solution
+> > Just insert a line `if i%3==0:` in the code for `sum_range_numba` and rename it to `conditional_sum_range_numba`.
+> > ~~~python
+> > @numba.jit
+> > def conditional_sum_range_numba(a: int):
+> >     x = 0
+> >     for i in range(a):
+> >         if i%3==0:
+> >             x += i
+> >     return x
+> > ~~~
+> >
+> > Let's check how fast it runs.
+> > 
+> > ~~~
+> > %timeit conditional_sum_range_numba(10**7)
+> > ~~~
+> > ~~~
+> > 8.11 ms ± 15.6 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+> > ~~~
+> >
+> > Compare this with the run time for the C code for conditional_sum_range.
+> > Compile and link in the usual way, assuming the file name is still `test.c`:
+> > ~~~bash
+> > gcc -O3 -g -fPIC -c -o test.o test.c
+> > ld -shared -o libtest.so test.o
+> > ~~~
+> > {: .source}
+> > 
+> > Again, we can time our compiled `conditional_sum_range` C library, e.g. from the iPython interface:
+> > ~~~python
+> > import ctypes
+> > testlib = ctypes.cdll.LoadLibrary("./libtest.so")
+> > conditional_sum_range = testlib.conditional_sum_range
+> > conditional_sum_range.argtypes = [ctypes.c_longlong]
+> > conditional_sum_range.restype = ctypes.c_longlong 
+> > %timeit conditional_sum_range(10**7)
+> > ~~~
+> > ~~~
+> > 7.62 ms ± 49.7 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+> > ~~~
+> > This shows that for this slightly more complicated example the C code is somewhat faster than the Numba decorated Python code.
+> >
+> > {: .output}
+> {: .solution}
+{: .challenge}
+
+
 # The `threading` module
 We will now parallelise the computation of pi using the `threading` module that is built into
 Python.
