@@ -20,13 +20,13 @@ keypoints:
 
 # Common problems
 
-> ## What problem(s) are we solving?
+> ## What problems are we solving?
 > Ask around what problems participants encountered: "Why did you sign up?"
 {: .discussion}
 
 Most problems will fit in one of two categories:
 - I wrote this code in Python and it is not fast enough.
-- I run this code on my Laptop, but the target problem size is bigger than the RAM.
+- I run this code on my laptop, but the target problem size is bigger than the RAM.
 
 In this course we will show several possible ways of speeding up your program and making it ready
 to function in parallel. We will be introducing the following modules:
@@ -62,7 +62,7 @@ In large parts this course will use Dask to illustrate these abstractions.
 - Vectorized instructions: tell many workers to do the same work on a different piece of data. This
   is where `dask.array` and `dask.dataframe` come in. We will illustrate this model of working by
 computing the number Pi later on.
-- Map/filter/reduce: This is a method where we combine different functionals to create a larger
+- Map/filter/reduce: this is a method where we combine different functionals to create a larger
   program. We will use `dask.bag` to count the number of unique words in a novel using this
 formalism.
 - Task-based parallelization: this may be the most generic abstraction as all the others can be expressed
@@ -143,7 +143,7 @@ print(y) # Print output
 {: .source}
 
 Although we are performing the loops in a serial way in the snippet above,
-nothing avoids us from performing doing this calculation in parallel.
+nothing avoids us from performing this calculation in parallel.
 The value of applying our function to any of the elements in the input `x` is completely independent of the values
 of the rest elements on `x`. This kind of problems are known as
 [embarrassingly parallel](https://en.wikipedia.org/wiki/Embarrassingly_parallel).
@@ -155,7 +155,7 @@ y = [n**2 for n in x]
 ~~~
 {: .source}
 
-It becomes more visible that each task (of squaring a number) is indeed independent.
+it becomes more visible that each task (of squaring a number) is indeed independent.
 
 ![parallel execution](../fig/parallel.svg)
 
@@ -166,26 +166,27 @@ embarrassingly parallel algorithms.
 > Often, the parallelizability of a problem depends on its specific implementation. For instance, in our
 first example of a non-parallelizable task, we mentioned the calculation of the factorial of 4 using
 the algorithm of multiplying, one by one, by all the integers below that number (that is, 4, 3, 2, 1).
-If, instead, we use another algorithm, such as the gamma function, the same problem accepts parallelization.
+If, instead, we use another algorithm, such as the [gamma function](https://en.wikipedia.org/wiki/Gamma_function#Motivation), the same problem accepts parallelization.
 >
-> Last but not least, don't let the name fool you: if your algorithm happens to be embarrassingly parallel,
-that's good news for you! The "embarrassingly" refers to the feeling of "this is great!,
+> Last but not least, don't let the name demotivate you: if your algorithm happens to be embarrassingly parallel, that's good news! The "embarrassingly" refers to the feeling of "this is great!,
 how did I not notice before?!"
 {: .callout}
 
 
 > ## Challenge: Parallelised Pea Soup
 > We have the following recipe:
-> 1.  (1 min) Pour water into a soup pan, ad the split peas and bay leaf and bring it to boil.
+> 1.  (1 min) Pour water into a soup pan, add the split peas and bay leaf and bring it to boil.
 > 2. (60 min) Remove any foam using a skimmer and let it simmer under a lid for about 60 minutes.
 > 3. (15 min) Clean and chop the leek, celeriac, onion, carrot and potato.
-> 4. (20 min) Remove the bay leaf, add the vegetables and simmer for 20 more minutes; stir the soup
+> 4. (20 min) Remove the bay leaf, add the vegetables and simmer for 20 more minutes. Stir the soup
 occasionally.
-> 5.  (1 day) Leave the soup for one day. Reheat before serving and add a sliced (vegetarian) smoked
->     sausage, season with pepper and salt.
+> 5.  (1 day) Leave the soup for one day. Reheat before serving and add a sliced smoked
+>     sausage (vegetarian options are also welcome). Season with pepper and salt.
 >
-> Can you identify potentials for parallelisation in this recipe? If you're cooking alone, and what
-> if you have help? Is the soup done any faster? Draw a dependency diagram.
+> Imagine you're cooking alone. 
+> - Can you identify potential for parallelisation in this recipe? 
+> - And what if you are cooking with the help of a friend help? Is the soup done any faster? 
+> - Draw a dependency diagram.
 >
 > > ## Solution
 > > - You can cut vegetables while simmering the split peas.
