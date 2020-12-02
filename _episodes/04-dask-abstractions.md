@@ -6,26 +6,28 @@ questions:
 - "What abstractions does Dask offer?"
 - "What programming patterns exist in the parallel universe?"
 objectives:
-- "Recognize `map`, `filter` and `reduce` patterns."
-- "Create programs using these building blocks."
-- "Use the `visualize` method to create dependency graphs."
-- "Understand the abstraction of delayed evaluation."
+- "Recognize `map`, `filter` and `reduce` patterns"
+- "Create programs using these building blocks"
+- "Use the `visualize` method to create dependency graphs"
+- "Understand the abstraction of delayed evaluation"
 keypoints:
-- "Using abstractions keep programs manageable."
+- "Using abstractions keep programs manageable"
 ---
 
-We've seen some use of Dask `array`, now we will also dive into `bag` and `delayed` sub-modules.
-(Dask also has Pandas-like `dataframe` and an advanced `futures` framework; `dataframe` is similar
-in character to `array`, while `futures` fall outside the scope of this tutorial.) Dask has a lot of
-components, so here's an overview.
+[Dask](https://dask.org/) is one of the many tools available for parallelizing Python code in a comfortable way.
+We've seen a basic example of `dask.array` in a previous episode.
+Now, we will focus on the `bag` and `delayed` sub-modules.
+Dask has a lot of other useful components, such as `dataframe` and `futures`, but we are not going to cover them in this lesson.
 
-| Dask module      | Abstraction          | Keywords                            |
-|:-----------------|:---------------------|:------------------------------------|
-| `dask.array`     | `numpy`              | Numerical analysis                  |
-| `dask.dataframe` | `pandas`             | Generic data analysis               |
-| `dask.bag`       | `itertools`          | Map-reduce, workflows               |
-| `dask.delayed`   | functions            | Anything that doesn't fit the above |
-| `dask.futures`   | `concurrent.futures` | Control execution, low-level        |
+See an overview below:
+
+| Dask module      | Abstraction          | Keywords                            | Covered |
+|:-----------------|:---------------------|:------------------------------------|:--------|
+| `dask.array`     | `numpy`              | Numerical analysis                  | ✔️       |
+| `dask.bag`       | `itertools`          | Map-reduce, workflows               | ✔️       |
+| `dask.delayed`   | functions            | Anything that doesn't fit the above | ✔️       |
+| `dask.dataframe` | `pandas`             | Generic data analysis               | ❌      |
+| `dask.futures`   | `concurrent.futures` | Control execution, low-level        | ❌      |
 
 # Parallelize using Dask bags
 Dask bags let you compose functionality using several primitive patterns: the most important of these are `map`, `filter`, `fold` and `groupby`.
