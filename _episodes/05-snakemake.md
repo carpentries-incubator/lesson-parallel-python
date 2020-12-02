@@ -25,7 +25,7 @@ keypoints:
 # Setup
 > ## Preparation
 > To follow this tutorial, participants need to have cloned the repository at [github.com/escience-academy/parallel-python-workshop](https://github.com/escience-academy/parallel-python-workshop/). This repository includes an `environment.yml` file for creating the proper Conda environment, as well as the Jupyter notebook and `Snakefile` used in this demo.
-> This environment includes the GraphViz and ImageMagick packages needed to do some of the visualizations in this tutorial.
+> This environment includes the [GraphViz](https://graphviz.org/) and [ImageMagick](https://imagemagick.org/) packages needed to do some of the visualizations in this tutorial.
 {: .callout}
 
 # The metanarrative
