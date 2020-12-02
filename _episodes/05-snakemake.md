@@ -87,6 +87,7 @@ Let's go a bit deeper into rule writing by doing a small exercise.
 > >     output: "combined.txt"
 > >     shell:
 > >         "cat {input} > {output}"
+> >         # Windows: "type {input} > {output}" ????
 > > ~~~
 > >
 > > Only the `combine` rule is being run (in addition to the `all` rule). The dependency diagram should look like this:
@@ -136,7 +137,7 @@ This should run significantly faster than the single worker case.
 
 # Specifics
 ## Cosmic structure
-This workflow is located in the `cosmic_structure` folder in the `parallel-python-workshop` repository.
+This workflow is located in the [`cosmic_structure` folder in the `parallel-python-workshop`](https://github.com/escience-academy/parallel-python-workshop/tree/main/cosmic_structure) repository.
 
 It is not the goal of this tutorial to teach cosmic structure formation, that would take us a few weeks. Instead we have a demo using several steps that are typical for any modelling application:
 
