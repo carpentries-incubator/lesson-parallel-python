@@ -6,36 +6,38 @@ questions:
 - "What abstractions does Dask offer?"
 - "What programming patterns exist in the parallel universe?"
 objectives:
-- "Recognize `map`, `filter` and `reduce` patterns."
-- "Create programs using these building blocks."
-- "Use the `visualize` method to create dependency graphs."
-- "Understand the abstraction of delayed evaluation."
+- "Recognize `map`, `filter` and `reduce` patterns"
+- "Create programs using these building blocks"
+- "Use the `visualize` method to create dependency graphs"
+- "Understand the abstraction of delayed evaluation"
 keypoints:
-- "Using abstractions keep programs manageable."
+- "Use abstractions to keep programs manageable"
 ---
 
-We've seen some use of Dask `array`, now we will also dive into `bag` and `delayed` sub-modules.
-(Dask also has Pandas-like `dataframe` and an advanced `futures` framework; `dataframe` is similar
-in character to `array`, while `futures` fall outside the scope of this tutorial.) Dask has a lot of
-components, so here's an overview.
+[Dask](https://dask.org/) is one of the many tools available for parallelizing Python code in a comfortable way.
+We've seen a basic example of `dask.array` in a previous episode.
+Now, we will focus on the `bag` and `delayed` sub-modules.
+Dask has a lot of other useful components, such as `dataframe` and `futures`, but we are not going to cover them in this lesson.
 
-| Dask module      | Abstraction          | Keywords                            |
-|:-----------------|:---------------------|:------------------------------------|
-| `dask.array`     | `numpy`              | Numerical analysis                  |
-| `dask.dataframe` | `pandas`             | Generic data analysis               |
-| `dask.bag`       | `itertools`          | Map-reduce, workflows               |
-| `dask.delayed`   | functions            | Anything that doesn't fit the above |
-| `dask.futures`   | `concurrent.futures` | Control execution, low-level        |
+See an overview below:
+
+| Dask module      | Abstraction          | Keywords                            | Covered |
+|:-----------------|:---------------------|:------------------------------------|:--------|
+| `dask.array`     | `numpy`              | Numerical analysis                  | ✔️       |
+| `dask.bag`       | `itertools`          | Map-reduce, workflows               | ✔️       |
+| `dask.delayed`   | functions            | Anything that doesn't fit the above | ✔️       |
+| `dask.dataframe` | `pandas`             | Generic data analysis               | ❌      |
+| `dask.futures`   | `concurrent.futures` | Control execution, low-level        | ❌      |
 
 # Parallelize using Dask bags
-Dask bags let you compose functionality using several primitive patterns: the most important of these are `map`, `filter`, `fold` and `groupby`.
+Dask bags let you compose functionality using several primitive patterns: the most important of these are `map`, `filter`, `groupby` and `reduce`.
 
 > ## Discussion
-> Open the [Dask documentation on bags](https://docs.dask.org/en/latest/bag-api.html)
+> Open the [Dask documentation on bags](https://docs.dask.org/en/latest/bag-api.html).
 > Discuss the `map` and `filter` and `reduction` methods
 {: .discussion}
 
-Operations on this level can be distinguished in several categories
+Operations on this level can be distinguished in several categories:
 
 - **map** (N to N) applies a function *one-to-one* on a list of arguments. This operation is **embarrassingly
   parallel**.
@@ -45,20 +47,53 @@ Operations on this level can be distinguished in several categories
   (summing, maximizing, etc) this can be done in parallel by reducing chunks of data and then
   further processing the results of those chunks.
 
+Let's see an example of it in action:
+
+First, let's create the `bag` containing the elements we want to work with (in this case, the numbers from 0 to 5).
+
 ~~~python
 import dask.bag as db
 
+bag = db.from_sequence(range(6))
+~~~
+{: .source}
+
+### Map
+
+To illustrate the concept of `map`, we'll need a mapping function. 
+In the example below we'll just use a function that squares its argument:
+
+~~~python
+# Create a function for mapping
 def f(x):
     return x**2
 
-bag = db.from_sequence(range(6))
+# Create the map and compute it
+bag.map(f).compute()
+~~~
+{: .source}
+~~~
+out: [0, 1, 4, 9, 16, 25]
+~~~
+{:.output}
+
+We can also visualize the mapping:
+
+~~~python
+# Visualize the map
 bag.map(f).visualize()
 ~~~
 {: .source}
 ![A map operation.](../fig/dask-bag-map.svg)
 {: .output}
 
+### Filter
+
+To illustrate the concept of `filter`, it is useful to have a function that returns a boolean.
+In this case, we'll use a function that returns `True` if the argument is an even integer, and `False` if it is odd:
+
 ~~~python
+# Return True if x is even, False if not
 def pred(x):
     return x % 2 == 0
 
@@ -70,6 +105,15 @@ bag.filter(pred).compute()
 ~~~
 {: .output}
 
+> ## Difference between `filter` and `map`
+> Without executing it, try to forecast what would be the output of `bag.map(pred).compute()`.
+> > ## Solution
+> > The output will be `[True, False, True, False, True, False]`.
+> {: .solution}
+{: .challenge}
+
+### Reduction
+
 ~~~python
 bag.reduction(sum, sum).visualize()
 ~~~
@@ -78,17 +122,16 @@ bag.reduction(sum, sum).visualize()
 {: .output}
 
 > ## Challenge
-> Look at the `mean`, `pluck`, `distinct`, and `topk` methods, match them up with `map`, `filter` and
-> `reduction` methods.
+> Look at the `mean`, `pluck`, `distinct`, and `topk` methods. Match them up with `map`, `filter`, `groupby` and `reduce` methods.
 > > ## Solution
-> > `mean` is a reduction, `pluck` is a mapping, and `topk` is a filter. `distinct` could be implemented by getting the length (`count`) after a `groupby`.
+> > `mean` is a reduction, `pluck` is a mapping, and `topk` is a filter. `distinct` could be implemented by getting the length (`count`, which is a reduction) after a `groupby`.
 > {: .solution}
 {: .challenge}
 
 > ## Challenge
 > Rewrite the following program in terms of a Dask bag. Make it
 > spicy by using your favourite literature classic from project Gutenberg as input.
-> Example: Adventures of Sherlock Holmes, https://www.gutenberg.org/files/1661/1661-0.txt
+> Example: Adventures of Sherlock Holmes, [(https://www.gutenberg.org/files/1661/1661-0.txt)](https://www.gutenberg.org/files/1661/1661-0.txt)
 >
 > ~~~python
 > from nltk.stem.snowball import PorterStemmer

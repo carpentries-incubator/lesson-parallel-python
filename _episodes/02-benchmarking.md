@@ -11,11 +11,11 @@ objectives:
 - "Use `%time` and `%timeit` line-magic"
 - "Use a memory profiler"
 - "Plot performance against number of work units"
-- "Understand the influence of hyper-threading on timings."
+- "Understand the influence of hyper-threading on timings"
 keypoints:
-- "It is often non-trivial to understand performance."
-- "Memory is just as important as speed."
-- "Measuring is knowing."
+- "It is often non-trivial to understand performance"
+- "Memory is just as important as speed"
+- "Measuring is knowing"
 ---
 
 # A first example with Dask
@@ -55,12 +55,14 @@ np.arange(10**7).sum()
 ~~~
 {: .source}
 
-This was only a single run, how can we trust this?
-
 The `%%time` line magic checks how long it took for a computation to finish. It does nothing to
 change the computation itself. In this it is very similar to the `time` shell command.
 
-The `%%timeit` line magic, however, first measures how long it takes to run a command one time, then
+If run the chunk several times, we will notice a difference in the times.
+How can we trust this timer, then?
+A possible solution will be to time the chunk several times, and take the average time as our valid measure.
+The `%%timeit` line magic does exactly this in a concise an comfortable manner!
+`%%timeit` first measures how long it takes to run a command one time, then
 repeats it enough times to get an average run-time. Also, `%%timeit` can measure run times without
 the time it takes to setup a problem, measuring only the performance of the code in the cell.
 This way we can trust the outcome better.
@@ -74,9 +76,8 @@ np.arange(10**7).sum()
 Note that this does not tell you anything about memory consumption or efficiency.
 
 # Memory profiling
-The act of systematically testing performance under different conditions is called **benchmarking**.
-Analysing what parts of a program contribute to the total performance, and identifying possible
-bottlenecks is **profiling**.
+- The act of systematically testing performance under different conditions is called **benchmarking**.
+- Analysing what parts of a program contribute to the total performance, and identifying possible bottlenecks is **profiling**.
 
 We will use the [`memory_profiler` package](https://github.com/pythonprofilers/memory_profiler) to track memory usage.
 It can be installed executing the code below in the console:
@@ -144,9 +145,9 @@ visualize([rprof2], output_notebook())
 FIXME: without the Profiler, the time axis is not nicely scaled. Profiler does not work with dask commands.
 
 # Using many cores
-Using more cores for a computation can decrease the run time. However, even with very simple
-examples performance may scale unexpectedly. The number of visible CPUs is often not equal to the
-number of physical cores due to a feature called *hyper-threading*.
+Using more cores for a computation can decrease the run time. 
+The first question is of course: how many cores do I have?
+See the snippets below to find out:
 
 > ## Find out how many cores your machine has
 >
@@ -168,6 +169,12 @@ number of physical cores due to a feature called *hyper-threading*.
 > ~~~
 > {: .source}
 {: .callout}
+
+However, even with simple examples performance may scale unexpectedly. 
+There are many reasons for this. 
+One of the most relevant is *hyper-threading*, that is, the fact that the number of visible CPUs is often not equal to the number of physical cores.
+
+See for instance the example below:
 
 On a machine with 8 listed cores doing this (admittedly oversimplistic) benchmark:
 
