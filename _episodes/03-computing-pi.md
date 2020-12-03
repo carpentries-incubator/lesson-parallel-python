@@ -238,6 +238,7 @@ And with Numba:
 >  it is not always trivial to rewrite your code so that you can use numba with it.
 {: .callout}
 
+
 # The `threading` module
 Another possibility for parallelization is to use the `threading` module.
 This module is built into Python. In this section, we'll use it to estimate pi
