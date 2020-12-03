@@ -115,10 +115,10 @@ bag.filter(pred).compute()
 ### Reduction
 
 ~~~python
-bag.reduction(sum, sum).visualize()
+bag.reduction(f, sum).visualize()
 ~~~
 {: .source}
-![A reduction.](../fig/dask-bag-reduction.svg)
+![A reduction.](../fig/dask-bag-reduction.png)
 {: .output}
 
 > ## Challenge
