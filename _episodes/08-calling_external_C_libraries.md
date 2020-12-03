@@ -1,16 +1,20 @@
 ---
 title: "Calling external C and C++ libraries from Python"
+
 teaching: 60
 exercises: 30
+
 questions:
 - "What are some of my options in calling C and C++ libraries from Python code?"
 - "How does this work together with Numpy arrays?"
 - "How do I use this in multiple threads while lifting the GIL?"
+
 objectives:
 - "Compile and link simple C programs into shared libraries."
 - "Call these library from Python and time its executions."
 - "Compare the performance with Numba decorated Python code.
 - "Bypass the GIL when calling these libraries from multiple threads simultaneously."
+
 keypoints:
 - "Multiple options are available in calling external C and C++ libraries and that the best choice can depend on the complexity of your problem."
 - "Obviously, there is an extra compile and link step, but you will get a much faster execution compared to pure Python."
@@ -150,7 +154,7 @@ sum_range.restype = ctypes.c_longlong
 2.69 ms ± 6.01 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
 ~~~
 
-If you compare with the numbers above, you will see that the C library for `sum_range` is faster than 
+If you compare with the Numba timing from [chapter 3](03-computing-pi.md), you will see that the C library for `sum_range` is faster than 
 the numpy computation but significantly slower than the `numba.jit` decorated function.
 
 
