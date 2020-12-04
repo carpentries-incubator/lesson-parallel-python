@@ -68,6 +68,17 @@ formalism.
 - Task-based parallelization: this may be the most generic abstraction as all the others can be expressed
   in terms of tasks or workflows. This is `dask.delayed`.
 
+# Why Python?
+Python is one of most widely used languages to do scientific data analysis, visualization, and even modelling and simulation.
+The popularity of Python is mainly due to the two pillars of a friendly syntax together with the availability of many high-quality libraries.
+
+> ## It's not all good news
+> The flexibility that Python offers comes with a few downsides though: 
+> - Python code typically doesn’t perform as fast as lower-level implementations in C/C++ or Fortran.
+> - It is not trivial to parallelize Python code to work efficiently on many-core architectures.
+> 
+> This workshop addresses both these issues, with an emphasis on being able to run Python code efficiently (in parallel) on multiple cores.
+{: .callout}
 # What is parallel computing?
 
 ## Dependency diagrams
