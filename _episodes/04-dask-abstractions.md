@@ -317,7 +317,7 @@ def gather(*args):
 We can visualize what `gather` does by this small example.
 
 ~~~python
-x_p = gather(*(add(n, n) for n in range(10)))
+x_p = gather(*(add(n, n) for n in range(10))) # Shorthand for gather(add(1, 1), add(2, 2), ...)
 x_p.visualize()
 ~~~
 {: .source}
