@@ -8,7 +8,7 @@
 # lc: Library Carpentry
 # cp: Carpentries (to use for instructor traning for instance)
 # ea: eScience Academy
-carpentry: "ea"
+carpentry: "incubator"
 
 # Overall title for pages.
 title: "Parallel Programming in Python"
@@ -16,6 +16,8 @@ title: "Parallel Programming in Python"
 # Life cycle stage of the lesson
 # possible values: "pre-alpha", "alpha", "beta", "stable"
 life_cycle: "pre-alpha"
+
+remote_theme: "carpentries/carpentries-theme"
 
 #------------------------------------------------------------
 # Generic settings (should not need to change).
