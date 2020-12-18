@@ -19,7 +19,43 @@ keypoints:
 > ## Metalesson!
 > This is a metalesson! The instructor should fill in the details.
 >
-> The material in this demo is currently geared towards an astrophysics application. It is not essential that you understand the specifics of this application. That being said: it is much encouraged to use an example that the instructor is familiar with. The choice of a "real world" example is deliberate: we want participants to feel that this is a real application with real benifits. If you use a different demo, **please consider contributing** it to our repository. Ideally, future instructors can then choose a prepared demo that best suits their taste or background.
+> The material in this demo is currently geared towards an astrophysics application. It is not essential that you understand the specifics of this application. That being said: it is much encouraged to use an example that the instructor is familiar with. The choice of a "real world" example is deliberate: we want participants to feel that this is a real application with real benefits. If you use a different demo, **please consider contributing** it to our repository. Ideally, future instructors can then choose a prepared demo that best suits their taste or background.
+{: .callout}
+
+# What are computational workflows?
+
+Imagine you have to process a set of files in order to get some output.
+It is likely that you've been there before: most of research involving computers follows this pattern.
+Geneticists process gene sequences, mathematical modellers run their models with different configurations, geologists process batches of satellite images, etc.
+
+Sometimes these workflows are divided in many steps.
+From a starting setting, intermediate files are generated.
+Afterwards, those intermediate files are further processed, and so on.
+They can get pretty complex indeed.
+
+If, like me, you were not born computationally skilled, it is likely that at some point you have orchestrated such a workflow by hand: generating your files by click, drag and drop.
+Checking that everything is there, and then proceeding to the next step.
+And so on.
+
+It takes forever.
+It is not automated, and thus hardly shareable and reproducible.
+And it feels weird, doesn't it?
+Like... _there should be a better way to do this!_
+
+And there is, indeed.
+
+In this chapter we'll focus on one solution to this problem: `Snakemake`, a workflow management system.
+
+> ## Why Snakemake?
+>
+> Because it works nicely, and its syntax is really similar to that of Python.
+{: .callout}
+
+> ## What has this to do with parallelization?
+>
+> As we saw in previous chapters, the key to parallelization is to identify parallelizable tasks.
+> In a properly designed workflow, the different branches of the whole process are clearly defined.
+> This facilitates greatly the parallelization process, to the point that it becomes _almost_ automatic.
 {: .callout}
 
 # Setup
