@@ -131,7 +131,8 @@ bag.reduction(sum, sum).visualize()
 > ## Challenge
 > Rewrite the following program in terms of a Dask bag. Make it
 > spicy by using your favourite literature classic from project Gutenberg as input.
-> Example: Adventures of Sherlock Holmes, [(https://www.gutenberg.org/files/1661/1661-0.txt)](https://www.gutenberg.org/files/1661/1661-0.txt)
+> Example: Adventures of Sherlock Holmes, (curl [https://www.gutenberg.org/files/1661/1661-0.txt](https://www.gutenberg.org/files/1661/1661-0.txt) > 1661-0.txt)
+
 >
 > ~~~python
 > from nltk.stem.snowball import PorterStemmer
@@ -179,7 +180,8 @@ bag.reduction(sum, sum).visualize()
 > > clean_words = raw_words.map(clean_word).filter(good_word)
 > > stems = clean_words.map(stemmer.stem)
 > > unique_words = stems.distinct().count()
-> > unique_words.compute(scheduler="processes", num_workers=4)
+> > nr_words = unique_words.compute(scheduler="processes", num_workers=4)
+> > print("This corpus contains {n} unique words.".format(n=nr_words))
 > > ~~~
 > > {: .source}
 > {: .solution}
@@ -189,6 +191,19 @@ bag.reduction(sum, sum).visualize()
 > > ## Solution
 > > ~~~python
 > > import dask.bag
+> > from numpy import repeat
+> > import random
+> > 
+> > def calc_pi(N):
+> >     """Computes the value of pi using N random samples."""
+> >     M = 0
+> >     for i in range(N):
+> >         # take a sample
+> >         x = random.uniform(-1, 1)
+> >         y = random.uniform(-1, 1)
+> >         if x*x + y*y < 1.: M+=1
+> >     return 4 * M / N
+> >
 > > bag = dask.bag.from_sequence(repeat(10**7, 24))
 > > shots = bag.map(calc_pi)
 > > estimate = shots.mean()
