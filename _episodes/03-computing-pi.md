@@ -31,7 +31,7 @@ This is an umbrella term for several algorithms that use random numbers to appro
 We chose this algorithm because of its simplicity and straightforward geometrical interpretation.
 
 We can compute the value of π using a random number generator. We count the points falling inside the blue circle M compared to the green square N.
-Then π is approximated by the ration 4M/N.
+Then π is approximated by the ratio 4M/N.
 
 ![Computing Pi](../fig/calc_pi_3_wide.svg)
 
@@ -254,6 +254,9 @@ of *workers* that pull jobs from the queue. More workers should get the job done
 ~~~python
 import queue
 import threading
+
+ncpus = 8
+input_range = range(10000)
 
 ### We need to define a worker function that fetches jobs from the queue.
 def worker(q):
