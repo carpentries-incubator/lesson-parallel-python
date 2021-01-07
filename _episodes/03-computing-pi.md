@@ -255,8 +255,10 @@ of *workers* that pull jobs from the queue. More workers should get the job done
 import queue
 import threading
 
-ncpus = 8
-input_range = range(10000)
+# Input values
+input_range = [10**9] * 10
+# Number of threads to launch
+ncpus = 4
 
 ### We need to define a worker function that fetches jobs from the queue.
 def worker(q):
