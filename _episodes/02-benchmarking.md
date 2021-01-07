@@ -151,6 +151,17 @@ See the snippets below to find out:
 
 > ## Find out how many cores your machine has
 >
+> The number of cores can be found from Python by executing:
+> 
+> ~~~python
+> import multiprocessing
+> N_cores = multiprocessing.cpu_count()
+> ~~~
+> {: .source}
+> 
+> The snippet above doesn't distinguish between logical and physical cores.
+> If we need this kind of detailed information, we'll have to use one of the following bash commands:
+>
 > On Linux:
 > ~~~bash
 > lscpu
@@ -199,7 +210,7 @@ data.set_index("n").plot()
 
 > ## Discussion
 > Why is the runtime increasing if we add more than 4 cores?
-> This has to do with **hyper-threading**. On most architectures it makes not much sense to use more
+> This has to do with **hyper-threading**. On most architectures it does not make much sense to use more
 > workers than the number of physical cores you have.
 {: .discussion}
 

@@ -52,8 +52,8 @@ it to work in a distributed environment.
 
 # FIXME: Overview and rationale
 This is an advanced course. Why is it advanced? We (hopefully) saw in the discussion that although
-many of your problems share similar characteristics, it is the details what will determine different
-solutions. We all need our algorithms, models, analysis to run in a way that many hands make light
+many of your problems share similar characteristics, it is the detail that will determine the
+solution. We all need our algorithms, models, analysis to run in a way that many hands make light
 work. When such a situation arises with a group of people, we start with a meeting discussing who
 does what, when do we meet again to sync up, etc. After a while you can get the feeling that all you
 do is be in meetings. We will see that there are several abstractions that can make our life easier.
@@ -68,6 +68,17 @@ formalism.
 - Task-based parallelization: this may be the most generic abstraction as all the others can be expressed
   in terms of tasks or workflows. This is `dask.delayed`.
 
+# Why Python?
+Python is one of most widely used languages to do scientific data analysis, visualization, and even modelling and simulation.
+The popularity of Python is mainly due to the two pillars of a friendly syntax together with the availability of many high-quality libraries.
+
+> ## It's not all good news
+> The flexibility that Python offers comes with a few downsides though: 
+> - Python code typically doesn’t perform as fast as lower-level implementations in C/C++ or Fortran.
+> - It is not trivial to parallelize Python code to work efficiently on many-core architectures.
+> 
+> This workshop addresses both these issues, with an emphasis on being able to run Python code efficiently (in parallel) on multiple cores.
+{: .callout}
 # What is parallel computing?
 
 ## Dependency diagrams
@@ -124,7 +135,7 @@ Note that each successive loop needs the result of the previous one in order to 
 
 ![serial execution](../fig/serial.svg)
 
-In the example above we see a block for each function call, indicating some work for the CPU, and the arrows
+In the example above we see a circle for each function call, indicating some work for the CPU, and the arrows
 show that the evaluation of a function depends on a previous result.
 
 In many cases, the computation involves **independent work**. However, the difference can be
