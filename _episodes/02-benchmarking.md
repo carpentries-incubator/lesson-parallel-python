@@ -210,7 +210,7 @@ data.set_index("n").plot()
 
 > ## Discussion
 > Why is the runtime increasing if we add more than 4 cores?
-> This has to do with **hyper-threading**. On most architectures it makes not much sense to use more
+> This has to do with **hyper-threading**. On most architectures it does not make much sense to use more
 > workers than the number of physical cores you have.
 {: .discussion}
 

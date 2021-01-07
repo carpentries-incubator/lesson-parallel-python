@@ -31,7 +31,7 @@ This is an umbrella term for several algorithms that use random numbers to appro
 We chose this algorithm because of its simplicity and straightforward geometrical interpretation.
 
 We can compute the value of π using a random number generator. We count the points falling inside the blue circle M compared to the green square N.
-Then π is approximated by the ration 4M/N.
+Then π is approximated by the ratio 4M/N.
 
 ![Computing Pi](../fig/calc_pi_3_wide.svg)
 

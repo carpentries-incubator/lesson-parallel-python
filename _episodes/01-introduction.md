@@ -52,8 +52,8 @@ it to work in a distributed environment.
 
 # FIXME: Overview and rationale
 This is an advanced course. Why is it advanced? We (hopefully) saw in the discussion that although
-many of your problems share similar characteristics, it is the details what will determine different
-solutions. We all need our algorithms, models, analysis to run in a way that many hands make light
+many of your problems share similar characteristics, it is the detail that will determine the
+solution. We all need our algorithms, models, analysis to run in a way that many hands make light
 work. When such a situation arises with a group of people, we start with a meeting discussing who
 does what, when do we meet again to sync up, etc. After a while you can get the feeling that all you
 do is be in meetings. We will see that there are several abstractions that can make our life easier.
@@ -135,7 +135,7 @@ Note that each successive loop needs the result of the previous one in order to 
 
 ![serial execution](../fig/serial.svg)
 
-In the example above we see a block for each function call, indicating some work for the CPU, and the arrows
+In the example above we see a circle for each function call, indicating some work for the CPU, and the arrows
 show that the evaluation of a function depends on a previous result.
 
 In many cases, the computation involves **independent work**. However, the difference can be
