@@ -153,6 +153,7 @@ sum_range.restype = ctypes.c_longlong
 ~~~
 2.69 ms ± 6.01 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
 ~~~
+{: .output}
 
 If you compare with the Numba timing from [chapter 3](03-computing-pi.md), you will see that the C library for `sum_range` is faster than 
 the numpy computation but significantly slower than the `numba.jit` decorated function.
@@ -196,6 +197,7 @@ the numpy computation but significantly slower than the `numba.jit` decorated fu
 > > ~~~
 > > 8.11 ms ± 15.6 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
 > > ~~~
+> > {: .output}
 > >
 > > Compare this with the run time for the C code for conditional_sum_range.
 > > Compile and link in the usual way, assuming the file name is still `test.c`:
@@ -217,10 +219,51 @@ the numpy computation but significantly slower than the `numba.jit` decorated fu
 > > ~~~
 > > 7.62 ms ± 49.7 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
 > > ~~~
-> > This shows that for this slightly more complicated example the C code is somewhat faster than the Numba decorated Python code.
-> >
 > > {: .output}
+> > This shows that for this slightly more complicated example the C code is somewhat faster than the Numba decorated Python code.
+> > 
 > {: .solution}
 {: .challenge}
 
+Now let us consider a more complex example. Instead of computing the sum of numbers up to a certain upper limit, let us
+compute that for an array of upper limits. This will return an array of sums. How difficult is it to modify our C and Python code
+to get this done? Well, you just need to replace `&sum_range` by `py::vectorize(sum_range)`:
 
+~~~c
+PYBIND11_MODULE(test_pybind, m) {
+    m.doc() = "pybind11 example plugin"; // optional module docstring
+
+    m.def("sum_range", py::vectorize(sum_range), "Adds upp consecutive integer numbers from 0 up to and including high-1");
+}
+~~~
+{: .source}
+
+Now let's see what happens if we pass `test_pybind.so` an array instead of an integer.
+
+~~~python
+import test_pybind
+sum_range=test_pybind.sum_range
+ys = range(10)
+sum_range(ys)
+~~~
+{: .source}
+
+gives
+~~~
+array([ 0,  0,  1,  3,  6, 10, 15, 21, 28, 36])
+~~~
+{: .output}
+
+which you can check to be correct by entering the following:
+
+~~~python
+out=sum_range(ys)
+out[1:]-out[:-1]
+~~~
+{: .source}
+
+which gives
+~~~
+array([0, 1, 2, 3, 4, 5, 6, 7, 8])
+~~~
+{: .output}
