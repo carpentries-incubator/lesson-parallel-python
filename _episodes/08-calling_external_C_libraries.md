@@ -243,7 +243,7 @@ Now let's see what happens if we pass `test_pybind.so` an array instead of an in
 ~~~python
 import test_pybind
 sum_range=test_pybind.sum_range
-ys = range(10)
+ys=range(10)
 sum_range(ys)
 ~~~
 {: .source}
