@@ -23,6 +23,7 @@ keypoints:
 ---
 
 # Calling C and C++ libraries
+## Simple example using either pybind11 or ctypes
 External C and C++ libraries can be called from Python code using a number of options, using e.g. Cython, CFFI, pybind11 and ctypes.
 We will discuss the last two, because they require the least amount of boilerplate, for simple cases - 
 for more complex examples that may not be the case. Consider this simple C program, test.c, which adds up consecutive numbers:
@@ -63,26 +64,22 @@ c++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` test.c -
 ~~~
 {: .source}
 
-which generates a `test_pybind.so` shared object which you can call from a Python program, like this:
+which generates a `test_pybind.so` shared object which you can call from a iPython shell, like this:
 
 ~~~python
-import test_pybind
-sum_range=test_pybind.sum_range
+%import test_pybind
+%sum_range=test_pybind.sum_range
+%high=1000000000
+%brute_force_sum=sum_range(high) 
+~~~
+{:source}
 
-high=1000000000
-
-sum_from_formula=high*(high-1)//2
-brute_force_sum=sum_range(high) 
-difference=sum_from_formula-brute_force_sum
-
-print()
-print("According to a simple formula, this should be the sum of {0} consecutive numbers,".format(high))
-print("starting at zero: {0}".format(sum_from_formula))
-print()
-print("Simply adding up the numbers should yield the same result: {0}".format(brute_force_sum))
-print()
-print("The two methods should yield the same answer, so this should be zero: {}".format(difference))
-print()
+Now you might want to check the output, by comparing with the well-known formula for the sum of consecutive integers.
+~~~python
+%sum_from_formula=high*(high-1)//2
+%sum_from_formula
+%difference=sum_from_formula-brute_force_sum
+%difference
 ~~~
 {: .source}
 
@@ -112,41 +109,30 @@ ld -shared -o libtest.so test.o
 {: .source}
 
 which generates a libtest.so file.
-In the Python script some boilerplate needs to be added:
+
+You will need some extra boilerplate:
 
 ~~~python
-import ctypes
-testlib = ctypes.cdll.LoadLibrary("./libtest.so")  
+%import ctypes
+%testlib = ctypes.cdll.LoadLibrary("./libtest.so")  
+%sum_range = testlib.sum_range
+%sum_range.argtypes = [ctypes.c_longlong]  
+%sum_range.restype = ctypes.c_longlong 
+%high=1000000000
+%brute_force_sum=sum_range(high) 
+~~~
 
-sum_range = testlib.sum_range
-sum_range.argtypes = [ctypes.c_longlong]  
-sum_range.restype = ctypes.c_longlong 
-
-high=1000000000
-
-sum_from_formula=high*(high-1)//2
-brute_force_sum=sum_range(high) 
-difference=sum_from_formula-brute_force_sum
-
-print()
-print("According to a simple formula, this should be the sum of {0} consecutive numbers,".format(high))
-print("starting at zero: {0}".format(sum_from_formula))
-print()
-print("Simply adding up the numbers should yield the same result: {0}".format(brute_force_sum))
-print()
-print("The two methods should yield the same answer, so this should be zero: {}".format(difference))
-print()
-
+Again, you can compare with the formula for the sum of consecutive integers.
+~~~python
+%sum_from_formula=high*(high-1)//2
+%sum_from_formula
+%difference=sum_from_formula-brute_force_sum
+%difference
 ~~~
 {: .source}
 
 Now we can time our compiled `sum_range` C library, e.g. from the iPython interface:
 ~~~python
-import ctypes
-testlib = ctypes.cdll.LoadLibrary("./libtest.so")
-sum_range = testlib.sum_range
-sum_range.argtypes = [ctypes.c_longlong]
-sum_range.restype = ctypes.c_longlong 
 %timeit sum_range(10**7)
 ~~~
 {: .source}
@@ -225,6 +211,7 @@ the numpy computation but significantly slower than the `numba.jit` decorated fu
 > {: .solution}
 {: .challenge}
 
+## Passing Numpy arrays to C libraries.
 Now let us consider a more complex example. Instead of computing the sum of numbers up to a certain upper limit, let us
 compute that for an array of upper limits. This will return an array of sums. How difficult is it to modify our C and Python code
 to get this done? Well, you just need to replace `&sum_range` by `py::vectorize(sum_range)`:
@@ -254,7 +241,7 @@ array([ 0,  0,  1,  3,  6, 10, 15, 21, 28, 36])
 ~~~
 {: .output}
 
-which you can check to be correct by entering the following:
+which you can check to be correct by subtracting the previous sum from each sum (except the first):
 
 ~~~python
 out=sum_range(ys)
@@ -267,3 +254,4 @@ which gives
 array([0, 1, 2, 3, 4, 5, 6, 7, 8])
 ~~~
 {: .output}
+as you would expect.
