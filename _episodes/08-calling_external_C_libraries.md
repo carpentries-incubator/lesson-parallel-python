@@ -131,6 +131,7 @@ Again, you can compare with the formula for the sum of consecutive integers.
 ~~~
 {: .source}
 
+## Performance
 Now we can time our compiled `sum_range` C library, e.g. from the iPython interface:
 ~~~python
 %timeit sum_range(10**7)
@@ -241,7 +242,7 @@ array([ 0,  0,  1,  3,  6, 10, 15, 21, 28, 36])
 ~~~
 {: .output}
 
-which you can check to be correct by subtracting the previous sum from each sum (except the first):
+It does not crash! Instead, it returns an array which you can check to be correct by subtracting the previous sum from each sum (except the first):
 
 ~~~python
 out=sum_range(ys)
@@ -254,4 +255,5 @@ which gives
 array([0, 1, 2, 3, 4, 5, 6, 7, 8])
 ~~~
 {: .output}
-as you would expect.
+
+the elements of `ys` - except the last -  as you would expect.
