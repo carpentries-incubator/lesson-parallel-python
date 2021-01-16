@@ -124,7 +124,7 @@ You will need some extra boilerplate:
 
 Again, you can compare with the formula for the sum of consecutive integers.
 ~~~python
-%sum_from_formula=high*(high-1)//2
+%sum_from_formula=high*(high-1)/2
 %sum_from_formula
 %difference=sum_from_formula-brute_force_sum
 %difference
@@ -229,10 +229,10 @@ PYBIND11_MODULE(test_pybind, m) {
 Now let's see what happens if we pass `test_pybind.so` an array instead of an integer.
 
 ~~~python
-import test_pybind
-sum_range=test_pybind.sum_range
-ys=range(10)
-sum_range(ys)
+%import test_pybind
+%sum_range=test_pybind.sum_range
+%ys=range(10)
+%sum_range(ys)
 ~~~
 {: .source}
 
@@ -245,8 +245,8 @@ array([ 0,  0,  1,  3,  6, 10, 15, 21, 28, 36])
 It does not crash! Instead, it returns an array which you can check to be correct by subtracting the previous sum from each sum (except the first):
 
 ~~~python
-out=sum_range(ys)
-out[1:]-out[:-1]
+%out=sum_range(ys)
+%out[1:]-out[:-1]
 ~~~
 {: .source}
 
@@ -257,3 +257,80 @@ array([0, 1, 2, 3, 4, 5, 6, 7, 8])
 {: .output}
 
 the elements of `ys` - except the last -  as you would expect.
+
+# Call the C library from multiple threads simultaneously.
+We can quickly show you how the C library compiled using pybind11 can be run multithreaded. try the following from an iPython shell:
+
+~~~python
+%high=int(1e9)
+%timeit(sum_range(high)
+~~~
+{: .source}
+
+gives
+~~~
+425 ms ± 9.36 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+~~~
+
+Now try a straightforward parallellisation of 200 calls of `sum_range`, over two threads, so 100 calls per thread.
+This should take about ```100 * 425ms = 4.25s``` if parallellisation were running without overhead. Let's try:
+
+~~~python
+%import threading as T  
+%import time 
+%def timer():
+%    start_time = time.time()
+%    for x in range(10):
+%        t1 = T.Thread(target=sum_range, args=(high,))
+%        t2 = T.Thread(target=sum_range, args=(high,))
+%        t1.start()
+%        t2.start()
+%        t1.join()
+%        t2.join()
+%    end_time = time.time()
+%    print("Time elapsed = {:.2f}s".format(end_time-start_time))
+%timer()  
+~~~
+{: .source}
+
+This gives
+~~~
+Time elapsed = 8.64s
+~~~
+i.e. more than twice the time we would expect. What actually happened is that `sum_range` was run sequentially instead of parallelly. 
+We need to add a single declaration to test.c: `py::call_guard<py::gil_scoped_release>()`:
+~~~c
+PYBIND11_MODULE(test_pybind, m) {
+    m.doc() = "pybind11 example plugin"; // optional module docstring
+
+    m.def("sum_range", py::vectorize(sum_range), "Adds upp consecutive integer numbers from 0 up to and including high-1");
+}
+~~~
+{: .source}
+
+like this:
+~~~c
+PYBIND11_MODULE(test_pybind, m) {
+    m.doc() = "pybind11 example plugin"; // optional module docstring
+
+    m.def("sum_range", &sum_range, "A function which adds upp numbers from 0 up to and including high-1", py::call_guard<py::gil_scoped_release>());
+}
+~~~
+{: .source}
+
+Now compile again:
+~~~bash
+c++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` test.c -o test_pybind.so
+~~~
+{: .source}
+
+Reimport the rebuilt shared object and time again:
+~~~python
+%import test_pybind
+%sum_range=test_pybind.sum_range
+%timer()
+~~~
+{: .source}
+
+
+
