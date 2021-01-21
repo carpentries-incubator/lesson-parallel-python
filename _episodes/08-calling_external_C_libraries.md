@@ -263,17 +263,17 @@ We can quickly show you how the C library compiled using pybind11 can be run mul
 
 ~~~python
 %high=int(1e9)
-%timeit(sum_range(high)
+%timeit(sum_range(high))
 ~~~
 {: .source}
 
 gives
 ~~~
-425 ms ± 9.36 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+274 ms ± 1.03 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
 ~~~
 
-Now try a straightforward parallellisation of 200 calls of `sum_range`, over two threads, so 100 calls per thread.
-This should take about ```100 * 425ms = 4.25s``` if parallellisation were running without overhead. Let's try:
+Now try a straightforward parallellisation of 20 calls of `sum_range`, over two threads, so 10 calls per thread.
+This should take about ```10 * 274ms = 2.74s``` if parallellisation were running without overhead. Let's try:
 
 ~~~python
 %import threading as T  
@@ -295,8 +295,10 @@ This should take about ```100 * 425ms = 4.25s``` if parallellisation were runnin
 
 This gives
 ~~~
-Time elapsed = 8.64s
+Time elapsed = 5.59s
 ~~~
+{: .output}
+
 i.e. more than twice the time we would expect. What actually happened is that `sum_range` was run sequentially instead of parallelly. 
 We need to add a single declaration to test.c: `py::call_guard<py::gil_scoped_release>()`:
 ~~~c
@@ -324,13 +326,33 @@ c++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` test.c -
 ~~~
 {: .source}
 
-Reimport the rebuilt shared object and time again:
+Reimport the rebuilt shared object - this can only be done by quitting and relaunching the iPython interpreter - and time again.
 ~~~python
 %import test_pybind
+%import time
+%import threading as T
+%
 %sum_range=test_pybind.sum_range
+%high=int(1e9)
+%
+%def timer():
+%    start_time = time.time()
+%    for x in range(10):
+%        t1 = T.Thread(target=sum_range, args=(high,))
+%        t2 = T.Thread(target=sum_range, args=(high,))
+%        t1.start()
+%        t2.start()
+%        t1.join()
+%        t2.join()
+%    end_time = time.time()
+%    print("Time elapsed = {:.2f}s".format(end_time-start_time))
 %timer()
 ~~~
 {: .source}
 
-
-
+This gives:
+~~~
+Time elapsed = 2.81s
+~~~
+{: .output}
+as you would expect for two `sum_range` modules running in parallel.
