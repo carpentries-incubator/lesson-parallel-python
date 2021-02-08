@@ -201,8 +201,14 @@ And with Numba:
 ~~~
 {: .output}
 
-> ## Challenge: Numbify `comp_pi`
-> Create a Numba version of `comp_pi`. Time it.
+Numba is 100x faster in this case!  It gets this speedup with "just-in-time" compilation (JIT)—compiling the Python
+function into machine code just before it is called (that's what the `@numba.jit` decorator stands for).
+Not every Python and Numpy feature is supported, but a function may be a good candidate for Numba if it is written
+with a Python for-loop over a large range of values, as with `sum_range_numba()`.
+
+
+> ## Challenge: Numbify `calc_pi`
+> Create a Numba version of `calc_pi`. Time it.
 >
 > > ## Solution
 > > Add the `@numba.jit` decorator to the first 'naive' implementation.
@@ -331,6 +337,12 @@ def calc_pi_numba(N):
 
 The `nopython` argument forces Numba to compile the code without referencing any Python objects,
 while the `nogil` argument enables lifting the GIL during the execution of the function.
+
+> ## Use `nopython=True` or `@numba.njit`
+> It's generally a good idea to use `nopython=True` with `@numba.jit` to make sure the entire
+> function is running without referencing Python objects, because that will dramatically slow
+> down most Numba code.  There's even a decorator that has `nopython=True` by default: `@numba.njit`
+{: .callout}
 
 > ## Challenge: profile the fixed program
 > The nogil version of `calc_pi_numba` should scale nicely with the number of cores used.
