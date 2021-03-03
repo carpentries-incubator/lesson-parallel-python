@@ -12,7 +12,7 @@ questions:
 objectives:
 - "Compile and link simple C programs into shared libraries."
 - "Call these library from Python and time its executions."
-- "Compare the performance with Numba decorated Python code.
+- "Compare the performance with Numba decorated Python code."
 - "Bypass the GIL when calling these libraries from multiple threads simultaneously."
 
 keypoints:
@@ -25,7 +25,7 @@ keypoints:
 # Calling C and C++ libraries
 ## Simple example using either pybind11 or ctypes
 External C and C++ libraries can be called from Python code using a number of options, using e.g. Cython, CFFI, pybind11 and ctypes.
-We will discuss the last two, because they require the least amount of boilerplate, for simple cases - 
+We will discuss the last two, because they require the least amount of boilerplate, for simple cases -
 for more complex examples that may not be the case. Consider this simple C program, test.c, which adds up consecutive numbers:
 
 ~~~c
@@ -36,7 +36,7 @@ long long sum_range(long long high)
 {
   long long i;
   long long s = 0LL;
- 
+
   for (i = 0LL; i < high; i++)
       s += (long long)i;
 
@@ -44,7 +44,7 @@ long long sum_range(long long high)
 }
 
 PYBIND11_MODULE(test_pybind, m) {
-    m.doc() = "Export the sum_range function as sum_range"; 
+    m.doc() = "Export the sum_range function as sum_range";
 
     m.def("sum_range", &sum_range, "Adds upp consecutive integer numbers from 0 up to and including high-1");
 }
@@ -70,7 +70,7 @@ which generates a `test_pybind.so` shared object which you can call from a iPyth
 %import test_pybind
 %sum_range=test_pybind.sum_range
 %high=1000000000
-%brute_force_sum=sum_range(high) 
+%brute_force_sum=sum_range(high)
 ~~~
 {:source}
 
@@ -92,7 +92,7 @@ long long sum_range(long long high)
 {
   long long i;
   long long s = 0LL;
- 
+
   for (i = 0LL; i < high; i++)
       s += (long long)i;
 
@@ -114,12 +114,12 @@ You will need some extra boilerplate:
 
 ~~~python
 %import ctypes
-%testlib = ctypes.cdll.LoadLibrary("./libtest.so")  
+%testlib = ctypes.cdll.LoadLibrary("./libtest.so")
 %sum_range = testlib.sum_range
-%sum_range.argtypes = [ctypes.c_longlong]  
-%sum_range.restype = ctypes.c_longlong 
+%sum_range.argtypes = [ctypes.c_longlong]
+%sum_range.restype = ctypes.c_longlong
 %high=1000000000
-%brute_force_sum=sum_range(high) 
+%brute_force_sum=sum_range(high)
 ~~~
 
 Again, you can compare with the formula for the sum of consecutive integers.
@@ -142,12 +142,12 @@ Now we can time our compiled `sum_range` C library, e.g. from the iPython interf
 ~~~
 {: .output}
 
-If you compare with the Numba timing from [chapter 3](03-computing-pi.md), you will see that the C library for `sum_range` is faster than 
+If you compare with the Numba timing from [chapter 3](03-computing-pi.md), you will see that the C library for `sum_range` is faster than
 the numpy computation but significantly slower than the `numba.jit` decorated function.
 
 
 > ## Challenge: Check if the Numba version of this conditional `sum range` function outperforms its C counterpart:
->  
+>
 > Insprired by [a blog by Christopher Swenson](http://caswenson.com/2009_06_13_bypassing_the_python_gil_with_ctypes.html).
 >
 > ~~~C
@@ -155,11 +155,11 @@ the numpy computation but significantly slower than the `numba.jit` decorated fu
 > {
 >   long long i;
 >   long long s = 0LL;
-> 
+>
 >   for (i = 0LL; i < to; i++)
 >     if (i % 3 == 0)
 >       s += i;
-> 
+>
 >   return s;
 > }
 > ~~~
@@ -177,7 +177,7 @@ the numpy computation but significantly slower than the `numba.jit` decorated fu
 > > ~~~
 > >
 > > Let's check how fast it runs.
-> > 
+> >
 > > ~~~
 > > %timeit conditional_sum_range_numba(10**7)
 > > ~~~
@@ -193,14 +193,14 @@ the numpy computation but significantly slower than the `numba.jit` decorated fu
 > > ld -shared -o libtest.so test.o
 > > ~~~
 > > {: .source}
-> > 
+> >
 > > Again, we can time our compiled `conditional_sum_range` C library, e.g. from the iPython interface:
 > > ~~~python
 > > import ctypes
 > > testlib = ctypes.cdll.LoadLibrary("./libtest.so")
 > > conditional_sum_range = testlib.conditional_sum_range
 > > conditional_sum_range.argtypes = [ctypes.c_longlong]
-> > conditional_sum_range.restype = ctypes.c_longlong 
+> > conditional_sum_range.restype = ctypes.c_longlong
 > > %timeit conditional_sum_range(10**7)
 > > ~~~
 > > ~~~
@@ -208,7 +208,7 @@ the numpy computation but significantly slower than the `numba.jit` decorated fu
 > > ~~~
 > > {: .output}
 > > This shows that for this slightly more complicated example the C code is somewhat faster than the Numba decorated Python code.
-> > 
+> >
 > {: .solution}
 {: .challenge}
 
@@ -276,8 +276,8 @@ Now try a straightforward parallellisation of 20 calls of `sum_range`, over two 
 This should take about ```10 * 274ms = 2.74s``` if parallellisation were running without overhead. Let's try:
 
 ~~~python
-%import threading as T  
-%import time 
+%import threading as T
+%import time
 %def timer():
 %    start_time = time.time()
 %    for x in range(10):
@@ -289,7 +289,7 @@ This should take about ```10 * 274ms = 2.74s``` if parallellisation were running
 %        t2.join()
 %    end_time = time.time()
 %    print("Time elapsed = {:.2f}s".format(end_time-start_time))
-%timer()  
+%timer()
 ~~~
 {: .source}
 
@@ -299,7 +299,7 @@ Time elapsed = 5.59s
 ~~~
 {: .output}
 
-i.e. more than twice the time we would expect. What actually happened is that `sum_range` was run sequentially instead of parallelly. 
+i.e. more than twice the time we would expect. What actually happened is that `sum_range` was run sequentially instead of parallelly.
 We need to add a single declaration to test.c: `py::call_guard<py::gil_scoped_release>()`:
 ~~~c
 PYBIND11_MODULE(test_pybind, m) {
