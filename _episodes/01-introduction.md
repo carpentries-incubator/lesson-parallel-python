@@ -157,7 +157,7 @@ Each task of squaring a number is independent of all the other elements in the l
 
 It is important to know that some tasks are fundamentally non-parallelizable.
 These tasks are also known as **inherently serial**. An example could be the computation of the fibonacci sequence
-using the formula `Fn=Fn-1 + Fn-2`
+using the formula `Fn=Fn-1 + Fn-2`. Each output here depends on the outputs of the two previous loops.
 
 ## Challenge: Parallellizable and non-parallellizable tasks
 Can you think of a task in your domain that is parallelizable? Can you also think of one that is fundamentally
