@@ -170,6 +170,17 @@ it becomes more visible that each task (of squaring a number) is indeed independ
 
 ![parallel execution](../fig/parallel.svg)
 
+
+It is important to know that some tasks are fundamentally non-parallelizable.
+These tasks are also known as **inherently serial**. An example could be the computation of the fibonacci sequence
+using the formula `Fn=Fn-1 + Fn-2`
+
+## Challenge: Parallellizable and non-parallellizable tasks
+Can you think of a task in your domain that is parallelizable? Can you also think of one that is fundamentally
+non-parallelizable?
+
+Please write your answers in the collaborative document.
+
 > ## Embarrassingly parallel problems
 > Although we talked about embarrassingly parallel problems, it would be more correct to talk about
 embarrassingly parallel algorithms.
