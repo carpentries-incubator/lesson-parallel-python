@@ -73,10 +73,10 @@ Python is one of most widely used languages to do scientific data analysis, visu
 The popularity of Python is mainly due to the two pillars of a friendly syntax together with the availability of many high-quality libraries.
 
 > ## It's not all good news
-> The flexibility that Python offers comes with a few downsides though: 
+> The flexibility that Python offers comes with a few downsides though:
 > - Python code typically doesn’t perform as fast as lower-level implementations in C/C++ or Fortran.
 > - It is not trivial to parallelize Python code to work efficiently on many-core architectures.
-> 
+>
 > This workshop addresses both these issues, with an emphasis on being able to run Python code efficiently (in parallel) on multiple cores.
 {: .callout}
 # What is parallel computing?
@@ -104,72 +104,56 @@ Nowadays, most personal computers have 4 or 8 processors (also known as cores). 
 {: .callout}
 
 ## Parallelizable and non-parallelizable tasks
+Some tasks are easily parallelizable while others inherently aren't. However, it might not always be immediately
+apparent that a task is parallelizable.
 
-It is important to know that some tasks are fundamentally non-parallelizable.
-These tasks are also known as **inherently serial**. An example could be the brute-force computation of
-the factorial of an integer.
-
-Example: the factorial of 4,
-usually written as $4!$,
-is obtained by multiplying all the integers smaller or equal to 4, that is:
-
-$$
-4! = 4 \cdot 3 \cdot 2 \cdot 1 = 24
-$$
-
-A possible implementation in Python could be the following:
-
-~~~python
-n = 4 # This the input
-
-temp = 1 # Initialize temporary variable as 1. It will act as intermediate input - output
-for i in range(n): # Multiply by 2, 3, ..., up to n
-  temp = temp * (i + 1) # This is the function, it gets called n times
-
-output = temp
-
-print(output)
-~~~
-
-Note that each successive loop needs the result of the previous one in order to be executed.
-
-![serial execution](../fig/serial.svg)
-
-In the example above we see a circle for each function call, indicating some work for the CPU, and the arrows
-show that the evaluation of a function depends on a previous result.
-
-In many cases, the computation involves **independent work**. However, the difference can be
-hard to spot. Look at this pseudo snippet:
-
+Let us consider the following piece of code.
 ~~~python
 x = [1, 2, 3, 4] # Write input
 
-y = [] # Initialize (empty) output
+y = 0 # Initialize output
 
 for i in range(len(x)):
-  y.append(x[i]**2) # Apply a function to each element in the input (square it)
+  y += x[i] # Add each element to the output variable
 
 print(y) # Print output
 ~~~
 {: .source}
 
+Note that each successive loop uses the result of the previous loop. In that way, it is dependent on the previous
+loop. The following dependency diagram makes that clear:
+
+![serial execution](../fig/serial.svg)
+
 Although we are performing the loops in a serial way in the snippet above,
 nothing avoids us from performing this calculation in parallel.
-The value of applying our function to any of the elements in the input `x` is completely independent of the values
-of the rest elements on `x`. This kind of problems are known as
+The following example shows that parts of the computations can be done independently:
+
+```python
+x = [1, 2, 4, 4]
+
+chunk1 = x[:2]
+chunk2 = x[2:]
+
+sum_1 = sum(chunk1)
+sum_2 = sum(chunk2)
+
+result = sum_1 + sum_2
+
+print(result)
+```
+
+![parallel execution](../fig/parallel.svg)
+
+There is a subclass of problems where the subtasks are completely independent. These kinds of problems are known as
 [embarrassingly parallel](https://en.wikipedia.org/wiki/Embarrassingly_parallel).
 
-If we rewrite this into a list-comprehension,
-
+An example of this kind of problem is squaring each element in a list, which can be done like so:
 ~~~python
 y = [n**2 for n in x]
 ~~~
 {: .source}
-
-it becomes more visible that each task (of squaring a number) is indeed independent.
-
-![parallel execution](../fig/parallel.svg)
-
+Each task of squaring a number is independent of all the other elements in the list.
 
 It is important to know that some tasks are fundamentally non-parallelizable.
 These tasks are also known as **inherently serial**. An example could be the computation of the fibonacci sequence
@@ -205,9 +189,9 @@ occasionally.
 > 5.  (1 day) Leave the soup for one day. Reheat before serving and add a sliced smoked
 >     sausage (vegetarian options are also welcome). Season with pepper and salt.
 >
-> Imagine you're cooking alone. 
-> - Can you identify potential for parallelisation in this recipe? 
-> - And what if you are cooking with the help of a friend help? Is the soup done any faster? 
+> Imagine you're cooking alone.
+> - Can you identify potential for parallelisation in this recipe?
+> - And what if you are cooking with the help of a friend help? Is the soup done any faster?
 > - Draw a dependency diagram.
 >
 > > ## Solution
