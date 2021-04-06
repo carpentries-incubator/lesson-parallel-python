@@ -65,12 +65,19 @@ The `%%timeit` line magic does exactly this in a concise an comfortable manner!
 `%%timeit` first measures how long it takes to run a command one time, then
 repeats it enough times to get an average run-time. Also, `%%timeit` can measure run times without
 the time it takes to setup a problem, measuring only the performance of the code in the cell.
-This way we can trust the outcome better. Instead of timing an entire cell,
-it is also possible to time a single line with `%time` or `%timeit`.
+This way we can trust the outcome better.
 
 ~~~python
 %%timeit
 np.arange(10**7).sum()
+~~~
+{: .source}
+
+If you want to store the output of `%%timeit` in a Python variable, you can do so with the `-o` flag.
+
+~~~python
+time = %timeit -o np.arange(10**7).sum()
+print(f"Time taken: {time.average:.4f}s")
 ~~~
 {: .source}
 
