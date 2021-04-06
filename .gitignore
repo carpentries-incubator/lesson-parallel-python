@@ -15,3 +15,5 @@ _site
 Gemfile.lock
 
 .idea/
+.*.swp
+

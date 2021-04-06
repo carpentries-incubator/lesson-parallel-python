@@ -52,7 +52,8 @@ rule draw_dependency_diagrams:
         td = TraceDask()
 
         x = td(zero())
-        numbers = [3, 4, 5, 6]
+        numbers = [1, 2, 3, 4]
+        n = len(numbers)
         for i in numbers:
             x = td(x+i)
 
@@ -61,11 +62,10 @@ rule draw_dependency_diagrams:
 
         x = td(zero())
         y = td(zero())
-        for i,v in enumerate(numbers):
-            if i % 2 == 0:
-                x = td(x + v)
-            else:
-                y = td(y + v)
+        for v in numbers[:n//2]:
+            x = td(x + v)
+        for v in numbers[n//2:]:
+            y = td(y + v)
         z = td(x + y)
         z.visualize(rankdir="LR", filename=output[1],
                     data_attributes=td.attributes)
