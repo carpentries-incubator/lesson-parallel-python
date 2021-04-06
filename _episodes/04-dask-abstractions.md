@@ -60,7 +60,7 @@ bag = db.from_sequence(range(6))
 
 ### Map
 
-To illustrate the concept of `map`, we'll need a mapping function. 
+To illustrate the concept of `map`, we'll need a mapping function.
 In the example below we'll just use a function that squares its argument:
 
 ~~~python
@@ -153,7 +153,7 @@ bag.reduction(sum, sum).visualize()
 >     cw = clean_word(w)
 >     if good_word(cw):
 >         words.add(stemmer.stem(cw))
-> print("This corpus contains {n} unique words.".format(n=len(words)))
+> print(f"This corpus contains {len(words)} unique words.")
 > ~~~
 > {: .source}
 >
@@ -181,7 +181,7 @@ bag.reduction(sum, sum).visualize()
 > > stems = clean_words.map(stemmer.stem)
 > > unique_words = stems.distinct().count()
 > > nr_words = unique_words.compute(scheduler="processes", num_workers=4)
-> > print("This corpus contains {n} unique words.".format(n=nr_words))
+> > print(f"This corpus contains {nr_words} unique words.")
 > > ~~~
 > > {: .source}
 > {: .solution}
@@ -193,7 +193,7 @@ bag.reduction(sum, sum).visualize()
 > > import dask.bag
 > > from numpy import repeat
 > > import random
-> > 
+> >
 > > def calc_pi(N):
 > >     """Computes the value of pi using N random samples."""
 > >     M = 0
