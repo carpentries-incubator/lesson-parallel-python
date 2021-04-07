@@ -288,7 +288,7 @@ This should take about ```10 * 274ms = 2.74s``` if parallellisation were running
 %        t1.join()
 %        t2.join()
 %    end_time = time.time()
-%    print("Time elapsed = {:.2f}s".format(end_time-start_time))
+%    print(f"Time elapsed = {end_time-start_time:.2f}s")
 %timer()
 ~~~
 {: .source}
@@ -345,7 +345,7 @@ Reimport the rebuilt shared object - this can only be done by quitting and relau
 %        t1.join()
 %        t2.join()
 %    end_time = time.time()
-%    print("Time elapsed = {:.2f}s".format(end_time-start_time))
+%    print(f"Time elapsed = {end_time-start_time:.2f}s")
 %timer()
 ~~~
 {: .source}
