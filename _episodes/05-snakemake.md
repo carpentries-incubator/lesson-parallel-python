@@ -112,6 +112,33 @@ Let's go a bit deeper into rule writing by doing a small exercise.
 > ~~~
 > {: .source}
 >
+> Alternatively, the same can be done using only Python commands:
+>
+> ~~~python
+> rule all:
+>     input:
+>         "allcaps.txt"
+>
+> rule generate_message:
+>     output:
+>         "message.txt"
+>     run:
+>         with open(output[0], "w") as f:
+>             print("Hello, World!", file=f)
+>
+> rule shout_message:
+>     input:
+>         "message.txt"
+>     output:
+>         "allcaps.txt"
+>     run:
+>         with open(output[0], "w") as f_out, \
+>              open(input[0], "r") as f_in:
+>             content = f_in.read()
+>             f_out.write(content.upper())
+> ~~~
+> {: .source}
+>
 > View the dependency diagram: `snakemake --dag | dot | display`, and run the workflow `snakemake -j1`
 > What is happening? Create a new rule that concatenates `message.txt` and `allcaps.txt` (use the `cat` command).
 > Change the `all` rule to require the new output file. When you rerun the workflow, are all the steps repeated?
@@ -124,6 +151,20 @@ Let's go a bit deeper into rule writing by doing a small exercise.
 > >     shell:
 > >         "cat {input} > {output}"
 > >         # Windows: "type {input} > {output}" ????
+> > ~~~
+> >
+> > Alternatively, using Python commands:
+> >
+> > ~~~python
+> > rule combine:
+> >     input:
+> >         "message.txt", "allcaps.txt"
+> >     output:
+> >         "combined.txt"
+> >     run:
+> >         with open(output[0], "w") as f_out:
+> >             for path in input:
+> >                 f_out.write(open(path).read())
 > > ~~~
 > >
 > > Only the `combine` rule is being run (in addition to the `all` rule). The dependency diagram should look like this:
