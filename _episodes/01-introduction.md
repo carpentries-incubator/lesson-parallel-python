@@ -145,7 +145,7 @@ print(result)
 
 ![parallel execution](../fig/parallel.svg)
 
-There is a subclass of problems where the subtasks are completely independent. These kinds of problems are known as
+There is a subclass of algorithms where the subtasks are completely independent. These kinds of algorithms are known as
 [embarrassingly parallel](https://en.wikipedia.org/wiki/Embarrassingly_parallel).
 
 An example of this kind of problem is squaring each element in a list, which can be done like so:
@@ -156,26 +156,25 @@ y = [n**2 for n in x]
 Each task of squaring a number is independent of all the other elements in the list.
 
 It is important to know that some tasks are fundamentally non-parallelizable.
-These tasks are also known as **inherently serial**. An example could be the computation of the fibonacci sequence
+An example of such an **inherently serial** algorithm could be the computation of the fibonacci sequence
 using the formula `Fn=Fn-1 + Fn-2`. Each output here depends on the outputs of the two previous loops.
 
-## Challenge: Parallellizable and non-parallellizable tasks
-Can you think of a task in your domain that is parallelizable? Can you also think of one that is fundamentally
-non-parallelizable?
-
-Please write your answers in the collaborative document.
-
-> ## Embarrassingly parallel problems
-> Although we talked about embarrassingly parallel problems, it would be more correct to talk about
-embarrassingly parallel algorithms.
+> ## Challenge: Parallellizable and non-parallellizable tasks
+> Can you think of a task in your domain that is parallelizable? Can you also think of one that is fundamentally
+> non-parallelizable?
 >
+> Please write your answers in the collaborative document.
+{: .challenge}
+
+> ## Problems versus Algorithms
 > Often, the parallelizability of a problem depends on its specific implementation. For instance, in our
-first example of a non-parallelizable task, we mentioned the calculation of the factorial of 4 using
-the algorithm of multiplying, one by one, by all the integers below that number (that is, 4, 3, 2, 1).
-If, instead, we use another algorithm, such as the [gamma function](https://en.wikipedia.org/wiki/Gamma_function#Motivation), the same problem accepts parallelization.
+first example of a non-parallelizable task, we mentioned the calculation of the Fibonacci sequence.
+> However, there exists a [closed form expression to compute the n-th Fibonacci
+> number](https://en.wikipedia.org/wiki/Fibonacci_number#Closed-form_expression).
 >
-> Last but not least, don't let the name demotivate you: if your algorithm happens to be embarrassingly parallel, that's good news! The "embarrassingly" refers to the feeling of "this is great!,
-how did I not notice before?!"
+> Last but not least, don't let the name demotivate you: if your algorithm happens to be
+> embarrassingly parallel, that's good news! The "embarrassingly" refers to the feeling of "this is
+> great!, how did I not notice before?!"
 {: .callout}
 
 
