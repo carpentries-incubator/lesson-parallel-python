@@ -54,7 +54,7 @@ First, let's create the `bag` containing the elements we want to work with (in t
 ~~~python
 import dask.bag as db
 
-bag = db.from_sequence(range(6))
+bag = db.from_sequence(['mary', 'had', 'a', 'little', 'lamb'])
 ~~~
 {: .source}
 
@@ -66,14 +66,14 @@ In the example below we'll just use a function that squares its argument:
 ~~~python
 # Create a function for mapping
 def f(x):
-    return x**2
+    return x.upper()
 
 # Create the map and compute it
 bag.map(f).compute()
 ~~~
 {: .source}
 ~~~
-out: [0, 1, 4, 9, 16, 25]
+out: ['MARY', 'HAD', 'A', 'LITTLE', 'LAMB]
 ~~~
 {:.output}
 
@@ -90,32 +90,38 @@ bag.map(f).visualize()
 ### Filter
 
 To illustrate the concept of `filter`, it is useful to have a function that returns a boolean.
-In this case, we'll use a function that returns `True` if the argument is an even integer, and `False` if it is odd:
+In this case, we'll use a function that returns `True` if the argument contains the letter 'a', 
+and `False` if it doesn't.
 
 ~~~python
 # Return True if x is even, False if not
 def pred(x):
-    return x % 2 == 0
+    return 'a' in x
 
 bag.filter(pred).compute()
 ~~~
 {: .source}
 ~~~
-[out]: [0, 2, 4]
+[out]: ['mary', 'had', 'a', 'lamb']
 ~~~
 {: .output}
 
 > ## Difference between `filter` and `map`
 > Without executing it, try to forecast what would be the output of `bag.map(pred).compute()`.
 > > ## Solution
-> > The output will be `[True, False, True, False, True, False]`.
+> > The output will be `[True, True, True, False, True]`.
 > {: .solution}
 {: .challenge}
 
 ### Reduction
 
 ~~~python
-bag.reduction(sum, sum).visualize()
+def count_chars(x):
+    per_word = [len(w) for w in x]
+    
+    return sum(per_word)
+
+bag.reduction(count_chars, sum).visualize()
 ~~~
 {: .source}
 ![A reduction.](../fig/dask-bag-reduction.svg)
