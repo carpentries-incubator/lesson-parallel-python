@@ -131,11 +131,22 @@ bag.reduction(sum, sum).visualize()
 > ## Challenge
 > Rewrite the following program in terms of a Dask bag. Make it
 > spicy by using your favourite literature classic from project Gutenberg as input.
-> Example: Adventures of Sherlock Holmes, (curl [https://www.gutenberg.org/files/1661/1661-0.txt](https://www.gutenberg.org/files/1661/1661-0.txt) > 1661-0.txt)
-
+> Examples: 
+> - Mapes Dodge - https://www.gutenberg.org/files/764/764-0.txt
+> - Melville - https://www.gutenberg.org/files/15/15-0.txt
+> - Conan Doyle - https://www.gutenberg.org/files/1661/1661-0.txt
+> - Shelley - https://www.gutenberg.org/files/84/84-0.txt
+> - Stoker - https://www.gutenberg.org/files/345/345-0.txt
+> - E. Bronte - https://www.gutenberg.org/files/768/768-0.txt
+> - Austen - https://www.gutenberg.org/files/1342/1342-0.txt
+> - Carroll - https://www.gutenberg.org/files/11/11-0.txt
+> - Christie - https://www.gutenberg.org/files/61262/61262-0.txt
 >
+> 
+> 
 > ~~~python
 > from nltk.stem.snowball import PorterStemmer
+> import requests
 > stemmer = PorterStemmer()
 >
 > def good_word(w):
@@ -143,6 +154,10 @@ bag.reduction(sum, sum).visualize()
 >
 > def clean_word(w):
 >     return w.strip("*!?.:;'\",“’‘”()_").lower()
+> 
+> def load_url(url):
+>    response = requests.get(url)
+>    return response.text
 > ~~~
 > {: .source}
 >
@@ -167,21 +182,43 @@ bag.reduction(sum, sum).visualize()
 > len(words)
 > ~~~
 > {: .source}
->
+> 
+> All urls in a python list for convenience:
+> ```python=
+> [
+> 'https://www.gutenberg.org/files/764/764-0.txt',
+> 'https://www.gutenberg.org/files/15/15-0.txt', 
+> 'https://www.gutenberg.org/files/1661/1661-0.txt',
+> 'https://www.gutenberg.org/files/84/84-0.txt',
+> 'https://www.gutenberg.org/files/345/345-0.txt',
+> 'https://www.gutenberg.org/files/768/768-0.txt',
+> 'https://www.gutenberg.org/files/1342/1342-0.txt',
+> 'https://www.gutenberg.org/files/11/11-0.txt',
+> 'https://www.gutenberg.org/files/61262/61262-0.txt'
+> ]
+>```
 > > ## Solution
-> > Use `read_text` to read the text efficiently, split the words and `flatten` to create a
+> > Load the list of books as a bag with `db.from_sequence`, load the books by using `map` in 
+> > combination with the `load_url` function. Split the words and `flatten` to create a
 > > single bag, then `map` to capitalize all the words (or find their stems).
 > > To split the words, use `group_by` and finaly `count` to reduce to the number of
 > > words. Other option `distinct`.
 > >
 > > ~~~python
-> > bag = db.read_text("./1661-0.txt", blocksize="32k")
-> > raw_words = bag.str.split().flatten()
-> > clean_words = raw_words.map(clean_word).filter(good_word)
-> > stems = clean_words.map(stemmer.stem)
-> > unique_words = stems.distinct().count()
-> > nr_words = unique_words.compute(scheduler="processes", num_workers=4)
-> > print(f"This corpus contains {nr_words} unique words.")
+> > 
+> > words = db.from_sequence(books)\
+> >          .map(load_url)\
+> >          .str.split(' ')\
+> >          .flatten().map(clean_word)\
+> >          .filter(good_word)\
+> >          .map(stemmer.stem)\
+> >          .distinct()\
+> >          .count()\
+> >          .compute()
+> > 
+> > print(f'This collection of books contains {words} unique words')
+> > ```
+> > 
 > > ~~~
 > > {: .source}
 > {: .solution}
