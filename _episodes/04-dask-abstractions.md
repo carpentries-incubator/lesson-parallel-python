@@ -73,7 +73,7 @@ bag.map(f).compute()
 ~~~
 {: .source}
 ~~~
-out: ['MARY', 'HAD', 'A', 'LITTLE', 'LAMB]
+out: ['MARY', 'HAD', 'A', 'LITTLE', 'LAMB']
 ~~~
 {:.output}
 
