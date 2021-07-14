@@ -6,9 +6,9 @@ permalink: index.html  # Is the only page that doesn't follow the pattern /:path
 
 {% include_relative _meta/description.md %}
 
-<blockquote class=prereq>
+:::
 ## Prerequisites
 {% include_relative _meta/prerequisites.md %}
-</blockquote>
+::: {: .prereq}
 
 {% include links.md %}
