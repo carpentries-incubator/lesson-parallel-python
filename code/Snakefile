@@ -1,0 +1,73 @@
+import dask
+from dataclasses import dataclass, field
+
+
+def dask_root(a):
+    """Finds the root of the Dask graph, by searching for an item
+    in the dependents that is not used anywhere else."""
+    return next(k for k, v in a.dask.dependents.items() if not v)
+
+
+@dataclass
+class TraceDask:
+    """Use this to map the nodes in a Dask graph to their
+    computed values. Very inefficient."""
+    labels: dict[str, str] = field(default_factory=dict)
+
+    def __call__(self, x):
+        self.labels[dask_root(x)] = str(x.compute())
+        return x
+
+    @property
+    def attributes(self):
+        return {k: {'label': v, 'style': 'filled',
+                    'fillcolor': '#ffffff:#dddddd',
+                    'gradientangle': '315'} for k, v in self.labels.items()}
+
+
+rule all:
+    input:
+        "fig/serial.png",
+        "fig/serial.svg",
+        "fig/parallel.png",
+        "fig/parallel.svg"
+
+rule convert_to_png:
+    input:
+        "fig/{name}.svg"
+    output:
+        "fig/{name}.png"
+    shell:
+        "convert -density 150 {input} {output}"
+
+rule draw_dependency_diagrams:
+    output:
+        "fig/serial.svg",
+        "fig/parallel.svg"
+    run:
+        @dask.delayed
+        def zero():
+            return 0
+
+        td = TraceDask()
+
+        x = td(zero())
+        numbers = [1, 2, 3, 4]
+        n = len(numbers)
+        for i in numbers:
+            x = td(x+i)
+
+        x.visualize(rankdir="LR", filename=output[0],
+                    data_attributes=td.attributes)
+
+        x = td(zero())
+        y = td(zero())
+        for v in numbers[:n//2]:
+            x = td(x + v)
+        for v in numbers[n//2:]:
+            y = td(y + v)
+        z = td(x + y)
+        z.visualize(rankdir="LR", filename=output[1],
+                    data_attributes=td.attributes)
+
+# vim:ft=python

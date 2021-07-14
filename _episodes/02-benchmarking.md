@@ -20,7 +20,7 @@ keypoints:
 
 # A first example with Dask
 We will get into creating parallel programs in Python later. First let's see a small example. Open
-your system monitor (this will differ among specific operative systems), and run the following code examples.
+your system monitor (this will differ among specific operating systems), and run the following code examples.
 
 ~~~python
 # Summation making use of numpy:
@@ -70,6 +70,14 @@ This way we can trust the outcome better.
 ~~~python
 %%timeit
 np.arange(10**7).sum()
+~~~
+{: .source}
+
+If you want to store the output of `%%timeit` in a Python variable, you can do so with the `-o` flag.
+
+~~~python
+time = %timeit -o np.arange(10**7).sum()
+print(f"Time taken: {time.average:.4f}s")
 ~~~
 {: .source}
 
@@ -145,46 +153,36 @@ visualize([rprof2], output_notebook())
 FIXME: without the Profiler, the time axis is not nicely scaled. Profiler does not work with dask commands.
 
 # Using many cores
-Using more cores for a computation can decrease the run time. 
+Using more cores for a computation can decrease the run time.
 The first question is of course: how many cores do I have?
 See the snippets below to find out:
 
 > ## Find out how many cores your machine has
 >
-> On Linux:
-> ~~~bash
-> lscpu
-> ~~~
-> {: .source}
+> The number of cores can be found from Python by executing:
 >
-> On Mac:
-> ~~~bash
->sysctl -n hw.physicalcpu
-> ~~~
-> {: .source}
->
-> On Windows:
-> ~~~bash
-> WMIC CPU Get NumberOfCores,NumberOfLogicalProcessors
+> ~~~python
+> import psutil
+> N_physical_cores = psutil.cpu_count(logical=False)
+> N_logical_cores = psutil.cpu_count(logical=True)
+> print(f"The number of physical/logical cores is {N_physical_cores}/{N_logical_cores}")
 > ~~~
 > {: .source}
 {: .callout}
 
-However, even with simple examples performance may scale unexpectedly. 
-There are many reasons for this. 
-One of the most relevant is *hyper-threading*, that is, the fact that the number of visible CPUs is often not equal to the number of physical cores.
+Usually the number of logical cores is higher than the number of physical course. This is due to *hyper-threading*,
+which enables each physical CPU core to execute several threads at the same time. Even with simple examples,
+performance may scale unexpectedly. There are many reasons for this, hyper-threading being one of them.
 
 See for instance the example below:
 
-On a machine with 8 listed cores doing this (admittedly oversimplistic) benchmark:
+On a machine with 4 physical and 8 logical cores doing this (admittedly oversimplistic) benchmark:
 
 ~~~python
-import timeit
-x = [timeit.timeit(
-        stmt=f"da.arange(5*10**7).sum().compute(num_workers={n})",
-        setup="import dask.array as da",
-        number=1)
-     for n in range(1, 9)]
+x = []
+for n in range(1, 9):
+    time_taken = %timeit -r 1 -o da.arange(5*10**7).sum().compute(num_workers=n)
+    x.append(time_taken.average)
 ~~~
 
 Gives the following result:
@@ -199,7 +197,7 @@ data.set_index("n").plot()
 
 > ## Discussion
 > Why is the runtime increasing if we add more than 4 cores?
-> This has to do with **hyper-threading**. On most architectures it makes not much sense to use more
+> This has to do with **hyper-threading**. On most architectures it does not make much sense to use more
 > workers than the number of physical cores you have.
 {: .discussion}
 

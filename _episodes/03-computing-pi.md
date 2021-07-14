@@ -31,7 +31,7 @@ This is an umbrella term for several algorithms that use random numbers to appro
 We chose this algorithm because of its simplicity and straightforward geometrical interpretation.
 
 We can compute the value of π using a random number generator. We count the points falling inside the blue circle M compared to the green square N.
-Then π is approximated by the ration 4M/N.
+Then π is approximated by the ratio 4M/N.
 
 ![Computing Pi](../fig/calc_pi_3_wide.svg)
 
@@ -157,7 +157,7 @@ Numba makes it easier to create accelerated functions. You can use it with the d
 import numba
 
 @numba.jit
-def sum_range_numba(a: int):
+def sum_range_numba(a):
     """Compute the sum of the numbers in the range [0, a)."""
     x = 0
     for i in range(a):
@@ -201,8 +201,41 @@ And with Numba:
 ~~~
 {: .output}
 
-> ## Challenge: Numbify `comp_pi`
-> Create a Numba version of `comp_pi`. Time it.
+Numba is 100x faster in this case!  It gets this speedup with "just-in-time" compilation (JIT)—compiling the Python
+function into machine code just before it is called (that's what the `@numba.jit` decorator stands for).
+Not every Python and Numpy feature is supported, but a function may be a good candidate for Numba if it is written
+with a Python for-loop over a large range of values, as with `sum_range_numba()`.
+
+> ## Just-in-time compilation speedup
+>
+> The first time you call a function decorated with `@numba.jit`, you may see little or no speedup. In
+> subsequent calls, the function could be much faster. You may also see this warning when using `timeit`:
+>
+> `The slowest run took 14.83 times longer than the fastest. This could mean that an intermediate result is being cached.`
+>
+> Why does this happen?
+> On the first call, the JIT compiler needs to compile the function. On subsequent calls, it reuses the
+> already-compiled function. The compiled function can *only* be reused if it is called with the same argument types
+> (int, float, etc.).
+>
+> See this example where `sum_range_numba` is timed again, but now with a float argument instead of int:
+> ~~~python
+> %time sum_range_numba(10.**7)
+> %time sum_range_numba(10.**7)
+> ~~~
+> {: .source}
+> ~~~
+> CPU times: user 58.3 ms, sys: 3.27 ms, total: 61.6 ms
+> Wall time: 60.9 ms
+> CPU times: user 5 µs, sys: 0 ns, total: 5 µs
+> Wall time: 7.87 µs
+> ~~~
+> {: .output}
+{: .callout}
+
+
+> ## Challenge: Numbify `calc_pi`
+> Create a Numba version of `calc_pi`. Time it.
 >
 > > ## Solution
 > > Add the `@numba.jit` decorator to the first 'naive' implementation.
@@ -238,6 +271,7 @@ And with Numba:
 >  it is not always trivial to rewrite your code so that you can use numba with it.
 {: .callout}
 
+
 # The `threading` module
 Another possibility for parallelization is to use the `threading` module.
 This module is built into Python. In this section, we'll use it to estimate pi
@@ -254,12 +288,19 @@ of *workers* that pull jobs from the queue. More workers should get the job done
 import queue
 import threading
 
+# Number of times to execute calc_pi_numba
+ncalc = 10
+# Number of threads to launch
+ncpus = 4
+# Input values
+input_range = [10**6] * ncalc
+
 ### We need to define a worker function that fetches jobs from the queue.
 def worker(q):
     while True:
         try:
             x = q.get(block=False)
-            print(calc_pi_numba(x), end=' ', flush=True)
+            print(f"{calc_pi_numba(x)} ", end='', flush=True)
         except queue.Empty:
             break
 
@@ -268,11 +309,14 @@ work_queue = queue.Queue()
 for i in input_range:
     work_queue.put(i)
 
-### Start a number of threads
+### Create a number of threads
 threads = [
     threading.Thread(target=worker, args=(work_queue,))
     for i in range(ncpus)]
-
+~~~
+~~~python
+%%time
+### Start the threads
 for t in threads:
     t.start()
 
@@ -282,6 +326,12 @@ for t in threads:
 
 print()
 ~~~
+~~~
+3.140964 3.141652 3.143212 3.142704 3.141864 3.136988 3.13924 3.140984 3.14036 3.143616
+CPU times: user 175 ms, sys: 7.19 ms, total: 182 ms
+Wall time: 180 ms
+~~~
+{: .output}
 
 > ## Discussion: where's the speed-up?
 > While mileage may vary, parallelizing `calc_pi`, `calc_pi_numpy` and `calc_pi_numba` this way will
@@ -302,7 +352,9 @@ There are roughly two classes of solutions to circumvent/lift the GIL:
 - Have important code outside Python: OS operations, C++ extensions, cython, numba
 
 The downside of running multiple Python instances is that we need to share program state between different processes.
-To this end, you need to serialize objects using `pickle`, `json` or similar, creating a large overhead.
+To this end, you need to serialize objects. Serialization entails converting a Python object into a stream of bytes,
+that can then be sent to the other process, or e.g. stored to disk. This is typically done using `pickle`, `json`, or
+similar, and creates a large overhead.
 The alternative is to bring parts of our code outside Python.
 Numpy has many routines that are largely situated outside of the GIL.
 The only way to know for sure is trying out and profiling your application.
@@ -325,6 +377,12 @@ def calc_pi_numba(N):
 
 The `nopython` argument forces Numba to compile the code without referencing any Python objects,
 while the `nogil` argument enables lifting the GIL during the execution of the function.
+
+> ## Use `nopython=True` or `@numba.njit`
+> It's generally a good idea to use `nopython=True` with `@numba.jit` to make sure the entire
+> function is running without referencing Python objects, because that will dramatically slow
+> down most Numba code.  There's even a decorator that has `nopython=True` by default: `@numba.njit`
+{: .callout}
 
 > ## Challenge: profile the fixed program
 > The nogil version of `calc_pi_numba` should scale nicely with the number of cores used.

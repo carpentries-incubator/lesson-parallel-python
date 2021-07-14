@@ -13,3 +13,7 @@ _site
 .vendor/
 .docker-vendor/
 Gemfile.lock
+
+.idea/
+.*.swp
+

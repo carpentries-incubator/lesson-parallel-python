@@ -8,14 +8,10 @@ FIXME: home page introduction
 <!-- this is an html comment -->
 
 {% comment %} This is a comment in Liquid {% endcomment %}
+{% include_relative _meta/description.md %}
 
 > ## Prerequisites
-> The participant should be:
-> - familiar with basic Python: control flow, functions, numpy
-> - comfortable working in Jupyter
->
-> Recommended:
-> - understand how NumPy and/or Pandas work
+> {% include_relative _meta/prerequisites.md %}
 {: .prereq}
 
 {% include links.md %}

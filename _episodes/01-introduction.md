@@ -52,8 +52,8 @@ it to work in a distributed environment.
 
 # FIXME: Overview and rationale
 This is an advanced course. Why is it advanced? We (hopefully) saw in the discussion that although
-many of your problems share similar characteristics, it is the details what will determine different
-solutions. We all need our algorithms, models, analysis to run in a way that many hands make light
+many of your problems share similar characteristics, it is the detail that will determine the
+solution. We all need our algorithms, models, analysis to run in a way that many hands make light
 work. When such a situation arises with a group of people, we start with a meeting discussing who
 does what, when do we meet again to sync up, etc. After a while you can get the feeling that all you
 do is be in meetings. We will see that there are several abstractions that can make our life easier.
@@ -68,6 +68,17 @@ formalism.
 - Task-based parallelization: this may be the most generic abstraction as all the others can be expressed
   in terms of tasks or workflows. This is `dask.delayed`.
 
+# Why Python?
+Python is one of most widely used languages to do scientific data analysis, visualization, and even modelling and simulation.
+The popularity of Python is mainly due to the two pillars of a friendly syntax together with the availability of many high-quality libraries.
+
+> ## It's not all good news
+> The flexibility that Python offers comes with a few downsides though:
+> - Python code typically doesn’t perform as fast as lower-level implementations in C/C++ or Fortran.
+> - It is not trivial to parallelize Python code to work efficiently on many-core architectures.
+>
+> This workshop addresses both these issues, with an emphasis on being able to run Python code efficiently (in parallel) on multiple cores.
+{: .callout}
 # What is parallel computing?
 
 ## Dependency diagrams
@@ -93,83 +104,77 @@ Nowadays, most personal computers have 4 or 8 processors (also known as cores). 
 {: .callout}
 
 ## Parallelizable and non-parallelizable tasks
+Some tasks are easily parallelizable while others inherently aren't. However, it might not always be immediately
+apparent that a task is parallelizable.
 
-It is important to know that some tasks are fundamentally non-parallelizable.
-These tasks are also known as **inherently serial**. An example could be the brute-force computation of
-the factorial of an integer.
-
-Example: the factorial of 4,
-usually written as $4!$,
-is obtained by multiplying all the integers smaller or equal to 4, that is:
-
-$$
-4! = 4 \cdot 3 \cdot 2 \cdot 1 = 24
-$$
-
-A possible implementation in Python could be the following:
-
-~~~python
-n = 4 # This the input
-
-temp = 1 # Initialize temporary variable as 1. It will act as intermediate input - output
-for i in range(n): # Multiply by 2, 3, ..., up to n
-  temp = temp * (i + 1) # This is the function, it gets called n times
-
-output = temp
-
-print(output)
-~~~
-
-Note that each successive loop needs the result of the previous one in order to be executed.
-
-![serial execution](../fig/serial.svg)
-
-In the example above we see a block for each function call, indicating some work for the CPU, and the arrows
-show that the evaluation of a function depends on a previous result.
-
-In many cases, the computation involves **independent work**. However, the difference can be
-hard to spot. Look at this pseudo snippet:
-
+Let us consider the following piece of code.
 ~~~python
 x = [1, 2, 3, 4] # Write input
 
-y = [] # Initialize (empty) output
+y = 0 # Initialize output
 
 for i in range(len(x)):
-  y.append(x[i]**2) # Apply a function to each element in the input (square it)
+  y += x[i] # Add each element to the output variable
 
 print(y) # Print output
 ~~~
 {: .source}
 
+Note that each successive loop uses the result of the previous loop. In that way, it is dependent on the previous
+loop. The following dependency diagram makes that clear:
+
+![serial execution](../fig/serial.svg)
+
 Although we are performing the loops in a serial way in the snippet above,
 nothing avoids us from performing this calculation in parallel.
-The value of applying our function to any of the elements in the input `x` is completely independent of the values
-of the rest elements on `x`. This kind of problems are known as
+The following example shows that parts of the computations can be done independently:
+
+```python
+x = [1, 2, 4, 4]
+
+chunk1 = x[:2]
+chunk2 = x[2:]
+
+sum_1 = sum(chunk1)
+sum_2 = sum(chunk2)
+
+result = sum_1 + sum_2
+
+print(result)
+```
+
+![parallel execution](../fig/parallel.svg)
+
+There is a subclass of algorithms where the subtasks are completely independent. These kinds of algorithms are known as
 [embarrassingly parallel](https://en.wikipedia.org/wiki/Embarrassingly_parallel).
 
-If we rewrite this into a list-comprehension,
-
+An example of this kind of problem is squaring each element in a list, which can be done like so:
 ~~~python
 y = [n**2 for n in x]
 ~~~
 {: .source}
+Each task of squaring a number is independent of all the other elements in the list.
 
-it becomes more visible that each task (of squaring a number) is indeed independent.
+It is important to know that some tasks are fundamentally non-parallelizable.
+An example of such an **inherently serial** algorithm could be the computation of the fibonacci sequence
+using the formula `Fn=Fn-1 + Fn-2`. Each output here depends on the outputs of the two previous loops.
 
-![parallel execution](../fig/parallel.svg)
-
-> ## Embarrassingly parallel problems
-> Although we talked about embarrassingly parallel problems, it would be more correct to talk about
-embarrassingly parallel algorithms.
+> ## Challenge: Parallellizable and non-parallellizable tasks
+> Can you think of a task in your domain that is parallelizable? Can you also think of one that is fundamentally
+> non-parallelizable?
 >
+> Please write your answers in the collaborative document.
+{: .challenge}
+
+> ## Problems versus Algorithms
 > Often, the parallelizability of a problem depends on its specific implementation. For instance, in our
-first example of a non-parallelizable task, we mentioned the calculation of the factorial of 4 using
-the algorithm of multiplying, one by one, by all the integers below that number (that is, 4, 3, 2, 1).
-If, instead, we use another algorithm, such as the [gamma function](https://en.wikipedia.org/wiki/Gamma_function#Motivation), the same problem accepts parallelization.
+first example of a non-parallelizable task, we mentioned the calculation of the Fibonacci sequence.
+> However, there exists a [closed form expression to compute the n-th Fibonacci
+> number](https://en.wikipedia.org/wiki/Fibonacci_number#Closed-form_expression).
 >
-> Last but not least, don't let the name demotivate you: if your algorithm happens to be embarrassingly parallel, that's good news! The "embarrassingly" refers to the feeling of "this is great!,
-how did I not notice before?!"
+> Last but not least, don't let the name demotivate you: if your algorithm happens to be
+> embarrassingly parallel, that's good news! The "embarrassingly" refers to the feeling of "this is
+> great!, how did I not notice before?!"
 {: .callout}
 
 
@@ -183,9 +188,9 @@ occasionally.
 > 5.  (1 day) Leave the soup for one day. Reheat before serving and add a sliced smoked
 >     sausage (vegetarian options are also welcome). Season with pepper and salt.
 >
-> Imagine you're cooking alone. 
-> - Can you identify potential for parallelisation in this recipe? 
-> - And what if you are cooking with the help of a friend help? Is the soup done any faster? 
+> Imagine you're cooking alone.
+> - Can you identify potential for parallelisation in this recipe?
+> - And what if you are cooking with the help of a friend help? Is the soup done any faster?
 > - Draw a dependency diagram.
 >
 > > ## Solution
