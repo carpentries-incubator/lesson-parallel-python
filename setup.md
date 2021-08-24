@@ -1,5 +1,9 @@
 ---
 title: Setup
+tools-needed:
+  - editor
+  - python
+  - jupyterlab
 ---
 FIXME
 
