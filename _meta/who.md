@@ -4,4 +4,3 @@ The participant should be:
 
 Recommended:
 - understand how NumPy and/or Pandas work
-
