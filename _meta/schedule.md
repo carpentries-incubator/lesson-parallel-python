@@ -4,7 +4,7 @@
     <table class="table table-striped">
       <tr> <td>09:00</td>  <td>Welcome and icebreaker</td> </tr>
       <tr> <td>09:15</td>  <td>Introduction</td></tr>
-      <tr> <td>10:05</td>  <td>Break</td></tr>
+      <tr> <td>10:00</td>  <td>Break</td></tr>
       <tr> <td>10:15</td>  <td>Measuring performance</td> </tr>
       <tr> <td>11:00</td>  <td>Parallelization using Dask Arrays</td> </tr>
       <tr> <td>12:00</td>  <td>Coffee break</td> </tr>
