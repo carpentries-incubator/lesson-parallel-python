@@ -1,4 +1,4 @@
-## Requirements
+### Requirements
 
 - A programming editor, in doubt we recommend [Microsoft VS Code](https://code.visualstudio.com/).
 - Python version 3.9, we recommend [Anaconda](https://www.anaconda.com/products/individual) or
@@ -15,7 +15,7 @@ git clone https://github.com/esciencecenter-digital-skills/parallel-python-works
 
 You may prepare the environment either in `conda` or using vanilla Python with `poetry`.
 
-### Conda (recommended)
+#### Conda (recommended)
 
 ```bash
 conda env create -f environment.yml
@@ -23,7 +23,7 @@ conda activate parallel-python
 pytest
 ```
 
-### Poetry
+#### Poetry
 
 ```bash
 pip install --user poetry
