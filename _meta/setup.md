@@ -1,6 +1,6 @@
 ### Requirements
 
-- A programming editor, in doubt we recommend [Microsoft VS Code](https://code.visualstudio.com/).
+- A programming editor, when in doubt we recommend [Microsoft VS Code](https://code.visualstudio.com/).
 - Python version 3.9, we recommend [Anaconda](https://www.anaconda.com/products/individual) or
   [Miniconda](https://docs.conda.io/en/latest/miniconda.html) if you only use the command-line
 interface. If you insist on using vanilla Python, see instructions below.
