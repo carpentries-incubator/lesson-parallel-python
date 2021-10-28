@@ -204,7 +204,6 @@ occasionally.
 ## Shared vs. Distributed memory
 FIXME: add text
 
-![Shared memory architecture](../fig/shared-memory.svg)
-![Distributed memory architecture](../fig/distributed-memory.svg)
+![Shared vs. Distributed memory architecture](../fig/memory-architecture.svg)
 
 {% include links.md %}
