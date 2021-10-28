@@ -6,4 +6,3 @@
 - Parallel design patterns
 - Delayed evaluation
 - Dependency based programming using Snakemake
-
