@@ -201,4 +201,10 @@ occasionally.
 > {: .solution}
 {: .challenge}
 
+## Shared vs. Distributed memory
+FIXME: add text
+
+![Shared memory architecture](../fig/shared-memory.svg)
+![Distributed memory architecture](../fig/distributed-memory.svg)
+
 {% include links.md %}
