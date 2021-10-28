@@ -8,7 +8,7 @@ permalink: index.html  # Is the only page that doesn't follow the pattern /:path
 
 <div class="prereq" markdown="1">
 ## Prerequisites
-{% include_relative _meta/prerequisites.md %}
+{% include_relative _meta/who.md %}
 </div>
 
 {% include links.md %}
