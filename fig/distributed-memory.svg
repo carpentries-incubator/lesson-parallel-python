@@ -1,0 +1,216 @@
+<svg viewBox="-30 -30 560 610" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700');
+
+:root {
+   --nlesc-blue:   #009DDD;
+   --nlesc-purple: #380339;
+   --nlesc-yellow: #FFB213;
+}
+
+text {
+   font-family: 'Nunito';
+   font-weight: 700;
+}
+
+.router-light {
+   fill: var(--nlesc-yellow);
+}
+
+.fat-arrow {
+   stroke: var(--nlesc-blue);
+   stroke-width: 10;
+   stroke-linecap: round;
+}
+
+.lan {
+   stroke: var(--nlesc-blue);
+   stroke-width: 5;
+}
+
+.group {
+   stroke: var(--nlesc-blue);
+   stroke-width: 5;
+   fill: none;
+}
+
+.cpu text {
+   fill: white;
+}
+
+text {
+   fill: white;
+}
+
+.case {
+    fill: var(--nlesc-purple);
+    stroke: none; /*#380339;  var(nlesc-purple);*/
+    border-radius: 5pt;
+}
+
+.gradientCpuBorder-0 {
+   stop-color: #380339;
+}
+
+.gradientCpuBorder-1 {
+   stop-color: white;
+}
+
+.connectors {
+    stroke: var(--nlesc-yellow);
+    stroke-width: 2pt;
+    filter: drop-shadow( 0px 0px 2px rgba(0, 0, 0, .3));
+}
+  
+</style>
+<g transform="translate(125, 0)">
+<g>
+<rect class="group" x="-25" y="-25" width="300" height="150" rx="20" />
+<rect class="case" x="-10" y="-10" width="270" height="39" rx="10" />
+<rect class="case" x="-10" y="30" width="270" height="39" rx="10" />
+<rect class="case" x="-10" y="70" width="270" height="40" rx="10" />
+<text x="125" y="52" text-anchor="middle" dominant-baseline="middle" font-size="30">
+ROUTER
+</text>
+<circle class="router-light" cx="5" cy="5" r="5" />
+<circle class="router-light" cx="5" cy="45" r="5" />
+<circle class="router-light" cx="5" cy="85" r="5" />
+</g>
+</g>
+<g transform="translate(0, 300)">
+<g>
+<rect class="group" x="-25" y="-25" width="150" height="300" rx="20" />
+<g class="cpu">
+<rect class="case" x="0" y="0" width="100" height="100" rx="10" />
+<g id="cpu-connectors" class="connectors">
+<line x1="20.0" y1="-15" x2="20.0" y2="5" />
+<line x1="28.57142857142857" y1="-15" x2="28.57142857142857" y2="5" />
+<line x1="37.14285714285714" y1="-15" x2="37.14285714285714" y2="5" />
+<line x1="45.714285714285715" y1="-15" x2="45.714285714285715" y2="5" />
+<line x1="54.285714285714285" y1="-15" x2="54.285714285714285" y2="5" />
+<line x1="62.857142857142854" y1="-15" x2="62.857142857142854" y2="5" />
+<line x1="71.42857142857143" y1="-15" x2="71.42857142857143" y2="5" />
+<line x1="80.0" y1="-15" x2="80.0" y2="5" />
+</g>
+<use xlink:href="#cpu-connectors" transform="rotate(90,  50, 50)" />
+<use xlink:href="#cpu-connectors" transform="rotate(180, 50, 50)" />
+<use xlink:href="#cpu-connectors" transform="rotate(-90, 50, 50)" />
+<text x="50" y="52" text-anchor="middle" dominant-baseline="middle" font-size="30">
+CPU
+</text>
+</g>
+<g transform="translate(0, 200)">
+<g class="ram">
+<rect class="case" x="0" y="0" width="100" height="50" rx="10" />
+<g id="ram-connectors" class="connectors">
+<line x1="20.0" y1="-15" x2="20.0" y2="5" />
+<line x1="28.57142857142857" y1="-15" x2="28.57142857142857" y2="5" />
+<line x1="37.14285714285714" y1="-15" x2="37.14285714285714" y2="5" />
+<line x1="45.714285714285715" y1="-15" x2="45.714285714285715" y2="5" />
+<line x1="54.285714285714285" y1="-15" x2="54.285714285714285" y2="5" />
+<line x1="62.857142857142854" y1="-15" x2="62.857142857142854" y2="5" />
+<line x1="71.42857142857143" y1="-15" x2="71.42857142857143" y2="5" />
+<line x1="80.0" y1="-15" x2="80.0" y2="5" />
+</g>
+<use xlink:href="#ram-connectors" transform="rotate(180, 50, 25)" />
+<text x="50" y="27" text-anchor="middle" dominant-baseline="middle" font-size="30">
+RAM
+</text>
+</g>
+</g>
+<line x1="50" y1="125" x2="50" y2="175" class="fat-arrow" />
+</g>
+</g>
+<g transform="translate(200, 300)">
+<g>
+<rect class="group" x="-25" y="-25" width="150" height="300" rx="20" />
+<g class="cpu">
+<rect class="case" x="0" y="0" width="100" height="100" rx="10" />
+<g id="cpu-connectors" class="connectors">
+<line x1="20.0" y1="-15" x2="20.0" y2="5" />
+<line x1="28.57142857142857" y1="-15" x2="28.57142857142857" y2="5" />
+<line x1="37.14285714285714" y1="-15" x2="37.14285714285714" y2="5" />
+<line x1="45.714285714285715" y1="-15" x2="45.714285714285715" y2="5" />
+<line x1="54.285714285714285" y1="-15" x2="54.285714285714285" y2="5" />
+<line x1="62.857142857142854" y1="-15" x2="62.857142857142854" y2="5" />
+<line x1="71.42857142857143" y1="-15" x2="71.42857142857143" y2="5" />
+<line x1="80.0" y1="-15" x2="80.0" y2="5" />
+</g>
+<use xlink:href="#cpu-connectors" transform="rotate(90,  50, 50)" />
+<use xlink:href="#cpu-connectors" transform="rotate(180, 50, 50)" />
+<use xlink:href="#cpu-connectors" transform="rotate(-90, 50, 50)" />
+<text x="50" y="52" text-anchor="middle" dominant-baseline="middle" font-size="30">
+CPU
+</text>
+</g>
+<g transform="translate(0, 200)">
+<g class="ram">
+<rect class="case" x="0" y="0" width="100" height="50" rx="10" />
+<g id="ram-connectors" class="connectors">
+<line x1="20.0" y1="-15" x2="20.0" y2="5" />
+<line x1="28.57142857142857" y1="-15" x2="28.57142857142857" y2="5" />
+<line x1="37.14285714285714" y1="-15" x2="37.14285714285714" y2="5" />
+<line x1="45.714285714285715" y1="-15" x2="45.714285714285715" y2="5" />
+<line x1="54.285714285714285" y1="-15" x2="54.285714285714285" y2="5" />
+<line x1="62.857142857142854" y1="-15" x2="62.857142857142854" y2="5" />
+<line x1="71.42857142857143" y1="-15" x2="71.42857142857143" y2="5" />
+<line x1="80.0" y1="-15" x2="80.0" y2="5" />
+</g>
+<use xlink:href="#ram-connectors" transform="rotate(180, 50, 25)" />
+<text x="50" y="27" text-anchor="middle" dominant-baseline="middle" font-size="30">
+RAM
+</text>
+</g>
+</g>
+<line x1="50" y1="125" x2="50" y2="175" class="fat-arrow" />
+</g>
+</g>
+<g transform="translate(400, 300)">
+<g>
+<rect class="group" x="-25" y="-25" width="150" height="300" rx="20" />
+<g class="cpu">
+<rect class="case" x="0" y="0" width="100" height="100" rx="10" />
+<g id="cpu-connectors" class="connectors">
+<line x1="20.0" y1="-15" x2="20.0" y2="5" />
+<line x1="28.57142857142857" y1="-15" x2="28.57142857142857" y2="5" />
+<line x1="37.14285714285714" y1="-15" x2="37.14285714285714" y2="5" />
+<line x1="45.714285714285715" y1="-15" x2="45.714285714285715" y2="5" />
+<line x1="54.285714285714285" y1="-15" x2="54.285714285714285" y2="5" />
+<line x1="62.857142857142854" y1="-15" x2="62.857142857142854" y2="5" />
+<line x1="71.42857142857143" y1="-15" x2="71.42857142857143" y2="5" />
+<line x1="80.0" y1="-15" x2="80.0" y2="5" />
+</g>
+<use xlink:href="#cpu-connectors" transform="rotate(90,  50, 50)" />
+<use xlink:href="#cpu-connectors" transform="rotate(180, 50, 50)" />
+<use xlink:href="#cpu-connectors" transform="rotate(-90, 50, 50)" />
+<text x="50" y="52" text-anchor="middle" dominant-baseline="middle" font-size="30">
+CPU
+</text>
+</g>
+<g transform="translate(0, 200)">
+<g class="ram">
+<rect class="case" x="0" y="0" width="100" height="50" rx="10" />
+<g id="ram-connectors" class="connectors">
+<line x1="20.0" y1="-15" x2="20.0" y2="5" />
+<line x1="28.57142857142857" y1="-15" x2="28.57142857142857" y2="5" />
+<line x1="37.14285714285714" y1="-15" x2="37.14285714285714" y2="5" />
+<line x1="45.714285714285715" y1="-15" x2="45.714285714285715" y2="5" />
+<line x1="54.285714285714285" y1="-15" x2="54.285714285714285" y2="5" />
+<line x1="62.857142857142854" y1="-15" x2="62.857142857142854" y2="5" />
+<line x1="71.42857142857143" y1="-15" x2="71.42857142857143" y2="5" />
+<line x1="80.0" y1="-15" x2="80.0" y2="5" />
+</g>
+<use xlink:href="#ram-connectors" transform="rotate(180, 50, 25)" />
+<text x="50" y="27" text-anchor="middle" dominant-baseline="middle" font-size="30">
+RAM
+</text>
+</g>
+</g>
+<line x1="50" y1="125" x2="50" y2="175" class="fat-arrow" />
+</g>
+</g>
+<line class="lan" x1="50" y1="275" x2="200" y2="125" />
+<line class="lan" x1="250" y1="275" x2="250" y2="125" />
+<line class="lan" x1="450" y1="275" x2="300" y2="125" />
+</svg>
