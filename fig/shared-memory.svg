@@ -10,7 +10,7 @@
 }
 
 text {
-   font-family: 'Nunito';
+   font-family: 'Nunito', sans-serif;
    font-weight: 700;
 }
 
