@@ -170,7 +170,6 @@ x_p.compute()
 > > ## Solution
 > > ~~~python
 > > from dask import delayed
-> > import numba as nb
 > > import random
 > >
 > > @delayed
