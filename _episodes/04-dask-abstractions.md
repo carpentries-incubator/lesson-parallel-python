@@ -188,7 +188,7 @@ x_p.compute()
 > >     return 4 * M / N
 > >
 > >
-> > N = 10**7
+> > N = 10**6
 > > pi_p = mean(*(delayed(calc_pi)(N) for i in range(10)))
 > > pi_p.compute()
 > > ~~~
@@ -197,7 +197,7 @@ x_p.compute()
 {: .challenge}
 
 You may not seed a significant speedup. This is because `dask delayed` uses threads by default and our native Python implementation
-of `calc_pi` does not circumvent the GIL. With for example the numba version of `calc_pi`, you should see a more significant speedup.
+of `calc_pi` does not circumvent the GIL. With for example the numba version of `calc_pi` you should see a more significant speedup.
 
 In practice you may not need to use `@delayed` functions too often, but it does offer ultimate
 flexibility. You can build complex computational workflows in this manner, sometimes replacing shell
