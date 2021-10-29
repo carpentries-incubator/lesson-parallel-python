@@ -1,5 +1,5 @@
 ---
-title: "Dask abstractions: bags and delays"
+title: "Dask abstractions: delays and bags"
 teaching: 60
 exercises: 30
 questions:
@@ -16,7 +16,7 @@ keypoints:
 
 [Dask](https://dask.org/) is one of the many tools available for parallelizing Python code in a comfortable way.
 We've seen a basic example of `dask.array` in a previous episode.
-Now, we will focus on the `bag` and `delayed` sub-modules.
+Now, we will focus on the `delayed` and `bag` sub-modules.
 Dask has a lot of other useful components, such as `dataframe` and `futures`, but we are not going to cover them in this lesson.
 
 See an overview below:
@@ -48,8 +48,8 @@ def add(a, b):
 ~~~
 {: .source}
 
-A `delayed` function stores the requested function call inside a **promise**. Nothing is being done
-yet.
+A `delayed` function stores the requested function call inside a **promise**. The function is not actually executed yet, instead we
+are *promised* a value that can be computed later.
 
 ~~~python
 x_p = add(1, 2)
@@ -84,7 +84,7 @@ x_p.compute()
 ~~~
 {:.output}
 
-From `Delayed` values we can create larger workflows.
+From `Delayed` values we can create larger workflows and visualize them.
 
 ~~~python
 x_p = add(1, 2)
@@ -135,9 +135,9 @@ def gather(*args):
 {: .source}
 
 > ## Challenge: understand `gather`
-> Can you describe what the `gather` function does in terms of lists and promises? How would you classify `gather` in terms of parallel programming patterns?
+> Can you describe what the `gather` function does in terms of lists and promises?
 > > ## Solution
-> > It turns a list of promises into a promise of a list. This computes from many values to a single object and should be considered a *reduction*.
+> > It turns a list of promises into a promise of a list.
 > {: .solution}
 {: .challenge}
 
@@ -163,22 +163,41 @@ x_p.compute()
 ~~~
 {: .output}
 
-> ## Challenge: design a `mean` function
-> Write a `delayed` function that computes the mean of its arguments. Complete the program to
-> compute pi in parallel.
->
+> ## Challenge: design a `mean` function and calculate pi
+> Write a `delayed` function that computes the mean of its arguments. Use it to esimates pi several
+> times and returns the mean of the results.
+> Make sure that the entire computation is contained in a single promise.
 > > ## Solution
 > > ~~~python
+> > from dask import delayed
+> > import numba as nb
+> > import random
+> >
 > > @delayed
 > > def mean(*args):
 > >     return sum(args) / len(args)
 > >
+> > def calc_pi(N):
+> >     """Computes the value of pi using N random samples."""
+> >     M = 0
+> >     for i in range(N):
+> >         # take a sample
+> >         x = random.uniform(-1, 1)
+> >         y = random.uniform(-1, 1)
+> >         if x*x + y*y < 1.: M+=1
+> >     return 4 * M / N
+> >
+> >
+> > N = 10**7
 > > pi_p = mean(*(delayed(calc_pi)(N) for i in range(10)))
 > > pi_p.compute()
 > > ~~~
 > > {: .source}
 > {: .solution}
 {: .challenge}
+
+You may not seed a significant speedup. This is because `dask delayed` uses threads by default and our native Python implementation
+of `calc_pi` does not circumvent the GIL. With for example the numba version of `calc_pi`, you should see a more significant speedup.
 
 In practice you may not need to use `@delayed` functions too often, but it does offer ultimate
 flexibility. You can build complex computational workflows in this manner, sometimes replacing shell
