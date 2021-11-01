@@ -1,5 +1,5 @@
 ---
-title: "Dask abstractions: bags and delays"
+title: "Dask abstractions: delays and bags"
 teaching: 60
 exercises: 30
 questions:
@@ -16,7 +16,7 @@ keypoints:
 
 [Dask](https://dask.org/) is one of the many tools available for parallelizing Python code in a comfortable way.
 We've seen a basic example of `dask.array` in a previous episode.
-Now, we will focus on the `bag` and `delayed` sub-modules.
+Now, we will focus on the `delayed` and `bag` sub-modules.
 Dask has a lot of other useful components, such as `dataframe` and `futures`, but we are not going to cover them in this lesson.
 
 See an overview below:
@@ -28,6 +28,179 @@ See an overview below:
 | `dask.delayed`   | functions            | Anything that doesn't fit the above | ✔️       |
 | `dask.dataframe` | `pandas`             | Generic data analysis               | ❌      |
 | `dask.futures`   | `concurrent.futures` | Control execution, low-level        | ❌      |
+
+# Dask Delayed
+A lot of the functionality in Dask is based on top of a framework of *delayed evaluation*. The concept of delayed evaluation is very important in understanding how Dask functions, which is why we will go a bit deeper into `dask.delayed`.
+
+~~~python
+from dask import delayed
+~~~
+{: .source}
+
+The `delayed` decorator builds a dependency graph from function calls.
+
+~~~python
+@delayed
+def add(a, b):
+    result = a + b
+    print(f"{a} + {b} = {result}")
+    return a + b
+~~~
+{: .source}
+
+A `delayed` function stores the requested function call inside a **promise**. The function is not actually executed yet, instead we
+are *promised* a value that can be computed later.
+
+~~~python
+x_p = add(1, 2)
+~~~
+{: .source}
+
+We can check that `x_p` is now a `Delayed` value.
+
+~~~python
+type(x_p)
+~~~
+{: .source}
+~~~
+[out]: dask.delayed.Delayed
+~~~
+{: .output}
+
+> ## Note
+> It is often a good idea to suffix variables that you know are promises with `_p`. That way you
+> keep track of promises versus immediate values.
+{: .callout}
+
+Only when we evaluate the computation, do we get an output.
+
+~~~python
+x_p.compute()
+~~~
+{:.source}
+~~~
+1 + 2 = 3
+[out]: 3
+~~~
+{:.output}
+
+From `Delayed` values we can create larger workflows and visualize them.
+
+~~~python
+x_p = add(1, 2)
+y_p = add(x_p, 3)
+z_p = add(x_p, y_p)
+z_p.visualize(rankdir="LR")
+~~~
+{: .source}
+
+![Dask workflow graph](../fig/dask-workflow-example.svg)
+{: .output}
+
+> ## Challenge: run the workflow
+> Run the workflow. How many times is `x_p` computed? We needed it twice.
+> > ## Solution
+> > ~~~python
+> > z_p.compute()
+> > ~~~
+> > {: .source}
+> > ~~~
+> > 1 + 2 = 3
+> > 3 + 3 = 6
+> > 3 + 6 = 9
+> > [out]: 9
+> > ~~~
+> > {: .output}
+> > The computation of `x_p` (1 + 2) appears only once.
+> {: .solution}
+{: .challenge}
+
+We can also make a promise by directly calling `delayed`
+
+~~~python
+N = 10**7
+x_p = delayed(calc_pi)(N)
+~~~
+{: .source}
+
+It is now possible to call `visualize` or `compute` methods on `x_p`.
+
+We can build new primitives from the ground up.
+
+~~~python
+@delayed
+def gather(*args):
+    return list(args)
+~~~
+{: .source}
+
+> ## Challenge: understand `gather`
+> Can you describe what the `gather` function does in terms of lists and promises?
+> > ## Solution
+> > It turns a list of promises into a promise of a list.
+> {: .solution}
+{: .challenge}
+
+We can visualize what `gather` does by this small example.
+
+~~~python
+x_p = gather(*(add(n, n) for n in range(10))) # Shorthand for gather(add(1, 1), add(2, 2), ...)
+x_p.visualize()
+~~~
+{: .source}
+
+![a gather pattern](../fig/dask-gather-example.svg)
+{: .output}
+
+Computing the result,
+
+~~~python
+x_p.compute()
+~~~
+{: .source}
+~~~
+[out]: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+~~~
+{: .output}
+
+> ## Challenge: design a `mean` function and calculate pi
+> Write a `delayed` function that computes the mean of its arguments. Use it to esimates pi several
+> times and returns the mean of the results.
+> Make sure that the entire computation is contained in a single promise.
+> > ## Solution
+> > ~~~python
+> > from dask import delayed
+> > import random
+> >
+> > @delayed
+> > def mean(*args):
+> >     return sum(args) / len(args)
+> >
+> > def calc_pi(N):
+> >     """Computes the value of pi using N random samples."""
+> >     M = 0
+> >     for i in range(N):
+> >         # take a sample
+> >         x = random.uniform(-1, 1)
+> >         y = random.uniform(-1, 1)
+> >         if x*x + y*y < 1.: M+=1
+> >     return 4 * M / N
+> >
+> >
+> > N = 10**6
+> > pi_p = mean(*(delayed(calc_pi)(N) for i in range(10)))
+> > pi_p.compute()
+> > ~~~
+> > {: .source}
+> {: .solution}
+{: .challenge}
+
+You may not seed a significant speedup. This is because `dask delayed` uses threads by default and our native Python implementation
+of `calc_pi` does not circumvent the GIL. With for example the numba version of `calc_pi` you should see a more significant speedup.
+
+In practice you may not need to use `@delayed` functions too often, but it does offer ultimate
+flexibility. You can build complex computational workflows in this manner, sometimes replacing shell
+scripting, make files and the likes.
 
 # Parallelize using Dask bags
 Dask bags let you compose functionality using several primitive patterns: the most important of these are `map`, `filter`, `groupby` and `reduce`.
@@ -90,7 +263,7 @@ bag.map(f).visualize()
 ### Filter
 
 To illustrate the concept of `filter`, it is useful to have a function that returns a boolean.
-In this case, we'll use a function that returns `True` if the argument contains the letter 'a', 
+In this case, we'll use a function that returns `True` if the argument contains the letter 'a',
 and `False` if it doesn't.
 
 ~~~python
@@ -118,7 +291,7 @@ bag.filter(pred).compute()
 ~~~python
 def count_chars(x):
     per_word = [len(w) for w in x]
-    
+
     return sum(per_word)
 
 bag.reduction(count_chars, sum).visualize()
@@ -137,7 +310,7 @@ bag.reduction(count_chars, sum).visualize()
 > ## Challenge
 > Rewrite the following program in terms of a Dask bag. Make it
 > spicy by using your favourite literature classic from project Gutenberg as input.
-> Examples: 
+> Examples:
 > - Mapes Dodge - https://www.gutenberg.org/files/764/764-0.txt
 > - Melville - https://www.gutenberg.org/files/15/15-0.txt
 > - Conan Doyle - https://www.gutenberg.org/files/1661/1661-0.txt
@@ -148,8 +321,8 @@ bag.reduction(count_chars, sum).visualize()
 > - Carroll - https://www.gutenberg.org/files/11/11-0.txt
 > - Christie - https://www.gutenberg.org/files/61262/61262-0.txt
 >
-> 
-> 
+>
+>
 > ~~~python
 > from nltk.stem.snowball import PorterStemmer
 > import requests
@@ -160,7 +333,7 @@ bag.reduction(count_chars, sum).visualize()
 >
 > def clean_word(w):
 >     return w.strip("*!?.:;'\",“’‘”()_").lower()
-> 
+>
 > def load_url(url):
 >    response = requests.get(url)
 >    return response.text
@@ -188,12 +361,12 @@ bag.reduction(count_chars, sum).visualize()
 > len(words)
 > ~~~
 > {: .source}
-> 
+>
 > All urls in a python list for convenience:
 > ```python=
 > [
 > 'https://www.gutenberg.org/files/764/764-0.txt',
-> 'https://www.gutenberg.org/files/15/15-0.txt', 
+> 'https://www.gutenberg.org/files/15/15-0.txt',
 > 'https://www.gutenberg.org/files/1661/1661-0.txt',
 > 'https://www.gutenberg.org/files/84/84-0.txt',
 > 'https://www.gutenberg.org/files/345/345-0.txt',
@@ -204,14 +377,14 @@ bag.reduction(count_chars, sum).visualize()
 > ]
 >```
 > > ## Solution
-> > Load the list of books as a bag with `db.from_sequence`, load the books by using `map` in 
+> > Load the list of books as a bag with `db.from_sequence`, load the books by using `map` in
 > > combination with the `load_url` function. Split the words and `flatten` to create a
 > > single bag, then `map` to capitalize all the words (or find their stems).
 > > To split the words, use `group_by` and finaly `count` to reduce to the number of
 > > words. Other option `distinct`.
 > >
 > > ~~~python
-> > 
+> >
 > > words = db.from_sequence(books)\
 > >          .map(load_url)\
 > >          .str.split(' ')\
@@ -221,10 +394,10 @@ bag.reduction(count_chars, sum).visualize()
 > >          .distinct()\
 > >          .count()\
 > >          .compute()
-> > 
+> >
 > > print(f'This collection of books contains {words} unique words')
 > > ```
-> > 
+> >
 > > ~~~
 > > {: .source}
 > {: .solution}
@@ -260,159 +433,6 @@ bag.reduction(count_chars, sum).visualize()
 > By default Dask runs a bag using multi-processing. This alleviates problems with the GIL, but also means a larger overhead.
 {: .callout}
 
-# Dask Delayed
-A lot of the functionality in Dask is based on top of a framework of *delayed evaluation*. The concept of delayed evaluation is very important in understanding how Dask functions, which is why we will go a bit deeper into `dask.delayed`.
 
-~~~python
-from dask import delayed
-~~~
-{: .source}
-
-The `delayed` decorator builds a dependency graph from function calls.
-
-~~~python
-@delayed
-def add(a, b):
-    result = a + b
-    print(f"{a} + {b} = {result}")
-    return a + b
-~~~
-{: .source}
-
-A `delayed` function stores the requested function call inside a **promise**. Nothing is being done
-yet.
-
-~~~python
-x_p = add(1, 2)
-~~~
-{: .source}
-
-We can check that `x_p` is now a `Delayed` value.
-
-~~~python
-type(x_p)
-~~~
-{: .source}
-~~~
-[out]: dask.delayed.Delayed
-~~~
-{: .output}
-
-> ## Note
-> It is often a good idea to suffix variables that you know are promises with `_p`. That way you
-> keep track of promises versus immediate values.
-{: .callout}
-
-Only when we evaluate the computation, do we get an output.
-
-~~~python
-x_p.compute()
-~~~
-{:.source}
-~~~
-1 + 2 = 3
-[out]: 3
-~~~
-{:.output}
-
-From `Delayed` values we can create larger workflows.
-
-~~~python
-x_p = add(1, 2)
-y_p = add(x_p, 3)
-z_p = add(x_p, y_p)
-z_p.visualize(rankdir="LR")
-~~~
-{: .source}
-
-![Dask workflow graph](../fig/dask-workflow-example.svg)
-{: .output}
-
-> ## Challenge: run the workflow
-> Run the workflow. How many times is `x_p` computed? We needed it twice.
-> > ## Solution
-> > ~~~python
-> > z_p.compute()
-> > ~~~
-> > {: .source}
-> > ~~~
-> > 1 + 2 = 3
-> > 3 + 3 = 6
-> > 3 + 6 = 9
-> > [out]: 9
-> > ~~~
-> > {: .output}
-> > The computation of `x_p` (1 + 2) appears only once.
-> {: .solution}
-{: .challenge}
-
-We can also make a promise by directly calling `delayed`
-
-~~~python
-N = 10**7
-x_p = delayed(calc_pi)(N)
-~~~
-{: .source}
-
-It is now possible to call `visualize` or `compute` methods on `x_p`.
-
-We can build new primitives from the ground up.
-
-~~~python
-@delayed
-def gather(*args):
-    return list(args)
-~~~
-{: .source}
-
-> ## Challenge: understand `gather`
-> Can you describe what the `gather` function does in terms of lists and promises? How would you classify `gather` in terms of parallel programming patterns?
-> > ## Solution
-> > It turns a list of promises into a promise of a list. This computes from many values to a single object and should be considered a *reduction*.
-> {: .solution}
-{: .challenge}
-
-We can visualize what `gather` does by this small example.
-
-~~~python
-x_p = gather(*(add(n, n) for n in range(10))) # Shorthand for gather(add(1, 1), add(2, 2), ...)
-x_p.visualize()
-~~~
-{: .source}
-
-![a gather pattern](../fig/dask-gather-example.svg)
-{: .output}
-
-Computing the result,
-
-~~~python
-x_p.compute()
-~~~
-{: .source}
-~~~
-[out]: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
-~~~
-{: .output}
-
-> ## Challenge: design a `mean` function
-> Write a `delayed` function that computes the mean of its arguments. Complete the program to
-> compute pi in parallel.
->
-> > ## Solution
-> > ~~~python
-> > @delayed
-> > def mean(*args):
-> >     return sum(args) / len(args)
-> >
-> > pi_p = mean(*(delayed(calc_pi)(N) for i in range(10)))
-> > pi_p.compute()
-> > ~~~
-> > {: .source}
-> {: .solution}
-{: .challenge}
-
-In practice you may not need to use `@delayed` functions too often, but it does offer ultimate
-flexibility. You can build complex computational workflows in this manner, sometimes replacing shell
-scripting, make files and the likes.
 
 {% include links.md %}
