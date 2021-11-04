@@ -115,9 +115,121 @@ If we take the center of the last image, we get the following rendering of the J
 ![Example of a Julia set](../fig/julia-1.png)
 
 > ## Exercise
-> This is not even the worst code. Variables are aptly named and the code is nicely parametrized.
-> However, this code utterly lacks in modularity. Think about how to modularize the code.
->
 > Make this into a parallel program. What kind of speed-ups do you get? Can you get it efficient
-> enough to get an interactive fractal zoomer?
+> enough so that your code could power an interactive fractal zoomer?
+>
+> Hint: to structure the code, you may want to create a `GridInfo` class:
+>
+> ```python
+> from dataclasses import dataclass
+> from typing import Callable
+> import numpy as np
+>
+> @dataclass
+> class GridInfo:
+>     width: int
+>     height: int
+>     center: complex
+>     extent: complex
+>
+>     def map_int(f, *args):
+>          """Compute the value of `f(z)` for every point in this
+>          grid-info object. You may pass extra arguments to `f` as
+>          extra arguments to this function.
+>
+>          Returns: np.ndarray of size (width, height)"""
+>          ...
+> ```
+>
+> Then you may specify the function for computing the Mandelbrot fractal:
+>
+> ```python
+> def iteration_count(f, stop: Callable[(complex,), bool],
+>                     start: complex, max_iter: int, *args) -> int:
+>     x = start
+>     for k in range(max_iter):
+>         x = f(x, *args)
+>         if stop(x):
+>             break
+>     return k
+>
+> def stop_condition(z: complex):
+>     return (z.conj() * z).real > 4.0
+>
+> def mandelbrot(max_iter: int):
+>     def mandelbrot_f(c: complex):
+>         return iteration_count(lambda z: z**2 + c, stop_condition, 0, max_iter)
+>     return mandelbrot_f
+> ```
+>
+> These functions can be JIT compiled with Numba.
 {: .challenge}
+
+> ## Optional
+> There is another way to compute the Julia fractal: [inverse iteration method
+> (IIM)](https://en.wikipedia.org/wiki/Julia_set#Using_backwards_(inverse)_iteration_(IIM)).
+> Here you are computing the inverse of $$z_{n} = z_{n-1}^2 + c$$,
+>
+> $$z_{n-1} = \sqrt{z_n - c}.$$
+>
+> Because this inverse is multi-valued, your set of points grows exponentially with each inverse
+> iteration. This can be solved by randomly selecting a path at each iteration.
+{: .challenge}
+
+> ## Optional
+> See if you can make your solution work with the following `ipywidgets` code. You may have to
+> restructure either your own code or this snippet, whichever you prefer.
+>
+> You need `ipympl` installed, for this to work.
+>
+> ```shell
+> conda install -c conda-forge ipympl
+> conda install -c conda-forge nodejs
+> jupyter labextension install @jupyter-widgets/jupyterlab-manager jupyter-matplotlib
+> # restart Jupyter
+> ```
+>
+> ```python
+> %matplotlib widget
+> import ipywidgets as widgets
+>
+> fig, ax = plt.subplots(1, 2, figsize=(10, 5))
+>
+> # Plot the Mandelbrot to ax[0]; for this to work you need
+> # a function `plot_fractal` that plots the fractal for you,
+> # and a precomputed mandelbrot in `mandelbrot_im`.
+> mandel_grid = GridInfo(256, 256, -0.8+0.0j, 3.0+2.0j)
+> mandelbrot_im = mandel_grid.int_map(mandelbrot(256))
+> plot_fractal(mandel_grid, np.log(mandelbrot_im+1), ax=ax[0])
+>
+> # Add a marker for the selector location
+> mbloc = ax[0].plot(0, 0, 'r+')
+>
+> # This function only updates the position of the marker
+> def update_mandel_plot(c):
+>     mbloc[0].set_xdata(c.real)
+>     mbloc[0].set_ydata(c.imag)
+>     fig.canvas.draw()
+>
+> # `julia_ic` should return a Numba optimized function that
+> # iterates `z = z^2 + c` for a `c` that is given as an extra
+> # parameter.
+> julia_fun = julia(256)
+> julia_grid = GridInfo(256, 256, 0.0+0.0j, 3+3j)
+> julia_im = julia_grid.int_map(julia_fun, 0)
+> plot_fractal(julia_grid, np.log(julia_im + 1), ax=ax[1])
+>
+> def update_julia_plot(c):
+>     julia_im = julia_grid.int_map(julia_it, c)
+>     plot_fractal(julia_grid, np.log(julia_im + 1), ax=ax[1])
+>
+> @widgets.interact(x=(-2, 1.0, 0.01), y=(-1.5, 1.5, 0.01))
+> def update(x, y):
+>     c = x + 1j * y
+>     update_mandel_plot(c)
+>     update_julia_plot(c)
+>
+> plt.tight_layout()
+> ```
+{: .challenge}
+
