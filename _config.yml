@@ -15,7 +15,7 @@ title: "Parallel Programming in Python"
 
 # Life cycle stage of the lesson
 # possible values: "pre-alpha", "alpha", "beta", "stable"
-life_cycle: "pre-alpha"
+life_cycle: "beta"
 
 remote_theme: "carpentries/carpentries-theme"
 
