@@ -98,7 +98,21 @@ z_p.visualize(rankdir="LR")
 {: .output}
 
 > ## Challenge: run the workflow
-> Run the workflow. How many times is `x_p` computed? We needed it twice.
+> Given this workflow:
+> ~~~python
+> x_p = add(1, 2)
+> y_p = add(x_p, 3)
+> z_p = add(x_p, -3)
+> ~~~
+> Visualize and compute `y_p` and `z_p`, how often is `x_p` evaluated?
+> Now change the workflow:
+> ~~~python
+> x_p = add(1, 2)
+> y_p = add(x_p, 3)
+> z_p = add(x_p, y_p)
+> z_p.visualize(rankdir="LR")
+> ~~~
+> We pass the yet uncomputed promise `x_p` to both `y_p` and `z_p`. How often do you expect `x_p` to be evaluated? Run the workflow to check your answer.
 > > ## Solution
 > > ~~~python
 > > z_p.compute()
@@ -324,9 +338,9 @@ bag.reduction(count_chars, sum).visualize()
 {: .output}
 
 > ## Challenge
-> Look at the `mean`, `pluck`, `distinct`, and `topk` methods. Match them up with `map`, `filter`, `groupby` and `reduce` methods.
+> Look at the `mean`, `pluck`, `distinct` methods. These functions could be implemented by using more generic functions that also are in the `dask.bags` library: `map`, `filter`, and `reduce` methods. Can you recognize the design pattern from the descriptions in the documentation?
 > > ## Solution
-> > `mean` is a reduction, `pluck` is a mapping, and `topk` is a filter. `distinct` could be implemented by getting the length (`count`, which is a reduction) after a `groupby`.
+> > `mean` is a reduction, `pluck` is a mapping. 
 > {: .solution}
 {: .challenge}
 

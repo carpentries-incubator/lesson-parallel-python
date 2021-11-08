@@ -128,29 +128,16 @@ The figure should be similar to the one below:
 
 ![Memory performance](../fig/memory.png)
 
-# Alternate Profiling
+> ## Exercise (plenary)
+> Why is the Dask solution more memory efficient?
+> > ### Solution
+> > Chunking! Dask chunks the large array, such that the data is never entirely in memory.
+> {: .solution}
+{: .challenge}
 
-Dask has a couple of profiling options as well.
-
-~~~python
-from dask.diagnostics import Profiler, ResourceProfiler
-work = da.arange(10**7).sum()
-with Profiler() as prof, ResourceProfiler(dt=0.001) as rprof:
-    result2 = work.compute()
-
-from bokeh.plotting import output_notebook
-from dask.diagnostics import visualize
-visualize([prof,rprof], output_notebook())
-~~~
-FIXME: somehow the visualisation turns up in a separate file and in the notebook, I cannot disable the separate file atm.
-
-
-~~~python
-with ResourceProfiler(dt=0.001) as rprof2:
-    result = np.arange(10**7).sum()
-visualize([rprof2], output_notebook())
-~~~
-FIXME: without the Profiler, the time axis is not nicely scaled. Profiler does not work with dask commands.
+> ## Profiling from Dask
+> Dask has several option to do profiling from Dask itself. See the [dask documentation](https://docs.dask.org/en/latest/diagnostics-local.html) for more information.
+{: .callout}
 
 # Using many cores
 Using more cores for a computation can decrease the run time.

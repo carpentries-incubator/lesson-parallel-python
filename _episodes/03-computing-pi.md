@@ -273,65 +273,30 @@ with a Python for-loop over a large range of values, as with `sum_range_numba()`
 
 
 # The `threading` module
+FIXME: expand text
+
 Another possibility for parallelization is to use the `threading` module.
 This module is built into Python. In this section, we'll use it to estimate pi
 once again.
 
-We now build a queue/worker model. This is the basis of multi-threading applications in Python. At
-this point creating a parallel program is quite involved. After we've done this, we'll see ways to
-do the same in Dask without mucking about with threads directly.
+Using threading to speed up your code:
 
-On the one hand we have a `Queue` to which we push work units. On the other hand we have any number
-of *workers* that pull jobs from the queue. More workers should get the job done in less time!
+```python
+from threading import (Thread)
+```
 
-~~~python
-import queue
-import threading
-
-# Number of times to execute calc_pi_numba
-ncalc = 10
-# Number of threads to launch
-ncpus = 4
-# Input values
-input_range = [10**6] * ncalc
-
-### We need to define a worker function that fetches jobs from the queue.
-def worker(q):
-    while True:
-        try:
-            x = q.get(block=False)
-            print(f"{calc_pi_numba(x)} ", end='', flush=True)
-        except queue.Empty:
-            break
-
-### Create the queue, and fill it with input values
-work_queue = queue.Queue()
-for i in input_range:
-    work_queue.put(i)
-
-### Create a number of threads
-threads = [
-    threading.Thread(target=worker, args=(work_queue,))
-    for i in range(ncpus)]
-~~~
-~~~python
+```python
 %%time
-### Start the threads
-for t in threads:
-    t.start()
+n = 10**7
+t1 = Thread(target=calc_pi, args=(n,))
+t2 = Thread(target=calc_pi, args=(n,))
 
-### Wait until all of them are done
-for t in threads:
-    t.join()
+t1.start()
+t2.start()
 
-print()
-~~~
-~~~
-3.140964 3.141652 3.143212 3.142704 3.141864 3.136988 3.13924 3.140984 3.14036 3.143616
-CPU times: user 175 ms, sys: 7.19 ms, total: 182 ms
-Wall time: 180 ms
-~~~
-{: .output}
+t1.join()
+t2.join()
+```
 
 > ## Discussion: where's the speed-up?
 > While mileage may vary, parallelizing `calc_pi`, `calc_pi_numpy` and `calc_pi_numba` this way will
@@ -340,8 +305,7 @@ Wall time: 180 ms
 > interperter at any given time, a feature also known as the Global Interpreter Lock.
 {: .discussion}
 
-
-# A few words about the Global Interpreter Lock
+## A few words about the Global Interpreter Lock
 The Global Interpreter Lock (GIL) is an infamous feature of the Python interpreter.
 It both guarantees inner thread sanity, making programming in Python safer, and prevents us from using multiple cores from
 a single Python instance.
@@ -361,19 +325,19 @@ The only way to know for sure is trying out and profiling your application.
 
 To write your own routines that do not live under the GIL there are several options: fortunately `numba` makes this very easy.
 
-~~~python
+We can force the GIL off in Numba code by setting `nogil=True` in the `numba.jit` decorator.
+
+```python
 @numba.jit(nopython=True, nogil=True)
-def calc_pi_numba(N):
+def calc_pi_nogil(N):
     M = 0
     for i in range(N):
         x = random.uniform(-1, 1)
         y = random.uniform(-1, 1)
-
-        if x**2 + y**2 < 1.0:
+        if x**2 + y**2 < 1:
             M += 1
-    return 4 * M / N
-~~~
-{: .source}
+    return 4 * M / N    
+```
 
 The `nopython` argument forces Numba to compile the code without referencing any Python objects,
 while the `nogil` argument enables lifting the GIL during the execution of the function.
@@ -384,6 +348,28 @@ while the `nogil` argument enables lifting the GIL during the execution of the f
 > down most Numba code.  There's even a decorator that has `nopython=True` by default: `@numba.njit`
 {: .callout}
 
-> ## Challenge: profile the fixed program
-> The nogil version of `calc_pi_numba` should scale nicely with the number of cores used.
+Now we can run the benchmark again, using `calc_pi_nogil` instead of `calc_pi`.
+
+> ## Exercise: try threading on a Numpy function
+> Many Numpy functions unlock the GIL. Try to sort two randomly generated arrays using `numpy.sort` in parallel.
+>
+> > ## Solution
+> > ```python
+> > rnd1 = np.random.random(high)
+> > rnd2 = np.random.random(high)
+> > %timeit -n 10 -r 10 np.sort(rnd1)
+> > ```
+> > 
+> > ```python
+> > %%timeit -n 10 -r 10
+> > t1 = Thread(target=np.sort, args=(rnd1, ))
+> > t2 = Thread(target=np.sort, args=(rnd2, ))
+> > 
+> > t1.start()
+> > t2.start()
+> > 
+> > t1.join()
+> > t2.join()
+> > ```
+> {: .solution}
 {: .challenge}

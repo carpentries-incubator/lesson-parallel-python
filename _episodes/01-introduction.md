@@ -21,7 +21,7 @@ keypoints:
 # Common problems
 
 > ## What problems are we solving?
-> Ask around what problems participants encountered: "Why did you sign up?"
+> Ask around what problems participants encountered: "Why did you sign up?". Specifically: what is the domain science related task that you want to parallelize?
 {: .discussion}
 
 Most problems will fit in one of two categories:
@@ -50,7 +50,7 @@ it to work in a distributed environment.
 {: .callout}
 
 
-# FIXME: Overview and rationale
+# Overview and rationale
 This is an advanced course. Why is it advanced? We (hopefully) saw in the discussion that although
 many of your problems share similar characteristics, it is the detail that will determine the
 solution. We all need our algorithms, models, analysis to run in a way that many hands make light
@@ -107,6 +107,8 @@ Nowadays, most personal computers have 4 or 8 processors (also known as cores). 
 Some tasks are easily parallelizable while others inherently aren't. However, it might not always be immediately
 apparent that a task is parallelizable.
 
+FIXME: this may be too much
+
 Let us consider the following piece of code.
 ~~~python
 x = [1, 2, 3, 4] # Write input
@@ -145,8 +147,10 @@ print(result)
 
 ![parallel execution](../fig/parallel.svg)
 
+The technique for parallelising sums like this is called **chunking**.
+
 There is a subclass of algorithms where the subtasks are completely independent. These kinds of algorithms are known as
-[embarrassingly parallel](https://en.wikipedia.org/wiki/Embarrassingly_parallel).
+[embarrassingly parallel](https://en.wikipedia.org/wiki/Embarrassingly_parallel), or more friendly naturally or delightfully parallel.
 
 An example of this kind of problem is squaring each element in a list, which can be done like so:
 ~~~python
