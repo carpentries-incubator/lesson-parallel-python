@@ -38,7 +38,7 @@ To get you started, here is a code to create a small collage of cat pictures:
 ```
 from typing import Iterator
 from pathlib import Path
-from PIL import Image
+from PIL import Image, ImageOps
 
 def list_images(path: Path) -> Iterator[Path]:
     return path.glob("**/*.jpg")
