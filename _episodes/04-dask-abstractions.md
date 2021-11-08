@@ -141,7 +141,7 @@ It is now possible to call `visualize` or `compute` methods on `x_p`.
 > numbers = [1, 2, 3, 4]
 > add(*numbers)   # => 10
 > ```
-> {: .callout}
+{: .callout}
 
 We can build new primitives from the ground up.
 
