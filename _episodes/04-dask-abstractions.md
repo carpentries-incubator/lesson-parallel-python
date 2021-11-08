@@ -125,6 +125,24 @@ x_p = delayed(calc_pi)(N)
 
 It is now possible to call `visualize` or `compute` methods on `x_p`.
 
+> ## Variadic arguments
+> In Python you can define functions that take arbitrary number of arguments:
+>
+> ```python
+> def add(*args):
+>  return sum(args)
+>
+> add(1, 2, 3, 4)   # => 10
+> ```
+>
+> You can use tuple-unpacking to pass a sequence of arguments:
+>
+> ```python
+> numbers = [1, 2, 3, 4]
+> add(*numbers)   # => 10
+> ```
+> {: .callout}
+
 We can build new primitives from the ground up.
 
 ~~~python
@@ -164,8 +182,13 @@ x_p.compute()
 {: .output}
 
 > ## Challenge: design a `mean` function and calculate pi
-> Write a `delayed` function that computes the mean of its arguments. Use it to esimates pi several
-> times and returns the mean of the results.
+> Write a `delayed` function that computes the mean of its arguments. Use it to esimates pi several times and returns the mean of the results.
+>
+> ```python
+> >>> mean(1, 2, 3, 4).compute()
+> 2.5
+> ```
+>
 > Make sure that the entire computation is contained in a single promise.
 > > ## Solution
 > > ~~~python
