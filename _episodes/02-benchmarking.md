@@ -95,6 +95,7 @@ pip install memory_profiler
 ~~~
 {: .source}
 
+
 In Jupyter, type the following lines to compare the memory usage of the serial and parallel versions of the code presented above (again, change the value of `10**7` to something higher if needed):
 ~~~python
 import numpy as np
@@ -130,7 +131,7 @@ The figure should be similar to the one below:
 
 > ## Exercise (plenary)
 > Why is the Dask solution more memory efficient?
-> > ### Solution
+> > ## Solution
 > > Chunking! Dask chunks the large array, such that the data is never entirely in memory.
 > {: .solution}
 {: .challenge}
