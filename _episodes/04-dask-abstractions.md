@@ -271,7 +271,7 @@ bag = db.from_sequence(['mary', 'had', 'a', 'little', 'lamb'])
 ### Map
 
 To illustrate the concept of `map`, we'll need a mapping function.
-In the example below we'll just use a function that squares its argument:
+In the example below we'll just use a function that capitalizes its argument:
 
 ~~~python
 # Create a function for mapping
@@ -304,7 +304,7 @@ In this case, we'll use a function that returns `True` if the argument contains 
 and `False` if it doesn't.
 
 ~~~python
-# Return True if x is even, False if not
+# Return True if the character 'a' is in x, False if not
 def pred(x):
     return 'a' in x
 
@@ -345,9 +345,16 @@ bag.reduction(count_chars, sum).visualize()
 {: .challenge}
 
 > ## Challenge
-> Rewrite the following program in terms of a Dask bag. Make it
-> spicy by using your favourite literature classic from project Gutenberg as input.
-> Examples:
+> Rewrite the following program in terms of a Dask bag. 
+> 
+> The program processes a text, and counts the number of unique words.
+> A text is tokenized by splitting the text on spaces.
+> Punctuation is removed, and tokens containing numbers are ignored.
+> Finally, we use a stemmer from the NLTK library to map tokens to a standard form.
+> This way the tokens 'Books' and 'Book', and the tokens 'Reading' and 'Read' are counted as a single word ('Book' and 'Read', respectively).
+> 
+> Make it spicy by using your favourite literature classic from project Gutenberg as input.
+> Reccomendations:
 > - Mapes Dodge - https://www.gutenberg.org/files/764/764-0.txt
 > - Melville - https://www.gutenberg.org/files/15/15-0.txt
 > - Conan Doyle - https://www.gutenberg.org/files/1661/1661-0.txt
@@ -365,11 +372,13 @@ bag.reduction(count_chars, sum).visualize()
 > import requests
 > stemmer = PorterStemmer()
 >
-> def good_word(w):
->     return len(w) > 0 and not any(i.isdigit() for i in w)
+> def isWord(token):
+>     """Is the token a valid word?"""
+>     return len(token) > 0 and not any(i.isdigit() for i in token)
 >
-> def clean_word(w):
->     return w.strip("*!?.:;'\",“’‘”()_").lower()
+> def preprocess(token):
+>     """Strip punctuation characters and lowercase the token."""
+>     return token.strip("*!?.:;'\",“’‘”()_").lower()
 >
 > def load_url(url):
 >    response = requests.get(url)
@@ -381,8 +390,8 @@ bag.reduction(count_chars, sum).visualize()
 > text = "Lorem ipsum"
 > words = set()
 > for w in text.split():
->     cw = clean_word(w)
->     if good_word(cw):
+>     cw = preprocess(w)
+>     if isWord(cw):
 >         words.add(stemmer.stem(cw))
 > print(f"This corpus contains {len(words)} unique words.")
 > ~~~
@@ -393,8 +402,8 @@ bag.reduction(count_chars, sum).visualize()
 >
 > ~~~python
 > words = set(map(stemmer.stem,
->                 filter(good_word,
->                        map(clean_word, text.split()))))
+>                 filter(isWord,
+>                        map(preprocess, text.split()))))
 > len(words)
 > ~~~
 > {: .source}
@@ -415,9 +424,9 @@ bag.reduction(count_chars, sum).visualize()
 >```
 > > ## Solution
 > > Load the list of books as a bag with `db.from_sequence`, load the books by using `map` in
-> > combination with the `load_url` function. Split the words and `flatten` to create a
-> > single bag, then `map` to capitalize all the words (or find their stems).
-> > To split the words, use `group_by` and finaly `count` to reduce to the number of
+> > combination with the `load_url` function. Split the text and `flatten` to create a
+> > single bag of tokens, then `map` to preprocess. Filter to get only the words, and map again 
+> > to get the stems. To split the words, use `group_by` and finaly `count` to reduce to the number of
 > > words. Other option `distinct`.
 > >
 > > ~~~python
@@ -425,8 +434,9 @@ bag.reduction(count_chars, sum).visualize()
 > > words = db.from_sequence(books)\
 > >          .map(load_url)\
 > >          .str.split(' ')\
-> >          .flatten().map(clean_word)\
-> >          .filter(good_word)\
+> >          .flatten()\
+> >          .map(preprocess)\
+> >          .filter(isWord)\
 > >          .map(stemmer.stem)\
 > >          .distinct()\
 > >          .count()\
