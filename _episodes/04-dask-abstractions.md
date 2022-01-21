@@ -25,9 +25,9 @@ See an overview below:
 |:-----------------|:---------------------|:------------------------------------|:--------|
 | `dask.array`     | `numpy`              | Numerical analysis                  | ✔️       |
 | `dask.bag`       | `itertools`          | Map-reduce, workflows               | ✔️       |
-| `dask.delayed`   | functions            | Anything that doesn't fit the above | ✔️       |
 | `dask.dataframe` | `pandas`             | Generic data analysis               | ❌      |
-| `dask.futures`   | `concurrent.futures` | Control execution, low-level        | ❌      |
+| `dask.delayed`   | functions            | Anything that doesn't fit the above | ✔️       |
+| `dask.futures`   | `concurrent.futures` | Control execution, low-level        | ⏩      |
 
 # Dask Delayed
 A lot of the functionality in Dask is based on top of a framework of *delayed evaluation*. The concept of delayed evaluation is very important in understanding how Dask functions, which is why we will go a bit deeper into `dask.delayed`.
@@ -466,10 +466,33 @@ bag.reduction(count_chars, sum).visualize()
 > {: .solution}
 {: .challenge}
 
+> ## Lazy versus immediate evaluation
+> As we saw in this section, delayed functions can be used to build a workflow, and that workflow is executed only when required (typically via the `.compute()` method).
+> This is known as delayed or, more eloquently, as lazy evaluation.
+> It is lazy in the sense that the actual evaluation only happens when and if required, but never before.
+>
+> The opposite of lazy evaluation is immediate evaluation.
+> Actually, you are probably more familiar with it.
+> Immediate evaluation is, for instance, what happens when you use Python as a calculator and do something as `a = 1 + 2`.
+> The variable `a` gets the value `3` immediately.
+>
+> You can think of a **lazy evaluated tree** as a **group of people cooking on a tv contest**.
+> The conductor asks them to cook, say, a _paella_.
+> The desired result is thus pre-defined.
+> The group has a few minutes to plan and divide the tasks (construct a tree).
+> And only when the timer starts and everybody is ready, they can start cooking.
+>
+> The analogy for an **immediately evaluated tree** would be that of **a group of friends cooking at home**.
+> The chef asks her friends to do things such as _cut the vegetables_, _smash the tomato_, and so on.
+> And these tasks can be started right away.
+> Perhaps the chef would make the last minute decision of adding _chicken_ to the _paella_, or realize that there is no _pepper_ and improvise a solution (or even add the new task of: _go to the store and bring pepper_).
+>
+> Luckily, Dask is capable of doing both.
+> In this workshop we'll focus only on lazy evaluation.
+> If you are interested in immediate evaluation with Dask, please take a look at the tutorial on [Dask futures](https://docs.dask.org/en/stable/futures.html).
+{: .callout}
 > ## Note
 > By default Dask runs a bag using multi-processing. This alleviates problems with the GIL, but also means a larger overhead.
 {: .callout}
-
-
 
 {% include links.md %}
