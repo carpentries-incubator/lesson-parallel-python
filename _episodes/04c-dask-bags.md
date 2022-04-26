@@ -14,7 +14,6 @@ keypoints:
 - "Use abstractions to keep programs manageable"
 ---
 
-# Parallelize using Dask bags
 Dask bags let you compose functionality using several primitive patterns: the most important of these are `map`, `filter`, `groupby` and `reduce`.
 
 > ## Discussion
