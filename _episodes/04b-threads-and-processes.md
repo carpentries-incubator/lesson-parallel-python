@@ -3,8 +3,12 @@ title: "Threading and Multiprocessing"
 teaching: 60
 exercises: 30
 questions:
+- "What is the Global Interpreter Lock (GIL)?"
+- "How do I use multiple threads in Python?"
 objectives:
+- "Understand the GIL."
 keypoints:
+- "If we want the most efficient parallelism on a single machine, we need to circumvent the GIL."
 ---
 
 FIXME: expand text
