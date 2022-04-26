@@ -7,8 +7,10 @@ questions:
 - "How do I use multiple threads in Python?"
 objectives:
 - "Understand the GIL."
+- "Understand the difference between the python `threading` and `multiprocessing` library"
 keypoints:
 - "If we want the most efficient parallelism on a single machine, we need to circumvent the GIL."
+- "If your code releases the GIL, threading will be more efficient than multiprocessing."
 ---
 
 FIXME: expand text

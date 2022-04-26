@@ -13,7 +13,7 @@ objectives:
 keypoints:
 - "Always profile your code to see which parellelization method works best"
 - "Vectorized algorithms are both a blessing and a curse."
-- "Numba helps you both speeding up code and circumventing the GIL."
+- "Numba can help you speed up code"
 ---
 
 # Parallelizing a Python application
