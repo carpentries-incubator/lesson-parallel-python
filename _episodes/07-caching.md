@@ -8,6 +8,7 @@ questions:
 objectives:
 - "Understand the principles of dynamic programming."
 - "Understand the relevance of dynamic programming in a parallel environment."
+- "Write a parallel sudoku solver"
 keypoints:
 - "FIXME"
 ---

@@ -1,5 +1,5 @@
 ---
-title: "Understanding parallelization in Python"
+title: "Accellerators: vectorized Numpy and Numba"
 teaching: 60
 exercises: 30
 questions:
