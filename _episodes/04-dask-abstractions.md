@@ -6,10 +6,8 @@ questions:
 - "What abstractions does Dask offer?"
 - "What programming patterns exist in the parallel universe?"
 objectives:
-- "Recognize `map`, `filter` and `reduce` patterns"
-- "Create programs using these building blocks"
-- "Use the `visualize` method to create dependency graphs"
 - "Understand the abstraction of delayed evaluation"
+- "Use the `visualize` method to create dependency graphs"
 keypoints:
 - "Use abstractions to keep programs manageable"
 ---

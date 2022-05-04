@@ -3,22 +3,16 @@ title: "Accellerators: vectorized Numpy and Numba"
 teaching: 60
 exercises: 30
 questions:
-- "What is the Global Interpreter Lock (GIL)?"
 - "How do I parallelize a Python application?"
 - "What is data parallelism?"
 - "What is task parallelism?"
-- "How do I use multiple threads in Python?"
 objectives:
 - "Rewrite a program in a vectorized form."
 - "Understand the difference between data and task-based parallel programming."
-- "Understand the GIL."
 - "Apply `numba.jit` to accelerate Python."
-- "Recognize the primitive components of the queue/worker model of execution."
 keypoints:
 - "Always profile your code to see which parellelization method works best"
 - "Vectorized algorithms are both a blessing and a curse."
-- "If we want the most efficient parallelism on a single machine, we need to circumvent the GIL."
-- "Numba helps you both speeding up code and circumventing the GIL."
 ---
 
 # Parallelizing a Python application
