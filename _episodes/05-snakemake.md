@@ -187,13 +187,14 @@ freely intermix Python to achieve this. Paste the following code above the rules
 import random
 from pathlib import Path
 import textwrap
+from typing import List
 
 
 def shuffle(x):
     return random.sample(x, k=len(x))
 
 
-def mix(in_paths: list[Path], out_path: Path) -> None:
+def mix(in_paths: List[Path], out_path: Path) -> None:
     texts = [open(f).read() for f in in_paths]
     words = [w for l in texts for w in l.split()]
     mixed = " ".join(shuffle(words))
