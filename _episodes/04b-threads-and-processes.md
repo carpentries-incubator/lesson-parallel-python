@@ -7,11 +7,10 @@ questions:
 - "How do I use multiple threads in Python?"
 objectives:
 - "Understand the GIL."
-- "Recognize the primitive components of the queue/worker model of execution."
-- "Understand the different overhead between threading & multiprocessing"
+- "Understand the difference between the python `threading` and `multiprocessing` library"
 keypoints:
 - "If we want the most efficient parallelism on a single machine, we need to circumvent the GIL."
-- "Numba helps you both speeding up code and circumventing the GIL."
+- "If your code releases the GIL, threading will be more efficient than multiprocessing."
 ---
 
 # Threading

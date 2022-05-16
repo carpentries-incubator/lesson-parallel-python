@@ -11,8 +11,9 @@ objectives:
 - "Understand the difference between data and task-based parallel programming."
 - "Apply `numba.jit` to accelerate Python."
 keypoints:
-- "Always profile your code to see which parellelization method works best"
+- "Always profile your code to see which parallelization method works best"
 - "Vectorized algorithms are both a blessing and a curse."
+- "Numba can help you speed up code"
 ---
 
 # Parallelizing a Python application
