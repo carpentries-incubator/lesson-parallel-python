@@ -33,7 +33,7 @@ source: 'https://example.com/template-source'
 branch: 'main'
 
 # Who to contact if there are any issues
-contact: 'team@carpentries.org'
+contact: 'j.hidding@esciencecenter.nl'
 
 # Navigation ------------------------------------------------
 #
@@ -58,17 +58,25 @@ contact: 'team@carpentries.org'
 # - another-learner.md
 
 # Order of episodes in your lesson
-episodes: 
-- introduction.Rmd
+episodes:
+- introduction.md
+- benchmarking.md
+- computing-pi.md
+- threads-and-processes.md
+- delayed-evaluation.md
+- map-and-reduce.md
+- exercise-with-fractals.md
+- extra-asyncio.md
+- extra-external-c.md
 
 # Information for Learners
-learners: 
+learners:
 
 # Information for Instructors
-instructors: 
+instructors:
 
 # Learner Profiles
-profiles: 
+profiles:
 
 # Customisation ---------------------------------------------
 #
