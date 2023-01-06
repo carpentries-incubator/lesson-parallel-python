@@ -6,7 +6,7 @@ exercises: 2
 
 :::questions
 - What abstractions does Dask offer?
-- What programming patterns exist in the parallel universe?
+- How can I paralellize existing Python code?
 :::
 
 :::objectives

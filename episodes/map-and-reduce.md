@@ -1,101 +1,191 @@
 ---
-title: 'map-and-reduce'
-teaching: 10
-exercises: 2
+title: 'Map and reduce'
+teaching: 60
+exercises: 30
 ---
 
-:::::::::::::::::::::::::::::::::::::: questions 
+:::questions
+- What abstractions does Dask offer?
+- What programming patterns exist in the parallel universe?
+:::
 
-- How do you write a lesson using R Markdown and `{sandpaper}`?
+:::objectives
+- Recognize `map`, `filter` and `reduce` patterns
+- Create programs using these building blocks
+- Use the `visualize` method to create dependency graphs
+:::
 
-::::::::::::::::::::::::::::::::::::::::::::::::
+In computer science *bags* refer to unordered collections of data. In Dask, a `bag` is a collection that is chunked internally. When you perform operations on a bag, these operations are automatically parallelized over the chunks inside the bag.
 
-::::::::::::::::::::::::::::::::::::: objectives
+Dask bags let you compose functionality using several primitive patterns: the most important of these are `map`, `filter`, `groupby`, `flatten`, and `reduction`.
 
-- Explain how to use markdown with the new lesson template
-- Demonstrate how to include pieces of code, figures, and nested challenge blocks
+:::discussion
+## Discussion
+Open the [Dask documentation on bags](https://docs.dask.org/en/latest/bag-api.html).
+Discuss the `map`, `filter`, `flatten` and `reduction` methods
 
-::::::::::::::::::::::::::::::::::::::::::::::::
+In this set of operations `reduction` is rather special. All other operations on bags could be written in terms of a reduction.
+:::
 
-## Introduction
+Operations on this level can be distinguished in several categories:
 
-This is a lesson created via The Carpentries Workbench. It is written in
-[Pandoc-flavored Markdown][pandoc] for static files (with extension `.md`) and
-[R Markdown][r-markdown] for dynamic files that can render code into output
-(with extension `.Rmd`). Please refer to the [Introduction to The Carpentries
-Workbench][carpentries-workbench] for full documentation.
+- **map** (N to N) applies a function *one-to-one* on a list of arguments. This operation is **embarrassingly
+  parallel**.
+- **filter** (N to &lt;N) selects a subset from the data.
+- **reduce** (N to 1) computes an aggregate from a sequence of data; if the operation permits it
+  (summing, maximizing, etc) this can be done in parallel by reducing chunks of data and then
+  further processing the results of those chunks.
+- **groupby** (1 bag to N bags) groups data in subcategories.
+- **flatten** (N bags to 1 bag) combine many bags into one.
 
-What you need to know is that there are three sections required for a valid
-Carpentries lesson template:
+Let's see an example of it in action:
 
- 1. `questions` are displayed at the beginning of the episode to prime the
-    learner for the content.
- 2. `objectives` are the learning objectives for an episode displayed with
-    the questions.
- 3. `keypoints` are displayed at the end of the episode to reinforce the
-    objectives.
+First, let's create the `bag` containing the elements we want to work with (in this case, the numbers from 0 to 5).
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
+~~~python
+import dask.bag as db
 
-Inline instructor notes can help inform instructors of timing challenges
-associated with the lessons. They appear in the "Instructor View"
+bag = db.from_sequence(['mary', 'had', 'a', 'little', 'lamb'])
+~~~
+{: .source}
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+### Map
 
-::::::::::::::::::::::::::::::::::::: challenge 
+To illustrate the concept of `map`, we'll need a mapping function.
+In the example below we'll just use a function that squares its argument:
 
-## Challenge 1: Can you do it?
+~~~python
+# Create a function for mapping
+def f(x):
+    return x.upper()
 
-What is the output of this command?
+# Create the map and compute it
+bag.map(f).compute()
+~~~
 
-```r
-paste("This", "new", "lesson", "looks", "good")
+~~~output
+out: ['MARY', 'HAD', 'A', 'LITTLE', 'LAMB']
+~~~
+
+We can also visualize the mapping:
+
+~~~python
+# Visualize the map
+bag.map(f).visualize()
+~~~
+
+![A map operation.](../fig/dask-bag-map.svg){.output alt="boxes and arrows"}
+
+### Filter
+
+To illustrate the concept of `filter`, it is useful to have a function that returns a boolean.
+In this case, we'll use a function that returns `True` if the argument contains the letter 'a',
+and `False` if it doesn't.
+
+~~~python
+# Return True if x is even, False if not
+def pred(x):
+    return 'a' in x
+
+bag.filter(pred).compute()
+~~~
+
+~~~output
+[out]: ['mary', 'had', 'a', 'lamb']
+~~~
+
+:::challenge
+## Difference between `filter` and `map`
+Without executing it, try to forecast what would be the output of `bag.map(pred).compute()`.
+
+::::solution
+## Solution
+The output will be `[True, True, True, False, True]`.
+::::
+:::
+
+### Reduction
+
+~~~python
+def count_chars(x):
+    per_word = [len(w) for w in x]
+
+    return sum(per_word)
+
+bag.reduction(count_chars, sum).visualize()
+~~~
+
+![A reduction.](../fig/dask-bag-reduction.svg){.output alt="boxes and arrows"}
+
+:::challenge
+## Challenge: consider `pluck`
+We previously discussed some generic operations on bags. In the documentation, lookup the `pluck` method. How would you implement this if `pluck` wasn't there?
+
+hint: Try `pluck` on some example data.
+
+```python
+from dask import bags as db
+
+data = [
+   { "name": "John", "age": 42 },
+   { "name": "Mary", "age": 35 },
+   { "name": "Paul", "age": 78 },
+   { "name": "Julia", "age": 10 }
+]
+
+bag = db.from_sequence(data)
+...
 ```
 
-:::::::::::::::::::::::: solution 
+::::solution
+The `pluck` method is a mapping. The input is supposed to be a bag of dictionaries.
 
-## Output
- 
-```output
-[1] "This new lesson looks good"
+```python
+from functools import partial
+from operator import getitem
+bag.map(partial(getitem, "name")).compute()
 ```
+::::
+:::
 
-:::::::::::::::::::::::::::::::::
+FIXME: find replacement for word counting example
 
+:::challenge
+## Challenge: Dask version of Pi estimation
+Use `map` and `mean` functions on Dask bags to compute $\pi$.
 
-## Challenge 2: how do you nest solutions within challenge blocks?
+::::solution
+## Solution
 
-:::::::::::::::::::::::: solution 
+~~~python
+import dask.bag
+from numpy import repeat
+import random
 
-You can add a line with at least three colons and a `solution` tag.
+def calc_pi(N):
+    """Computes the value of pi using N random samples."""
+    M = 0
+    for i in range(N):
+        # take a sample
+        x = random.uniform(-1, 1)
+        y = random.uniform(-1, 1)
+        if x*x + y*y < 1.: M+=1
+    return 4 * M / N
 
-:::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::
+bag = dask.bag.from_sequence(repeat(10**7, 24))
+shots = bag.map(calc_pi)
+estimate = shots.mean()
+estimate.compute()
+~~~
+::::
+:::
 
-## Figures
+:::callout
+## Note
+By default Dask runs a bag using multi-processing. This alleviates problems with the GIL, but also means a larger overhead.
+:::
 
-You can use pandoc markdown for static figures with the following syntax:
-
-`![optional caption that appears below the figure](figure url){alt='alt text for
-accessibility purposes'}`
-
-![You belong in The Carpentries!](https://raw.githubusercontent.com/carpentries/logo/master/Badge_Carpentries.svg){alt='Blue Carpentries hex person logo with no text.'}
-
-## Math
-
-One of our episodes contains $\LaTeX$ equations when describing how to create
-dynamic reports with {knitr}, so we now use mathjax to describe this:
-
-`$\alpha = \dfrac{1}{(1 - \beta)^2}$` becomes: $\alpha = \dfrac{1}{(1 - \beta)^2}$
-
-Cool, right?
-
-::::::::::::::::::::::::::::::::::::: keypoints 
-
-- Use `.md` files for episodes when you want static content
-- Use `.Rmd` files for episodes when you need to generate output
-- Run `sandpaper::check_lesson()` to identify any issues with your lesson
-- Run `sandpaper::build_lesson()` to preview your lesson locally
-
-::::::::::::::::::::::::::::::::::::::::::::::::
+:::keypoints
+- Use abstractions to keep programs manageable
+:::
 
