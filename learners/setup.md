@@ -7,43 +7,24 @@ sets the Learner needs to have installed.
 
 ## Data Sets
 
-Download the [data zip file](data/data.zip) and unzip it to your Desktop
+Clone the repository at [esciencecenter-digital-skills/parallel-python-workshop](https://github.com/esciencecenter-digital-skills/parallel-python-workshop). Follow instructions there, and run the unit tests to see if your setup is working.
 
 ## Software Setup
 
 ::::::::::::::::::::::::::::::::::::::: discussion
 
 ### Details
-
-Setup for different systems can be presented in dropdown menus via a `solution`
-tag. They will join to this discussion block, so you can give a general overview
-of the software used in this lesson here and fill out the individual operating
-systems (and potentially add more, e.g. online setup) in the solutions blocks.
+This is an intermediate level Python course. We expect familiarity with the command-line, and that you are comfortable working with a coding text editor (like for instance, [VS Code](https://code.visualstudio.com/)). We provide two choices for working environment: **conda** or **poetry**. If you are on **Windows** the prefered method is **conda**. On Linux or MacOS you should be fine with either.
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::
 
-:::::::::::::::: solution
+:::solution
+### Conda
 
-### Windows
+:::
 
-Use PuTTY
+:::solution
+### Poetry
 
-:::::::::::::::::::::::::
-
-:::::::::::::::: solution
-
-### MacOS
-
-Use Terminal.app
-
-:::::::::::::::::::::::::
-
-
-:::::::::::::::: solution
-
-### Linux
-
-Use Terminal
-
-:::::::::::::::::::::::::
+:::
 
