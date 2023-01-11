@@ -68,22 +68,6 @@ islice(integers(), 0, 10)
 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 ```
 
-:::solution
-## Obscure use of walrus operator
-Interestingly, since the introduction of the walrus operator, we can write `integers()` a bit different using a generator comprehension:
-
-```python
-# also available as itertools.repeat
-def repeat(x):
-  while True:
-    yield x
-
-def integers():
-  a = 0
-  return (a := a + da for da in repeat(1))
-```
-:::
-
 :::challenge
 ## Challenge: generate all even numbers
 Can you write a generator that generates all even numbers? Try to reuse `integers()`. Extra: Can you generate the Fibonacci numbers?
@@ -172,10 +156,18 @@ async def counter(name):
     await asyncio.sleep(0.2)
 
 await counter("Venus")
+```
+
+We can have coroutines work concurrently when we `gather` two coroutines.
+
+```python
 await asyncio.gather(counter("Earth"), counter("Moon"))
 ```
 
-This feature does not work so well with magics though, so we have to write our own timer.
+Note that, although the Earth counter and Moon counter seem to operate at the same time, in actuality they are alternated by the scheduler and still running in a single thread!
+
+## Timing asynchronous code
+While Jupyter works very well with `asyncio`, one thing that doesn't work is line or cell-magic. We'll have to write our own timer.
 
 ``` {.python #async-timer}
 from dataclasses import dataclass
