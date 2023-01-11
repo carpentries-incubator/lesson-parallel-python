@@ -4,7 +4,7 @@ teaching: 20
 exercises: 5
 ---
 
-:::::::::::::::::::::::::::::::::::::: questions 
+:::::::::::::::::::::::::::::::::::::: questions
 
 - What problems are we solving, and what are we **not** discussing?
 - Why do we use Python?
@@ -135,7 +135,7 @@ print(y) # Print output
 Note that each successive loop uses the result of the previous loop. In that way, it is dependent on the previous
 loop. The following dependency diagram makes that clear:
 
-![serial execution](fig/serial.svg)
+![serial execution](fig/serial.svg){alt="boxes and arrows"}
 
 Although we are performing the loops in a serial way in the snippet above,
 nothing avoids us from performing this calculation in parallel.
@@ -159,7 +159,7 @@ print(result)
 10
 ```
 
-![parallel execution](fig/parallel.svg)
+![parallel execution](fig/parallel.svg){alt="boxes and arrows"}
 
 The technique for parallelising sums like this is called **chunking**.
 
@@ -227,7 +227,7 @@ FIXME: add text
 
 ![Shared vs. Distributed memory architecture: the crucial difference is the bandwidth to shared memory](fig/memory-architecture.svg){alt="diagram"}
 
-::::::::::::::::::::::::::::::::::::: keypoints 
+::::::::::::::::::::::::::::::::::::: keypoints
 
 - Programs are parallelizable if you can identify independent tasks.
 - To make programs scalable, you need to chunk the work.

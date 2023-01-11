@@ -74,7 +74,7 @@ We can also visualize the mapping:
 bag.map(f).visualize()
 ~~~
 
-![A map operation.](../fig/dask-bag-map.svg){.output alt="boxes and arrows"}
+![A map operation.](fig/dask-bag-map.svg){.output alt="boxes and arrows"}
 
 ### Filter
 
@@ -115,7 +115,7 @@ def count_chars(x):
 bag.reduction(count_chars, sum).visualize()
 ~~~
 
-![A reduction.](../fig/dask-bag-reduction.svg){.output alt="boxes and arrows"}
+![A reduction.](fig/dask-bag-reduction.svg){.output alt="boxes and arrows"}
 
 :::challenge
 ## Challenge: consider `pluck`

@@ -27,7 +27,7 @@ fractal](https://en.wikipedia.org/wiki/Mandelbrot_fractal).
 
 :::callout
 ## Complex numbers
-Complex numbers are a special representation of rotations and scalings in the two-dimensional plane. Multiplying two complex numbers is the same as taking a point, rotate it by an angle $\phi$ and scale it by the absolute value. Multiplying with a number $z \in \mathbb{C}$ by 1 preserves $z$. Multiplying a point at $i = (0, 1)$ (having a positive angle of 90 degrees and absolute value 1), rotates it anti-clockwise by 90 degrees. Then you might see that $i^2 = (-1, 0)$. The funny thing is, that we can treat $i$ as any ordinary number, and all our algebra still works out. This is actually nothing short of a miracle! We can write a complex number 
+Complex numbers are a special representation of rotations and scalings in the two-dimensional plane. Multiplying two complex numbers is the same as taking a point, rotate it by an angle $\phi$ and scale it by the absolute value. Multiplying with a number $z \in \mathbb{C}$ by 1 preserves $z$. Multiplying a point at $i = (0, 1)$ (having a positive angle of 90 degrees and absolute value 1), rotates it anti-clockwise by 90 degrees. Then you might see that $i^2 = (-1, 0)$. The funny thing is, that we can treat $i$ as any ordinary number, and all our algebra still works out. This is actually nothing short of a miracle! We can write a complex number
 
 $$z = x + iy,$$
 
@@ -89,11 +89,11 @@ extent = 0.005+0.005j
 
 When we zoom in on the Mandelbrot fractal, we get smaller copies of the larger set!
 
-![Zoom in on Mandelbrot set](../fig/mandelbrot-1.png)
+![Zoom in on Mandelbrot set](fig/mandelbrot-1.png){alt="rendering of mandelbrot zoom"}
 
 :::challenge
 ## Exercise
-Make this into an efficient parallel program. What kind of speed-ups do you get? 
+Make this into an efficient parallel program. What kind of speed-ups do you get?
 
 ::::solution
 ### Create a `BoundingBox` class
@@ -103,6 +103,7 @@ We start with a naive implementation. It may be convenient to define a `Bounding
 from dataclasses import dataclass
 from typing import Optional
 import numpy as np
+import dask.array as da
 
 
 @dataclass
@@ -160,23 +161,67 @@ The main approach with Python will be: use Numba to make this fast. Then there a
 ``` {.python file="src/mandelbrot/__init__.py"}
 
 ```
+::::
 
-### Numba
-Create a file `mandelbrot_numba.py`. We have to pass all parameters as primitive objects, otherwise Numba can't compile with `nopython`.
+::::solution
+## Numba (serial)
+When we port the core Mandelbrot function to Numba, we need to keep some best practices in mind:
 
-``` {.python file="src/mandelbrot/numba.py"}
-from typing import Optional, Union
+- Don't pass composite objects other than Numpy arrays.
+- Avoid acquiring memory inside a Numba function; create an array in Python, then pass it to the Numba function.
+- Write a Pythonic wrapper around the Numba function for easy use.
+
+``` {.python file="src/mandelbrot/numba_serial.py"}
+from typing import Any, Optional
+import numba  # type:ignore
+import numpy as np
+
+from .bounding_box import BoundingBox
+
+
+@numba.njit(nogil=True)
+def compute_mandelbrot_numba(
+        result, width: int, height: int, center: complex,
+        scale: complex, max_iter: int):
+    for j in range(height):
+        for i in range(width):
+            c = center + (i - width // 2 + (j - height // 2) * 1j) * scale
+            z = 0.0+0.0j
+            for k in range(max_iter):
+                z = z**2 + c
+                if (z*z.conjugate()).real >= 4.0:
+                    break
+            result[j, i] = k
+    return result
+
+
+def compute_mandelbrot(
+        box: BoundingBox, max_iter: int,
+        result: Optional[np.ndarray[np.int64]] = None,
+        throttle: Any = None):
+    result = result if result is not None \
+            else np.zeros((box.height, box.width), np.int64)
+    return compute_mandelbrot_numba(
+        result, box.width, box.height, box.center, box.scale,
+        max_iter=max_iter)
+```
+
+### Numba `parallel=True`
+We can parallelize loops directly with Numba. Pass the flag `parallel=True` and use `prange` to create the loop. Here it is even more important to obtain the result array outside the context of Numba, or the result will be slower than the serial version.
+
+``` {.python file="src/mandelbrot/numba_parallel.py"}
+from typing import Optional
 import numba  # type:ignore
 from numba import prange  # type:ignore
 import numpy as np
-from numba_progress import ProgressBar  # type:ignore
 
-from .bounding_box import BoundingBox, test_case
-from .plotting import plot_fractal
+from .bounding_box import BoundingBox
+
 
 @numba.njit(nogil=True, parallel=True)
-def compute_mandelbrot(width: int, height: int, center: complex, scale: complex, max_iter:int, progress):
-    result = np.zeros((height, width), np.int64)
+def compute_mandelbrot_numba(
+        result, width: int, height: int, center: complex, scale: complex,
+        max_iter: int):
     for j in prange(height):
         for i in prange(width):
             c = center + (i - width // 2 + (j - height // 2) * 1j) * scale
@@ -186,26 +231,22 @@ def compute_mandelbrot(width: int, height: int, center: complex, scale: complex,
                 if (z*z.conjugate()).real >= 4.0:
                     break
             result[j, i] = k
-        progress.update(width)
     return result
 
 
-if __name__ == "__main__":
-    with ProgressBar(total=1, desc="compiling") as progress:
-        compute_mandelbrot(1, 1, 0, 1+1j, 1, progress)
-
-    box = test_case
-    max_iter = 1024
-
-    with ProgressBar(desc="computing", total=box.width*box.height) as progress:
-        result = compute_mandelbrot(
-            box.width, box.height, box.center, box.scale,
-            max_iter=max_iter, progress=progress)
-    fig, _ = plot_fractal(box, np.log(result + 1))
-    fig.savefig("numba-output.png", bbox_inches="tight")
+def compute_mandelbrot(box: BoundingBox, max_iter: int,
+                       throttle: Optional[int] = None):
+    if throttle is not None:
+        numba.set_num_threads(throttle)
+    result = np.zeros((box.height, box.width), np.int64)
+    return compute_mandelbrot_numba(
+        result, box.width, box.height, box.center, box.scale,
+        max_iter=max_iter)
 ```
+::::
 
-### Domain splitting
+::::solution
+## Domain splitting
 We split the computation into a set of sub-domains. The `BoundingBox.split()` method is designed such that if we deep-map the resulting list-of-lists, we can recombine the results using `numpy.block()`.
 
 ``` {.python #bounding-box-methods}
@@ -222,82 +263,52 @@ def split(self, n):
 
 To perform the computation in parallel, lets go ahead and chose the most difficult path: `asyncio`. There are other ways to do this, setting up a number of threads, or use Dask. However, `asyncio` is available to us in Python natively. In the end, the result is very similar to what we would get using `dask.delayed`.
 
-This may seem as a lot of code, but remember: we only used Numba to compile the core part and then used Asyncio to parallelize. The progress bar is a bit of flutter and the semaphore is only there to throttle the computation to fewer cores.
+This may seem as a lot of code, but remember: we only used Numba to compile the core part and then used Asyncio to parallelize. The progress bar is a bit of flutter and the semaphore is only there to throttle the computation to fewer cores. Even then, this solution is by far the most extensive, but also the fastest.
 
 ``` {.python file="src/mandelbrot/domain_splitting.py"}
-import numba  # type:ignore
+from typing import Optional
 import numpy as np
-from typing import Optional   # , AsyncContextManager
 import asyncio
 from psutil import cpu_count  # type:ignore
 from contextlib import nullcontext
 
-from numba_progress import ProgressBar  # type:ignore
-
-from .bounding_box import BoundingBox, test_case
-from .plotting import plot_fractal
+from .bounding_box import BoundingBox
+from .numba_serial import compute_mandelbrot as mandelbrot_serial
 
 
-@numba.njit(nogil=True)
-def compute_mandelbrot_numba(result, width: int, height: int, center: complex,
-                             scale: complex, max_iter: int, progress):
-    for j in range(height):
-        for i in range(width):
-            c = center + (i - width // 2 + (j - height // 2) * 1j) * scale
-            z = 0.0+0.0j
-            for k in range(max_iter):
-                z = z**2 + c
-                if (z*z.conjugate()).real >= 4.0:
-                    break
-            result[j, i] = k
-        progress.update(width)
-    return result
-
-
-async def compute_mandelbrot(
+async def a_compute_mandelbrot(
         box: BoundingBox,
         max_iter: int,
-        progress: ProgressBar,
         semaphore: Optional[asyncio.Semaphore]):
-    result = np.zeros((box.height, box.width), np.int64)
     async with semaphore or nullcontext():
+        result = np.zeros((box.height, box.width), np.int64)
         await asyncio.to_thread(
-            compute_mandelbrot_numba,
-            result, box.width, box.height, box.center, box.scale,
-            max_iter=max_iter, progress=progress)
+                mandelbrot_serial, box, max_iter, result=result)
     return result
 
 
-async def main(throttle: Optional[int] = None):
-    sem = asyncio.Semaphore(throttle) if throttle is not None else None
+async def a_domain_split(box: BoundingBox, max_iter: int,
+                         sem: Optional[asyncio.Semaphore]):
     n_cpus = cpu_count(logical=True)
-
-    with ProgressBar(total=1, desc="compiling") as progress:
-        await compute_mandelbrot(BoundingBox(1, 1, 0, 1+1j), 1, progress, None)
-
-    box = test_case
-    max_iter = 1024
-
     split = box.split(n_cpus)
-    with ProgressBar(total=box.width*box.height) as progress:
-        split_result = await asyncio.gather(
-            *(asyncio.gather(
-                *(compute_mandelbrot(b, max_iter, progress, sem)
-                  for b in row))
-              for row in split))
-        result = np.block(split_result)
-    fig, _ = plot_fractal(box, np.log(result + 1))
-    fig.savefig("domain-split-output.png", bbox_inches="tight")
+    split_result = await asyncio.gather(
+        *(asyncio.gather(
+            *(a_compute_mandelbrot(b, max_iter, sem)
+              for b in row))
+          for row in split))
+    return np.block(split_result)
 
 
-if __name__ == "__main__":
-    asyncio.run(main())
+def compute_mandelbrot(box: BoundingBox, max_iter: int,
+                       throttle: Optional[int] = None):
+    sem = asyncio.Semaphore(throttle) if throttle is not None else None
+    return asyncio.run(a_domain_split(box, max_iter, sem))
 ```
 ::::
 
 ::::solution
 ## Numba vectorize
-A solution requiring the minimum amount of extra code, is to use Numba's `@guvectorize` decorator. The speed-up (on my machine) is not as dramatic as with the domain-decomposition though.
+Another solution is to use Numba's `@guvectorize` decorator. The speed-up (on my machine) is not as dramatic as with the domain-decomposition though.
 
 ``` {.python #bounding-box-methods}
 def grid(self):
@@ -307,16 +318,23 @@ def grid(self):
     g = np.mgrid[x0.imag:x1.imag:self.height*1j,
                  x0.real:x1.real:self.width*1j]
     return g[1] + g[0]*1j
+
+def da_grid(self):
+    """Return the complex values on the grid in a 2d array."""
+    x0 = self.center - self.extent / 2
+    x1 = self.center + self.extent / 2
+    x = np.linspace(x0.real, x1.real, self.width, endpoint=False)
+    y = np.linspace(x0.imag, x1.imag, self.height, endpoint=False)
+    g = da.meshgrid(x, y)
+    return g[1] + g[0]*1j
 ```
 
 ``` {.python file="src/mandelbrot/vectorized.py"}
+from typing import Any
 from numba import guvectorize, int64, complex128  # type:ignore
 import numpy as np
 
-from numba_progress import ProgressBar  # type:ignore
-
-from .bounding_box import BoundingBox, test_case
-from .plotting import plot_fractal
+from .bounding_box import BoundingBox
 
 
 @guvectorize([(complex128[:, :], int64, int64[:, :])],
@@ -334,33 +352,78 @@ def compute_mandelbrot_numba(inp, max_iter: int, result):
             result[j, i] = k
 
 
-def compute_mandelbrot(
-        box: BoundingBox, max_iter: int,
-        progress: ProgressBar):
+def compute_mandelbrot(box: BoundingBox, max_iter: int, throttle: Any = None):
     result = np.zeros((box.height, box.width), np.int64)
     c = box.grid()
     compute_mandelbrot_numba(c, max_iter, result)
-    progress.update(c.size)
     return result
+```
+::::
+
+::::solution
+## Benchmarks
+
+![Benchmarks](fig/mandelbrot-timings.svg){alt="performance curves"}
+
+``` {.python file="src/mandelbrot/bench_all.py"}
+from typing import Optional
+import timeit
+from . import numba_serial, numba_parallel, vectorized, domain_splitting
+from .bounding_box import BoundingBox, test_case
 
 
-def main():
-    box = test_case
-    max_iter = 1024
+compile_box = BoundingBox(16, 16, 0.0+0.0j, 1.0+1.0j)
+timing_box = test_case
 
-    with ProgressBar(total=1, desc="compiling") as progress:
-        compile_box = BoundingBox(1, 1, 0.0+0.0j, 1.0+1.0j)
-        compute_mandelbrot(compile_box, 1, progress)
 
-    with ProgressBar(total=box.width*box.height) as progress:
-        result = compute_mandelbrot(box, max_iter, progress)
+def compile_run(m):
+    m.compute_mandelbrot(compile_box, 1)
 
-    fig, _ = plot_fractal(box, np.log(result + 1))
-    fig.savefig("vectorized-output.png", bbox_inches="tight")
+
+def timing_run(m, throttle: Optional[int] = None):
+    m.compute_mandelbrot(timing_box, 1024, throttle=throttle)
+
+
+modules = ["numba_serial:1", "vectorized:1"] \
+        + [f"domain_splitting:{n}" for n in range(1, 9)] \
+        + [f"numba_parallel:{n}" for n in range(1, 9)]
 
 
 if __name__ == "__main__":
-    main()
+    with open("timings.txt", "w") as out:
+        headings = ["name", "n", "min", "mean", "max"]
+        print(f"{headings[0]:<20}" \
+              f"{headings[1]:>10}" \
+              f"{headings[2]:>10}" \
+              f"{headings[3]:>10}" \
+              f"{headings[4]:>10}",
+              file=out)
+        for mn in modules:
+            m, n = mn.split(":")
+            n_cpus = int(n)
+            setup = f"from mandelbrot.bench_all import timing_run, compile_run\n" \
+                    f"from mandelbrot import {m}\n" \
+                    f"compile_run({m})"
+            times = timeit.repeat(
+                stmt=f"timing_run({m}, {n_cpus})",
+                setup=setup,
+                number=1,
+                repeat=50)
+            print(f"{m:20}" \
+                  f"{n_cpus:>10}" \
+                  f"{min(times):10.5g}" \
+                  f"{sum(times)/len(times):10.5g}" \
+                  f"{max(times):10.5g}",
+                  file=out)
+
+    import pandas as pd
+    from plotnine import ggplot, geom_point, geom_ribbon, geom_line, aes
+    timings = pd.read_table("timings.txt", delimiter=" +", engine="python")
+    plot = ggplot(timings, aes(x="n", y="mean", ymin="min", ymax="max",
+                               color="name", fill="name")) \
+        + geom_ribbon(alpha=0.3, color="none") \
+        + geom_point() + geom_line()
+    plot.save("mandelbrot-timings.svg")
 ```
 ::::
 :::

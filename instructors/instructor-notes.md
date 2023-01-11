@@ -26,6 +26,8 @@ dask = {extras = ["complete"], version = "^2022.12.1"}
 richbench = "^1.0.3"
 matplotlib = "^3.6.2"
 numba-progress = "^0.0.4"
+pandas = "^1.5.2"
+plotnine = "^0.10.1"
 
 [tool.poetry.dev-dependencies]
 
@@ -34,3 +36,13 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 ```
 
+``` {.makefile file="src/Makefile"}
+.RECIPEPREFIX = >
+
+.PHONY: bench
+
+bench: mandelbrot-timings.svg
+
+mandelbrot-timings.svg:
+> poetry run python -m mandelbrot.bench_all
+```
