@@ -16,7 +16,7 @@ exercises: 10
 :::
 
 # Introduction to Asyncio
-Asyncio stands for "asynchronous IO", and as you might have guessed it has little to do with either asynchronous work or doing IO. In fact, the system is more like a carefully tuned set of gears running a multitude of tasks *as if* you have a lot of OS threads running. In the end they are all powered by the same crank. The gears in `asyncio` are called **coroutines**, its teeth moving other coroutines wherever you find the `await` keyword.
+Asyncio stands for "asynchronous IO", and as you might have guessed it has little to do with either asynchronous work or doing IO. In general, asynchronous is an adjective describing objects or events that are not coordinated in time. In fact, the `asyncio` system is more like a carefully tuned set of gears running a multitude of tasks *as if* you have a lot of OS threads running. In the end they are all powered by the same crank. The gears in `asyncio` are called **coroutines**, its teeth moving other coroutines wherever you find the `await` keyword.
 
 The main application for `asyncio` is hosting back-ends for web services, where a lot of tasks may be waiting on each other, while the server still needs to be responsive to new events. In that respect, `asyncio` is a little bit outside the domain of computational science. Nevertheless, you may encounter async code in the wild, and you *can* do parallelism with `asyncio` if you want a higher level abstraction but don't want to depend on `dask` or a similar alternative.
 
@@ -26,12 +26,24 @@ Many modern programming languages have features that are very similar to `asynci
 The main point of `asyncio` is that it offers a different formalism for doing work than what you're used to from functions. To see what that means, we need to understand functions a bit better.
 
 ### Call stacks
-FIXME: improve wording
+A function call is best understood in terms of a stack based system. When you call a function, you give it its arguments and forget for the moment what you were doing. Or rather, whatever you were doing, push it on a stack and forget about it. Then, with a clean sheet (called a stack frame), you start working on the given arguments until you arrive at a result. This result is what you remember, when you go back to the stack to see what you needed it for in the first place.
+In this manner, every function call pushes a frame to the stack, and every return statement, we pop back to the previous.
 
-A function call is best understood in terms of a stack based system. When you call a function, you give it its arguments and forget for the moment what you were doing. Or rather, whatever you were doing, push it on a stack and forget about it. Then, with a clean sheet, you start working on the given arguments until you arrive at a result. This result is what you remember, when you go back to the stack to see what you were doing.
-In this manner, every function call pushes a context to the stack, and every return statement, we pop back.
+[![](https://mermaid.ink/img/pako:eNp1kL1Ow0AQhF9luSYgHApEdUUogpCoKRCSm8U3JpbtXXM_NlGUd-dMYgqkdKvb-Wb25mAqdTDWBHwlSIWnhj8996UQcRWbkSNoy10HPz-dpvVmc_ucJK9VLG01dY72mmjowAHEEiZ46mFp2nGkJlB9_X3zOBssWLZYn8wsvSMUFHd_YNY_3N9dinubLScOv8TgMTaawhm9GPFCTmUVqRWdCpqwGkGCMYeFQVsIfaBWj6uZF81f1nm30BCXk3TpxeFfM6YwPXzPjctFHmZJafJ1PUpj8-jYt6Up5Zh1nKK-7qUyNvqEwqTBZZ9z6cbW3AUcfwB5sYta?type=png)](https://mermaid.live/edit#pako:eNp1kL1Ow0AQhF9luSYgHApEdUUogpCoKRCSm8U3JpbtXXM_NlGUd-dMYgqkdKvb-Wb25mAqdTDWBHwlSIWnhj8996UQcRWbkSNoy10HPz-dpvVmc_ucJK9VLG01dY72mmjowAHEEiZ46mFp2nGkJlB9_X3zOBssWLZYn8wsvSMUFHd_YNY_3N9dinubLScOv8TgMTaawhm9GPFCTmUVqRWdCpqwGkGCMYeFQVsIfaBWj6uZF81f1nm30BCXk3TpxeFfM6YwPXzPjctFHmZJafJ1PUpj8-jYt6Up5Zh1nKK-7qUyNvqEwqTBZZ9z6cbW3AUcfwB5sYta)
 
-Crucially, when we pop back, we forget about the context inside the function. This way, there is always a single concious stream of thought. Function calls can be evaluated by a single active agent.
+<details>
+<summary>Mermaid code for above diagram</summary>
+
+```mermaid
+sequenceDiagram
+  Caller->>+Function: Could you please answer me: what is f(x)?
+  Function->>-Caller: Yes, the answer is 42.
+  Caller->>+Function: What was the previous answer?
+  Function->>-Caller: I don't know, we've never spoken before!
+```
+</details>
+
+Crucially, when we pop back, we forget about the stack frame inside the function. This way, there is always a single concious stream of thought. Function calls can be evaluated by a single active agent.
 
 ### Coroutines
 :::instructor
@@ -67,6 +79,23 @@ islice(integers(), 0, 10)
 ```output
 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 ```
+
+[![](https://mermaid.ink/img/pako:eNqtkT1Pw0AMhv-KuYWBdIDxhjAEqepUJAaWLG7OTU-9j-DzlUZV_zsXhQgqMbJZ9vPafu2L6qIhpVWij0yhoxeLPaNvAwB2Yk8oBA06Rzyl5mhV1w-bINQTJw2vjjARJEEW6GIOYkP_Cy70D_x-QAGbQA4Egc4CIfsd8fPEL9SkmLUaHv-r0dNUCLG4iSdiWNIUDAwcF8uG_jC9bm5Hb-49pMg8VjDGDJ_EBPvIfRShALiLWe5u1qjr1brRsD1WRetcOVUcgM42zZdSlfLEHq0pf7hMylYVW55apUtokI-tasO1cJglvo2hU1o4U6XyYMqu3z9Teo8u0fUL2jOgcw?type=png)](https://mermaid.live/edit#pako:eNqtkT1Pw0AMhv-KuYWBdIDxhjAEqepUJAaWLG7OTU-9j-DzlUZV_zsXhQgqMbJZ9vPafu2L6qIhpVWij0yhoxeLPaNvAwB2Yk8oBA06Rzyl5mhV1w-bINQTJw2vjjARJEEW6GIOYkP_Cy70D_x-QAGbQA4Egc4CIfsd8fPEL9SkmLUaHv-r0dNUCLG4iSdiWNIUDAwcF8uG_jC9bm5Hb-49pMg8VjDGDJ_EBPvIfRShALiLWe5u1qjr1brRsD1WRetcOVUcgM42zZdSlfLEHq0pf7hMylYVW55apUtokI-tasO1cJglvo2hU1o4U6XyYMqu3z9Teo8u0fUL2jOgcw)
+
+<details>
+<summary>Mermaid code for above diagram</summary>
+
+```mermaid
+sequenceDiagram
+  Caller->>+Integers: Please start counting
+  Caller-->>Integers: What is the next number?
+  Integers-->>Caller: 1
+  Caller-->>Integers: What is the next number?
+  Integers-->>Caller: 2
+  GC-->>Integers: I'm sorry, you were forgotten about!
+  Integers->>-GC: Ok, I'll stop existing
+```
+</details>
 
 :::challenge
 ## Challenge: generate all even numbers
@@ -158,16 +187,56 @@ async def counter(name):
 await counter("Venus")
 ```
 
+``` {.output}
+Venus      000
+Venus      001
+Venus      002
+Venus      003
+Venus      004
+```
+
 We can have coroutines work concurrently when we `gather` two coroutines.
 
 ```python
 await asyncio.gather(counter("Earth"), counter("Moon"))
 ```
 
-Note that, although the Earth counter and Moon counter seem to operate at the same time, in actuality they are alternated by the scheduler and still running in a single thread!
+```output
+Earth      000
+Moon       000
+Earth      001
+Moon       001
+Earth      002
+Moon       002
+Earth      003
+Moon       003
+Earth      004
+Moon       004
+````
+
+
+Note that, although the Earth counter and Moon counter seem to operate at the same time, in actuality they are alternated by the scheduler and still running in a single thread! If you work outside the confines of Jupyter, you need to make sure to create an asynchronous main function and run it using `asyncio.run`. A typical program will look like this:
+
+```python
+import asyncio
+
+...
+
+async def main():
+    ...
+
+if __name__ == "__main__":
+    asyncio.run(main)
+```
+
+Asyncio, just like we saw with Dask, is contagious. Once you have async code at some low level, higher level code also needs to be async: [it's turtles all the way down](https://en.wikipedia.org/wiki/Turtles_all_the_way_down)! You may be tempted to do `asyncio.run` somewhere from the middle of your normal code to interact with the asyncronous parts. This can get you into trouble though, when you get multiple active asyncio run-times. While it is in principle possible to mix asyncio and classic code, it is in general considered bad practice to do so.
 
 ## Timing asynchronous code
 While Jupyter works very well with `asyncio`, one thing that doesn't work is line or cell-magic. We'll have to write our own timer.
+
+:::instructor
+It may be best to let participants copy paste this snippet from the collaborative document. You may want to explain what a context manager is, but don't overdo it. This is advanced code and may scare off novices.
+:::
 
 ``` {.python #async-timer}
 from dataclasses import dataclass
@@ -195,6 +264,10 @@ Now we can write:
 async with timer() as t:
   await asyncio.sleep(0.2)
 print(f"that took {t.time} seconds")
+```
+
+```output
+that took 0.20058414503000677 seconds
 ```
 
 These few snippets of code require advanced Python knowledge to understand. Rest assured that both classic coroutines and `asyncio` are a large topic to cover, and we're not going to cover all of it. At least, we can now time the execution of our code!
@@ -225,7 +298,7 @@ We can send work to another thread with `asyncio.to_thread`.
 
 ```python
 async with timer() as t:
-  await asyncio.to_thread(calc_pi, 10**7)
+    await asyncio.to_thread(calc_pi, 10**7)
 ```
 
 :::challenge
@@ -235,9 +308,9 @@ We've seen that we can gather multiple coroutines using `asyncio.gather`. Now ga
 ::::solution
 ```python
 async with timer() as t:
-  result = await asyncio.gather(
-    asyncio.to_thread(calc_pi, 10**7),
-    asyncio.to_thread(calc_pi, 10**7))
+    result = await asyncio.gather(
+       asyncio.to_thread(calc_pi, 10**7),
+       asyncio.to_thread(calc_pi, 10**7))
 ```
 ::::
 :::
@@ -253,15 +326,29 @@ async def calc_pi_split(N, M):
 Now, see if we get a speed up.
 
 ``` {.python #async-calc-pi-main}
-async with timer():
+async with timer() as t:
     pi = await asyncio.to_thread(calc_pi, 10**8)
     print(f"Value of π: {pi}")
+
+print(f"that took {t.time} seconds")
+```
+
+```output
+Value of π: 3.1418552
+that took 2.3300534340087324 seconds
 ```
 
 ``` {.python #async-calc-pi-main}
-async with timer():
+async with timer() as t:
     pi = await calc_pi_split(10**7, 10)
     print(f"Value of π: {pi}")
+
+print(f"that took {t.time} seconds")
+```
+
+```output
+Value of π: 3.1416366400000006
+that took 0.5876454019453377 seconds
 ```
 
 # Working with `asyncio` outside Jupyter
@@ -272,22 +359,34 @@ Jupyter already has an asyncronous loop running for us. If you want to run scrip
 Collect what we have done so far to compute $\pi$ in parallel into a script and run it.
 
 ::::solution
-``` {.python file="src/calc_pi/__init__.py"}
+Make sure that you create an `async` main function, and run it using `asyncio.run`. Create a small module called `calc_pi`.
 
+``` {.python file="src/calc_pi/__init__.py"}
+# file: calc_pi/__init__.py
+# may remain empty
 ```
 
+Put the Numba code in a separate file `calc_pi/numba.py`.
+
 ``` {.python file="src/calc_pi/numba.py"}
+# file: calc_pi/numba.py
+
 <<calc-pi-numba>>
 ```
 
+Put the async timer function in a separate file `async_timer.py`.
+
 ``` {.python file="src/async_timer.py"}
+# file: async_timer.py
+
 <<async-timer>>
 ```
 
 ``` {.python file="src/calc_pi/async_pi.py"}
+# file: calc_pi/async_pi.py
+
 import asyncio
 from async_timer import timer
-
 from .numba import calc_pi
 
 <<async-calc-pi>>
@@ -299,6 +398,8 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 ```
+
+You may run this using `python -m calc_pi.async_pi`.
 ::::
 :::
 
@@ -316,7 +417,7 @@ from .numba import calc_pi
 from .async_pi import calc_pi_split
 from async_timer import timer
 
-calc_pi(1)
+calc_pi(1)  # compile the numba function
 
 
 async def main():
@@ -339,11 +440,13 @@ if __name__ == "__main__":
 
 ![timings](fig/asyncio-timings.svg){alt="a dip at njobs=10 and overhead ~0.1ms per task"}
 
-From these timings we can learn that the overhead is around 0.1ms per task.
+The work takes about 0.1s more when using 1000 tasks, so assuming that overhead scales linearly with the amount of tasks, we can learn that the overhead is around 0.1ms per task.
 ::::
 :::
 
 :::keypoints
+- Use the `async` keyword to write asynchronous code.
+- Use `await` to call coroutines.
 - Use `asyncio.gather` to collect work.
 - Use `asyncio.to_thread` to perform CPU intensive tasks.
 - Inside a script: always make an asynchronous `main` function, and run it with `asyncio.run`.
