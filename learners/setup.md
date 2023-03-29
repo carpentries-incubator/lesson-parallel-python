@@ -7,7 +7,7 @@ sets the Learner needs to have installed.
 
 ## Data Sets
 
-Clone the repository at [esciencecenter-digital-skills/parallel-python-workshop](https://github.com/esciencecenter-digital-skills/parallel-python-workshop). Follow instructions there, and run the unit tests to see if your setup is working.
+Clone the repository at [esciencecenter-digital-skills/parallel-python-workshop](https://github.com/esciencecenter-digital-skills/parallel-python-workshop). Follow software setup instructions there to setup the environment, and run the unit tests to see if your setup is working.
 
 ## Software Setup
 
@@ -20,6 +20,17 @@ This is an intermediate level Python course. We expect familiarity with the comm
 
 :::solution
 ### Conda
+From within the cloned repository root directory, run the following commands to create a conda environment from the environment.yml file and activate it
+```bash
+$ conda env create -f environment.yml --prefix ./env
+$ conda activate ./env
+```
+
+Next, run pytest and see if it completes all tests without errors.
+
+```bash
+$ pytest
+```
 
 :::
 
