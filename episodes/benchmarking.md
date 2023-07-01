@@ -10,18 +10,18 @@ exercises: 20
 :::
 
 :::objectives
-- View performance on system monitor
-- Find out how many cores your machine has
-- Use `%time` and `%timeit` line-magic
-- Use a memory profiler
-- Plot performance against number of work units
-- Understand the influence of hyper-threading on timings
+- View performance on system monitor.
+- Find out how many cores your machine has.
+- Use `%time` and `%timeit` line-magic.
+- Use a memory profiler.
+- Plot performance against number of work units.
+- Understand the influence of hyper-threading on timings.
 :::
 
 
 # A first example with Dask
 We will create parallel programs in Python later. First let's see a small example. Open
-your system monitor (this will vary between specific operating systems), and run the following code examples.
+your System Monitor (the application will vary between specific operating systems), and run the following code examples:
 
 ```python
 # Summation making use of numpy:
@@ -39,7 +39,7 @@ result = work.compute()
 
 :::callout
 ## Try a heavy enough task
-Your radar may not detect so small a task. In your computer, you may have to gradually raise the problem size to ``10**8`` or ``10**9`` to observe the effect in a long enough run. But be careful and increase slowly! Asking for too much memory can make your computer slow to a crawl.
+Your radar may not detect so small a task. In your computer you may have to gradually raise the problem size to ``10**8`` or ``10**9`` to observe the effect in long enough a run. But be careful and increase slowly! Asking for too much memory can make your computer slow to a crawl.
 :::
 
 ![System monitor](fig/system-monitor.jpg){alt="screenshot of system monitor"}
@@ -54,12 +54,12 @@ np.arange(10**7).sum()
 
 The `%%time` line magic checks how long it took for a computation to finish. It does not affect how the computation is performed. In this regard it is very similar to the `time` shell command.
 
-If run the chunk several times, we will notice variability in the reported times.
+If we run the chunk several times, we will notice variability in the reported times.
 How can we trust this timer, then?
 A possible solution will be to time the chunk several times, and take the average time as our valid measure.
-The `%%timeit` line magic does exactly this in a concise and conveninet manner!
+The `%%timeit` line magic does exactly this in a concise and convenient manner!
 `%%timeit` first measures how long it takes to run a command once, then
-repeats it enough times to get an average run-time. Also, `%%timeit` can measure run times discountinh the overhead of setting up a problem and measuring only the performance of the code in the cell.
+repeats it enough times to get an average run-time. Also, `%%timeit` can measure run times discounting the overhead of setting up a problem and measuring only the performance of the code in the cell.
 So this outcome is more trustworthy.
 
 ```python
@@ -140,7 +140,7 @@ Using more cores for a computation can decrease the run time. The first question
 
 :::callout
 ## Find out the number of cores in your machine
-The number of cores can be found from Python executing:
+The number of cores can be found from Python upon executing:
 
 ```python
 import psutil
@@ -155,7 +155,7 @@ which enables each physical CPU core to execute several threads at the same time
 performance may scale unexpectedly. There are many reasons for this, hyper-threading being one of them.
 See the ensuing example.
 
-On a machine with 4 physical and 8 logical cores, this admittedly oversimplistic benchmark:
+On a machine with 4 physical and 8 logical cores, this admittedly over-simplistic benchmark:
 
 ```python
 x = []
@@ -176,13 +176,13 @@ data.set_index("n").plot()
 
 :::discussion
 ## Discussion
-Why is the runtime increasing if we add more than 4 cores? This has to do with **hyper-threading**. On most architectures it does not make much sense to use more workers than physical cores you have.
+Why does the runtime increase if we add more than 4 cores? This has to do with **hyper-threading**. On most architectures it does not make much sense to use more workers than the physical cores you have.
 :::
 
 :::keypoints
 - Understanding performance is often non-trivial.
 - Memory is just as important as speed.
-- To  measure is to know.
+- To measure is to know.
 :::
 
 
