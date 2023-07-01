@@ -9,15 +9,15 @@ exercises: 5
 - What problems are we solving, and what are we **not** discussing?
 - Why do we use Python?
 - What is parallel programming?
-- Why can writing a parallel program be hard?
+- Why can writing a parallel program be challenging?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Recognize serial and parallel patterns
-- Identify problems that can be parallelized
-- Understand a dependency diagram
+- Recognize serial and parallel patterns.
+- Identify problems that can be parallelized.
+- Understand a dependency diagram.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -25,11 +25,11 @@ exercises: 5
 
 :::callout
 ## What problems are we solving?
-Ask around what problems participants encountered: "Why did you sign up?". 
-Specifically: which task in your field of expertise you want to parallelize?
+Ask around what problems participants encountered: "Why did you sign up?"
+Specifically: "Which task in your field of expertise do you want to parallelize?"
 :::
 
-Most problems will fit in one of two categories:
+Most problems will fit in either category:
 - I wrote this code in Python and it is not fast enough.
 - I run this code on my laptop, but the target size of the problem is bigger than its RAM.
 
@@ -40,9 +40,9 @@ We introduce the following modules:
 3. `dask` makes scalable parallel computing easy.
 4. `numba` speeds up your Python functions by translating them to optimized machine code.
 5. `memory_profile` monitors memory performance.
-6. `asyncio` Python's native asynchronous programming.
+6. `asyncio` is Python's native asynchronous programming.
 
-FIXME: Actually explain functional programming & distributed programming.
+FIXME: Actually explain functional programming and distributed programming.
 More importantly, we show how to change the design of a program to fit parallel paradigms. 
 This often involves techniques from **functional programming**.
 
@@ -52,7 +52,7 @@ In this course we will not talk about **distributed programming**.
 This is a huge can of worms. 
 It is easy to show simple examples, but solutions for particular problems will be wildly different. 
 Dask has a lot of functionalities to help you set up runs on a network. 
-The important bit is that, once you have made your code suitable for parallel computing, you will have the right mind-set to get it to work in a distributed environment.
+The important bit is that, once you have made your code suitable for parallel computing, you will have the right mindset to get it to work in a distributed environment.
 :::
 
 # Overview and rationale
@@ -62,30 +62,29 @@ This is an advanced course.
 Why is it advanced? 
 We (hopefully) saw in the discussion that, although many of your problems share similar characteristics, the details will determine the solution. 
 We all need our algorithms, models, analysis to run so that many hands make light work. 
-When such a situation arises with a group of people, we start with a meeting discussing who does what, when do we meet again to sync up, and so on. 
+When such a situation arises in a group of people, we start with a meeting discussing who does what, when do we meet again and sync up, and so on. 
 After a while you can get the feeling that all you do is to be in meetings. 
 We will see that several abstractions can make our life easier.
 This course illustrates these abstractions making ample use of Dask.
 
 - Vectorized instructions: tell many workers to do the same work on a different piece of data.
   This is where `dask.array` and `dask.dataframe` come in.
-  We will illustrate this model of working by computing the number $\pi$ later on.
+  We illustrate this model of working by computing the number $\pi$ later on.
 - Map/filter/reduce: this methodology combines different functionals to create a larger program.
   We implement this formalism when using `dask.bag` to count the number of unique words in a novel.
-- Task-based parallelization: this may be the most generic abstraction, as all the others can be expressed
-  in terms of tasks or workflows. This is `dask.delayed`.
+- Task-based parallelization: this may be the most generic abstraction, as all the others can be expressed in terms of tasks or workflows. This is `dask.delayed`.
 
 # Why Python?
 Python is one of most widely used languages for scientific data analysis, visualization, and even modelling and simulation.
-The popularity of Python is mainly due to the two pillars of a friendly syntax and the availability of many high-quality libraries.
+The popularity of Python is mainly due to the two pillars of the friendly syntax and the availability of many high-quality libraries.
 
 :::callout
 ## It's not all good news
-The flexibility of Python comes with a few downsides though:
+The flexibility of Python comes with a few downsides, though:
 - Python code typically does not perform as fast as lower-level implementations in C/C++ or Fortran.
 - Parallelizing Python code to work efficiently on many-core architectures is not trivial.
 
-This workshop addresses both issues, with an emphasis on efficiently running parallel Python code on multiple cores.
+This workshop addresses both issues, with an emphasis on running parallel Python code efficiently on multiple cores.
 :::
 
 # What is parallel computing?
@@ -103,7 +102,7 @@ Note that the output of one function can become the input of another one.
 The diagram above is the typical diagram of a **serial computation**. 
 If you ever used a loop to update a value, you used serial computation.
 
-If our computation involves **independent work** (that is, the results of each function are independent of the results of the application of the rest), we can structure our computation as follows:
+If our computation involves **independent work** (that is, the results of each function are independent of the results of applying the rest), we can structure our computation as follows:
 
 ![Parallel computation](fig/parallel.png){alt="boxes and arrows with two parallel pipe lines"}
 
@@ -116,13 +115,13 @@ In the diagram above, we can assign each of the three functions to one core, so 
 
 :::callout
 ## Do eight processors work eight as fast as one?
-It may be tempting to think that using eight cores instead of one would increase the execution speed eigthfold. 
-For now, it is ok to use this as a first approximation to reality. 
+It may be tempting to think that using eight cores instead of one would increase the execution speed eightfold. 
+For now, it is OK to use this as a first approximation to reality. 
 Later in the course we see that things are actually more complicated.
 :::
 
 ## Parallelizable and non-parallelizable tasks
-Some tasks are easily parallelizable while others inherently are not. 
+Some tasks are easily parallelizable while others are not so inherently. 
 However, it might not always be immediately apparent that a task is parallelizable.
 
 Let us consider the following piece of code:
@@ -213,7 +212,7 @@ For instance, in our first example of a non-parallelizable task, we mentioned th
 Conveniently, a [closed form expression to compute the n-th Fibonacci number](https://en.wikipedia.org/wiki/Fibonacci_number#Closed-form_expression) exists.
 
 Last but not least, do not let the name discourage you: if your algorithm happens to be embarrassingly parallel, that's good news! 
-The "embarrassingly" evokes the feeling of "this is great!, how did I not notice before?!"
+The adverb "embarrassingly" evokes the feeling of "this is great!, how did I not notice before?!"
 :::
 
 :::challenge
@@ -226,7 +225,7 @@ We have the following recipe:
 4. (20 min) Remove the bay leaf, add the vegetables, and simmer for 20 more minutes.
    Stir the soup occasionally.
 6. (1 day) Leave the soup for one day.
-   Reheat before serving and add a sliced smoked sausage (vegetarian options are also welcome).
+   Re-heat before serving and add a sliced smoked sausage (vegetarian options are also welcome).
    Season with pepper and salt.
 
 Imagine you are cooking alone.
