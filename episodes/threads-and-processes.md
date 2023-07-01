@@ -43,7 +43,7 @@ t2.join()
 While mileage may vary, parallelizing `calc_pi`, `calc_pi_numpy` and `calc_pi_numba` in this way will
 not give the theoretical speed-up. `calc_pi_numba` should give *some* speed-up, but nowhere near the
 ideal scaling for the number of cores. This is because, at any given time, Python only allows a single thread to access the
-interperter, a feature also known as the Global Interpreter Lock.
+interpreter, a feature also known as the Global Interpreter Lock.
 :::
 
 ## A few words about the Global Interpreter Lock
@@ -56,7 +56,7 @@ Roughly speaking, there are two classes of solutions to circumvent/lift the GIL:
 - Run multiple Python instances using `multiprocessing`.
 - Keep important code outside Python using OS operations, C++ extensions, Cython, Numba.
 
-The downside of running multiple Python instances is that we need to share program state between different processes.
+The downside of running multiple Python instances is that we need to share the program state between different processes.
 To this end, you need to serialize objects. Serialization entails converting a Python object into a stream of bytes
 that can then be sent to the other process or, for example, stored to disk. This is typically done using `pickle`, `json`, or
 similar, and creates a large overhead.
@@ -66,7 +66,7 @@ Trying out and profiling your application is the only way to know for sure.
 
 There are several options to make your own routines not subjected to the GIL: fortunately, `numba` makes this very easy.
 
-We can force off the GIL in Numba code by setting `nogil=True` inside the `numba.jit` decorator.
+We can force off the GIL in Numba code by setting `nogil=True` inside the `numba.jit` decorator:
 
 ```python
 @numba.jit(nopython=True, nogil=True)
@@ -85,7 +85,7 @@ while the `nogil` argument disables the GIL during the execution of the function
 
 :::callout
 ## Use `nopython=True` or `@numba.njit`
-It is generally a good idea to use `nopython=True` with `@numba.jit` to make sure the entire
+It is generally good practice to use `nopython=True` with `@numba.jit` to make sure the entire
 function is running without referencing Python objects, because that will dramatically slow
 down most Numba code. The decorator `@numba.njit` even has `nopython=True` by default. 
 :::
