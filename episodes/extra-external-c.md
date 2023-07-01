@@ -5,7 +5,7 @@ exercises: 30
 ---
 
 :::questions
-- Which options are available to call from Python code C and C++ libraries?
+- Which options are available to call from Python C and C++ libraries?
 - How does this work together with Numpy arrays?
 - How do I use this in multiple threads while lifting the GIL?
 :::
@@ -127,14 +127,14 @@ Now we can time our compiled `sum_range` C library, e.g. from the iPython interf
 2.69 ms ± 6.01 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
 ~~~
 
-If you compare with the Numba timing from [Episode 3](computing-pi.md), you will see that the C library for `sum_range` is faster than
-the numpy computation but significantly slower than the `numba.jit`-decorated function.
+If you contrast with the Numba timing in [Episode 3](computing-pi.md), you will see that the C library for `sum_range` is faster than
+the Numpy computation but significantly slower than the `numba.jit`-decorated function.
 
 :::challenge
 ## C versus Numba
 Check if the Numba version of this conditional `sum range` function outperforms its C counterpart.
 
-Insprired by [a blog by Christopher Swenson](https://caswenson.com/2009_06_13_bypassing_the_python_gil_with_ctypes.html).
+Inspired by [a blog by Christopher Swenson](https://caswenson.com/2009_06_13_bypassing_the_python_gil_with_ctypes.html).
 
 ~~~c
 long long conditional_sum_range(long long to)
@@ -230,7 +230,7 @@ gives
 array([ 0,  0,  1,  3,  6, 10, 15, 21, 28, 36])
 ~~~
 
-It does not crash! You can check that the array is upon subtracting the previous sum from each sum (except the first):
+It does not crash! You can check that the array is correct upon subtracting the previous sum from each sum (except the first):
 
 ~~~python
 %out=sum_range(ys)
@@ -243,7 +243,7 @@ which gives
 array([0, 1, 2, 3, 4, 5, 6, 7, 8])
 ~~~
 
-that is, the elements of `ys` except the last, as expected.
+which are the elements of `ys` except the last, as expected.
 
 # Call the C library from multiple threads simultaneously.
 We can show that a C library compiled using `pybind11` can be run as multithreaded. Try the following from an iPython shell:
@@ -310,7 +310,7 @@ Now compile again:
 c++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` test.c -o test_pybind.so
 ~~~
 
-Reimport the rebuilt shared object (only possible after quitting and relaunching the iPython interpreter) and time again.
+Import again the rebuilt shared object (only possible after quitting and relaunching the iPython interpreter), and time again.
 
 This code:
 
@@ -346,7 +346,7 @@ as you would expect for two `sum_range` modules running in parallel.
 
 :::keypoints
 - Multiple options are available to call external C and C++ libraries, and the best choice depends on the complexity of your problem.
-- Obviously, there is an extra compile and link step, but you will get a much faster execution compared to pure Python.
+- Obviously, there is an extra compile-and-link step, but the execution will be much faster than pure Python.
 - Also, the GIL will be circumvented in calling these libraries.
 - Numba might also offer you the speed-up you want with even less effort.
 :::
