@@ -1,16 +1,15 @@
----
 title: 'Exercise with Fractals'
 teaching: 10
 exercises: 50
 ---
 
 :::questions
-- Can we try a real problem now?
+- Can we tackle a real problem now?
 :::
 
 :::objectives
-- Create a strategy to parallelise existing code
-- Apply previous lessons
+- Create a strategy to parallelize existing code.
+- Apply previous lessons.
 :::
 
 # The Mandelbrot and Julia fractals
@@ -27,7 +26,7 @@ fractal](https://en.wikipedia.org/wiki/Mandelbrot_fractal).
 
 :::callout
 ## Complex numbers
-Complex numbers are a special representation of rotations and scalings in the two-dimensional plane. Multiplying two complex numbers is the same as taking a point, rotate it by an angle $\phi$ and scale it by the absolute value. Multiplying with a number $z \in \mathbb{C}$ by 1 preserves $z$. Multiplying a point at $i = (0, 1)$ (having a positive angle of 90 degrees and absolute value 1), rotates it anti-clockwise by 90 degrees. Then you might see that $i^2 = (-1, 0)$. The funny thing is, that we can treat $i$ as any ordinary number, and all our algebra still works out. This is actually nothing short of a miracle! We can write a complex number
+Complex numbers are a special representation of rotations and scalings in the two-dimensional plane. Multiplying two complex numbers is the same as taking a point, rotate it by an angle $\phi$ and scale it by the absolute value. Multiplying with a number $z \in \mathbb{C}$ by 1 preserves $z$. Multiplying a point at $i = (0, 1)$ (having a positive angle of 90 degrees and absolute value 1), rotates it anti-clockwise by 90 degrees. Then you might see that $i^2 = (-1, 0)$. The funny thing is that we can treat $i$ as any ordinary number, and all our algebra still works out. This is actually nothing short of a miracle! We can write a complex number
 
 $$z = x + iy,$$
 
@@ -78,8 +77,8 @@ ax.set_xlabel("$\Re(c)$")
 ax.set_ylabel("$\Im(c)$")
 ```
 
-Things become really loads of fun when we start to zoom in. We can play around with the `center` and
-`extent` values (and necessarily `max_iter`) to control our window.
+Things become really loads of fun when we zoom in. We can play around with the `center` and
+`extent` values, and necessarily `max_iter`, to control our window.
 
 ```python
 max_iter = 1024
@@ -93,11 +92,11 @@ When we zoom in on the Mandelbrot fractal, we get smaller copies of the larger s
 
 :::challenge
 ## Exercise
-Make this into an efficient parallel program. What kind of speed-ups do you get?
+Turn this into an efficient parallel program. What kind of speed-ups do you get?
 
 ::::solution
 ### Create a `BoundingBox` class
-We start with a naive implementation. It may be convenient to define a `BoundingBox` class in a separate module `bounding_box.py`. We'll add methods to this class later on.
+We start with a naive implementation. It may be convenient to define a `BoundingBox` class in a separate module `bounding_box.py`. We add methods to this class later on.
 
 ``` {.python file="src/mandelbrot/bounding_box.py"}
 from dataclasses import dataclass
@@ -156,7 +155,7 @@ def plot_fractal(box: BoundingBox, values: np.ndarray, ax=None):
 
 ::::solution
 ## Some solutions
-The main approach with Python will be: use Numba to make this fast. Then there are two ways to parallelize: let Numba parallelize the function, or do a manual domain decomposition and use one of many ways in Python to run things multi-threaded. There is a third way: create a vectorized function and parallelize using `dask.array`. This last option is almost always slower than `@njit(parallel=True)` or domain decomposition.
+The natural approach with Python is to speed this up with Numba. Then, there are three ways to parallelize: first, let Numba parallelize the function; second, do a manual domain decomposition and use one of the many Python ways to run things multi-threaded; third, create a vectorized function and parallelize using `dask.array`. This last option is almost always slower than `@njit(parallel=True)` and domain decomposition.
 
 ``` {.python file="src/mandelbrot/__init__.py"}
 
@@ -207,7 +206,7 @@ def compute_mandelbrot(
 ```
 
 ### Numba `parallel=True`
-We can parallelize loops directly with Numba. Pass the flag `parallel=True` and use `prange` to create the loop. Here it is even more important to obtain the result array outside the context of Numba, or the result will be slower than the serial version.
+We can parallelize loops directly with Numba. Pass the flag `parallel=True` and use `prange` to create the loop. Here, it is even more important to obtain the result array outside the context of Numba, otherwise the result will be slower than the serial version.
 
 ``` {.python file="src/mandelbrot/numba_parallel.py"}
 from typing import Optional
@@ -247,7 +246,7 @@ def compute_mandelbrot(box: BoundingBox, max_iter: int,
 
 ::::solution
 ## Domain splitting
-We split the computation into a set of sub-domains. The `BoundingBox.split()` method is designed such that if we deep-map the resulting list-of-lists, we can recombine the results using `numpy.block()`.
+We split the computation into a set of sub-domains. The `BoundingBox.split()` method is designed so that, if we deep-map the resulting list-of-lists, we can recombine the results using `numpy.block()`.
 
 ``` {.python #bounding-box-methods}
 def split(self, n):
@@ -308,7 +307,7 @@ def compute_mandelbrot(box: BoundingBox, max_iter: int,
 
 ::::solution
 ## Numba vectorize
-Another solution is to use Numba's `@guvectorize` decorator. The speed-up (on my machine) is not as dramatic as with the domain-decomposition though.
+Another solution is to use Numba's `@guvectorize` decorator. The speed-up (on my machine) is not as dramatic as with the domain decomposition though.
 
 ``` {.python #bounding-box-methods}
 def grid(self):
@@ -458,12 +457,12 @@ If we take the center of the last image, we get the following rendering of the J
 
 :::challenge
 ## Generalize
-Can you generalize your Mandelbrot code, such that you can compute both the Mandelbrot and the Julia sets in an efficient manner, while reusing as much of the code?
+Can you generalize your Mandelbrot code to compute both the Mandelbrot and the Julia sets  efficiently, while reusing as much code as possible?
 :::
 
 :::keypoints
-- Actually making code faster is not always straight forward
-- Easy one-liners *can* get you 80% of the way
-- Writing clean, modular code often makes it easier to parallelise later on
+- Actually making code faster is not always straightforward.
+- Easy one-liners *can* get you 80% of the way.
+- Writing clean and modular code often makes parallelization easier later on.
 :::
 
