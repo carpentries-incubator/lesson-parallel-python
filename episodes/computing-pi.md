@@ -18,14 +18,14 @@ exercises: 30
 
 # Parallelizing a Python application
 In order to recognize the advantages of parallelism we need an algorithm that is easy to parallelize, complex enough to take a few seconds of CPU time, understandable, and also interesting not to scare away the interested learner.
-Estimating the value of number π is a classical problem to demonstrate parallel programming.
+Estimating the value of number $\pi$ is a classical problem to demonstrate parallel programming.
 
 The algorithm we present is a classical demonstration of the power of Monte Carlo methods.
 This is a category of algorithms using random numbers to approximate exact results.
 This approach is simple and has a straightforward geometrical interpretation.
 
-We can compute the value of π using a random number generator. We count the points falling inside the blue circle M compared to the green square N.
-The ratio 4M/N then approximates π.
+We can compute the value of $\pi$ using a random number generator. We count the points falling inside the blue circle M compared to the green square N.
+The ratio 4M/N then approximates $\pi$.
 
 ![Computing Pi](fig/calc_pi_3_wide.svg){alt="the area of a unit sphere contains a multiple of pi"}
 
@@ -109,15 +109,15 @@ This implementation is much faster than the 'naive' implementation above:
 :::discussion
 ## Discussion: is this all better?
 What is the downside of the vectorized implementation?
-- It uses more memory
-- It is less intuitive
-- It is a more monolithic approach, i.e. you cannot break it up in several parts
+- It uses more memory.
+- It is less intuitive.
+- It is a more monolithic approach, i.e., you cannot break it up in several parts.
 :::
 
 :::challenge
 ## Challenge: Daskify
 Write `calc_pi_dask` to make the Numpy version parallel. Compare its speed and memory performance with
-the Numpy version. NB: Remember that API of `dask.array` mimics that of the Numpy.
+the Numpy version. NB: Remember that the API of `dask.array` mimics that of the Numpy.
 
 ::::solution
 ## Solution
@@ -166,7 +166,7 @@ Let's time three versions of the same test. First, native Python iterators:
 190 ms ± 3.26 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
 ```
 
-Then, with Numpy:
+Second, with Numpy:
 
 ```python
 %timeit np.arange(10**7).sum()
@@ -176,7 +176,7 @@ Then, with Numpy:
 17.5 ms ± 138 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
 ```
 
-Finally, with Numba:
+Third, with Numba:
 
 ```python
 %timeit sum_range_numba(10**7)
@@ -186,7 +186,7 @@ Finally, with Numba:
 162 ns ± 0.885 ns per loop (mean ± std. dev. of 7 runs, 10000000 loops each)
 ```
 
-Numba is hundredfold faster in this case! It gets this speedup with "just-in-time" compilation (JIT) —, that is, compiling the Python
+Numba is hundredfold faster in this case! It gets this speedup with "just-in-time" compilation (JIT) — that is, compiling the Python
 function into machine code just before it is called, as the `@numba.jit` decorator indicates.
 Numba does not support every Python and Numpy feature, but functions written with a for-loop with a large number of iterates, like in our `sum_range_numba()`, are good candidates.
 
@@ -199,7 +199,7 @@ The first time you call a function decorated with `@numba.jit`, you may see no o
 
 Why does this happen?
 On the first call, the JIT compiler needs to compile the function. On subsequent calls, it reuses the
-function previously compiled. The compiled function can *only* be reused if the types of its arguments (int, float, and the like) are the same as the point of compilation.
+function previously compiled. The compiled function can *only* be reused if the types of its arguments (int, float, and the like) are the same as at the point of compilation.
 
 See this example, where `sum_range_numba` is timed once again with a float argument instead of an int:
 ```python
