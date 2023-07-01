@@ -10,12 +10,12 @@ exercises: 30
 :::
 
 :::objectives
-- Recognize `map`, `filter` and `reduction` patterns
-- Create programs using these building blocks
-- Use the `visualize` method to create dependency graphs
+- Recognize `map`, `filter` and `reduction` patterns.
+- Create programs using these building blocks.
+- Use the `visualize` method to create dependency graphs.
 :::
 
-In computer science *bags* are unordered collections of data. In Dask, a `bag` is a collection that get chunked internally. Operations on a bag are automatically parallelized over the chunks inside the bag.
+In computer science *bags* are unordered collections of data. In Dask, a `bag` is a collection that gets chunked internally. Operations on a bag are automatically parallelized over the chunks inside the bag.
 
 Dask bags let you compose functionality using several primitive patterns: the most important of these are `map`, `filter`, `groupby`, `flatten`, and `reduction`.
 
@@ -51,7 +51,7 @@ bag = db.from_sequence(['mary', 'had', 'a', 'little', 'lamb'])
 
 ### Map
 
-A function that squares its argument is a mapping function that illustrates the concept of `map`:
+A function squaring its argument is a mapping function that illustrates the concept of `map`:
 
 ~~~python
 # Create a function for mapping
