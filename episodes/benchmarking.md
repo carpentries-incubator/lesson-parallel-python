@@ -71,7 +71,7 @@ You can store the output of `%%timeit` in a Python variable using the `-o` flag:
 
 ```python
 time = %timeit -o np.arange(10**7).sum()
-print(f"Time taken: {time.average:.4f}s")
+print(f"Time taken: {time.average:.4f} s")
 ```
 
 Note that this metric does not tell you anything about memory consumption or efficiency.
@@ -110,8 +110,8 @@ memory_dask = memory_usage(sum_with_dask, interval=0.01)
 # Plot results
 plt.plot(memory_numpy, label='numpy')
 plt.plot(memory_dask, label='dask')
-plt.xlabel('Time step')
-plt.ylabel('Memory / MB')
+plt.xlabel('Interval counter [-]')
+plt.ylabel('Memory usage [MiB]')
 plt.legend()
 plt.show()
 ```
