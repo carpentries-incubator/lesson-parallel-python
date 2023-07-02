@@ -151,7 +151,7 @@ Although we are performing the loops in a serial way in the snippet above, nothi
 The following example shows that parts of the computations can be done independently:
 
 ```python
-x = [1, 2, 4, 4]
+x = [1, 2, 3, 4]
 
 chunk1 = x[:2]
 chunk2 = x[2:]
@@ -178,7 +178,11 @@ These kinds of algorithms are known as [embarrassingly parallel](https://en.wiki
 An example of this kind of problem is squaring each element in a list, which can be done as follows:
 
 ```python
+x = [1, 2, 3, 4]
+
 y = [n**2 for n in x]
+
+print(y)
 ```
 
 Each task of squaring a number is independent of all other elements in the list.
