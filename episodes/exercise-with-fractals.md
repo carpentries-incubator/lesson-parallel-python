@@ -49,14 +49,14 @@ We may compute the Mandelbrot as follows:
 max_iter = 256
 width = 256
 height = 256
-center = -0.8+0.0j
-extent = 3.0+3.0j
+center = -0.8 + 0.0j
+extent = 3.0 + 3.0j
 scale = max((extent / width).real, (extent / height).imag)
 
 result = np.zeros((height, width), int)
 for j in range(height):
     for i in range(width):
-        c = center + (i - width // 2 + (j - height // 2)*1j) * scale
+        c = center + (i - width // 2 + 1j * (j - height // 2)) * scale
         z = 0
         for k in range(max_iter):
             z = z**2 + c
@@ -72,7 +72,7 @@ fig, ax = plt.subplots(1, 1, figsize=(10, 10))
 plot_extent = (width + 1j * height) * scale
 z1 = center - plot_extent / 2
 z2 = z1 + plot_extent
-ax.imshow(result**(1/3), origin='lower', extent=(z1.real, z2.real, z1.imag, z2.imag))
+ax.imshow(result**(1 / 3), origin='lower', extent=(z1.real, z2.real, z1.imag, z2.imag))
 ax.set_xlabel("$\Re(c)$")
 ax.set_ylabel("$\Im(c)$")
 ```
@@ -82,8 +82,8 @@ Things become really loads of fun when we zoom in. We can play around with the `
 
 ```python
 max_iter = 1024
-center = -1.1195+0.2718j
-extent = 0.005+0.005j
+center = -1.1195 + 0.2718j
+extent = 0.005 + 0.005j
 ```
 
 When we zoom in on the Mandelbrot fractal, we get smaller copies of the larger set!
@@ -135,7 +135,7 @@ matplotlib.use(backend="Agg")
 from matplotlib import pyplot as plt
 import numpy as np
 
-from .bounding_box import BoundingBox
+from bounding_box import BoundingBox
 
 def plot_fractal(box: BoundingBox, values: np.ndarray, ax=None):
     if ax is None:
@@ -146,7 +146,7 @@ def plot_fractal(box: BoundingBox, values: np.ndarray, ax=None):
     z1 = box.center - plot_extent / 2
     z2 = z1 + plot_extent
     ax.imshow(values, origin='lower', extent=(z1.real, z2.real, z1.imag, z2.imag),
-              cmap=matplotlib.colormaps["jet"])
+              cmap=matplotlib.colormaps["viridis"])
     ax.set_xlabel("$\Re(c)$")
     ax.set_ylabel("$\Im(c)$")
     return fig, ax
@@ -175,7 +175,7 @@ from typing import Any, Optional
 import numba  # type:ignore
 import numpy as np
 
-from .bounding_box import BoundingBox
+from bounding_box import BoundingBox
 
 
 @numba.njit(nogil=True)
@@ -184,11 +184,11 @@ def compute_mandelbrot_numba(
         scale: complex, max_iter: int):
     for j in range(height):
         for i in range(width):
-            c = center + (i - width // 2 + (j - height // 2) * 1j) * scale
-            z = 0.0+0.0j
+            c = center + (i - width // 2 + 1j * (j - height // 2)) * scale
+            z = 0.0 + 0.0j
             for k in range(max_iter):
                 z = z**2 + c
-                if (z*z.conjugate()).real >= 4.0:
+                if (z * z.conjugate()).real >= 4.0:
                     break
             result[j, i] = k
     return result
