@@ -82,7 +82,7 @@ In this case, we use a function returning `True` if the argument contains the le
 and `False` if it does not.
 
 ~~~python
-# Return True if x is even, False if not
+# Return True if x contains the letter 'a', else False
 def pred(x):
     return 'a' in x
 
@@ -123,7 +123,7 @@ We previously discussed some generic operations on bags. In the documentation, l
 Hint: Try `pluck` on some example data.
 
 ```python
-from dask import bags as db
+from dask import bag as db
 
 data = [
    { "name": "John", "age": 42 },
@@ -168,7 +168,8 @@ def calc_pi(N):
         # take a sample
         x = random.uniform(-1, 1)
         y = random.uniform(-1, 1)
-        if x*x + y*y < 1.: M+=1
+        if x*x + y*y < 1.:
+            M += 1
     return 4 * M / N
 
 bag = dask.bag.from_sequence(repeat(10**7, 24))
