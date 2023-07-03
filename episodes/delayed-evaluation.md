@@ -28,9 +28,9 @@ See an overview below:
 | `dask.futures`   | `concurrent.futures` | Control execution, low-level        | ❌      |
 
 # Dask Delayed
-A lot of the functionalities in Dask is based on an important concept known as *delayed evaluation*. Hence we go a bit deeper into `dask.delayed`.
+A lot of the functionalities in Dask are based on an important concept known as *delayed evaluation*. Hence we go a bit deeper into `dask.delayed`.
 
-`dask.delayed` changes the strategy by which our computation is evaluated. Normally, you expect that a computer runs commands when you ask for them, and that you can give the next command when the current job is complete. With delayed evaluation we do not wait before formulating the next command. Instead, we create the dependency graph of our complete computation without actually doing any work. Once we build the full dependency graph, we can see which jobs can be done in parallel and attribute those to different workers.
+`dask.delayed` changes the strategy by which our computation is evaluated. Normally, you expect that a computer runs commands when you ask for them, and that you can give the next command when the current job is complete. With delayed evaluation we do not wait before formulating the next command. Instead, we create the dependency graph of our complete computation without actually doing any work. Once we build the full dependency graph, we can see which jobs can be done in parallel and have those scheduled to different workers.
 
 To express a computation in this world, we need to handle future objects *as if they're already there*. These objects may be referred to as either *futures* or *promises*. 
 
@@ -179,7 +179,7 @@ add(*numbers)   # => 10
 ```
 :::
 
-We can build new primitives from the ground up. An important function frequently found where non-standard evaluation strategies are involved is `gather`. We can implement `gather` as follows:
+We can build new primitives from the ground up. An important function that is found frequently where non-standard evaluation strategies are involved is `gather`. We can implement `gather` as follows:
 
 ~~~python
 @delayed
@@ -229,7 +229,7 @@ Write a `delayed` function that computes the mean of its arguments. Use it to es
 2.5
 ```
 
-Ensure that the entire computation is contained in a single promise.
+Make sure that the entire computation is contained in a single promise.
 
 ::::solution
 ## Solution
