@@ -39,7 +39,7 @@ result = work.compute()
 
 :::callout
 ## Try a heavy enough task
-Your radar may not detect so small a task. In your computer you may have to gradually raise the problem size to ``10**8`` or ``10**9`` to observe the effect in long enough a run. But be careful and increase slowly! Asking for too much memory can make your computer slow to a crawl.
+Your system monitor may not detect so small a task. In your computer you may have to gradually raise the problem size to ``10**8`` or ``10**9`` to observe the effect in long enough a run. But be careful and increase slowly! Asking for too much memory can make your computer slow to a crawl.
 :::
 
 ![System monitor](fig/system-monitor.jpg){alt="screenshot of system monitor"}
