@@ -91,10 +91,7 @@ def calc_pi_numpy(N):
     return 4 * M / N
 ```
 
-This is a **vectorized** version of the original algorithm. It nicely demonstrates **data parallelization**,
-where a **single operation** is replicated over collections of data.
-It contrasts with **task parallelization**, where **different independent** procedures are performed in
-parallel (think, for example, about cutting the vegetables while simmering the split peas).
+This is a **vectorized** version of the original algorithm. A problem written in a vectorized form becomes amenable to **data parallelization**, where each single operation is replicated over a large collection of data. Data parallelism contrasts with **task parallelism**, where different independent procedures are performed in parallel. An example of task parallelism is the pea-soup recipe in the introduction.
 
 This implementation is much faster than the 'naive' implementation above: 
 
