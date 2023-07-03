@@ -66,7 +66,7 @@ Trying out and profiling your application is the only way to know for sure.
 
 There are several options to make your own routines not subjected to the GIL: fortunately, `numba` makes this very easy.
 
-We can force off the GIL in Numba code by setting `nogil=True` inside the `numba.jit` decorator:
+We can unlock the GIL in Numba code by setting `nogil=True` inside the `numba.jit` decorator:
 
 ```python
 import random
@@ -123,9 +123,9 @@ t2.join()
 :::
 
 # Multiprocessing
-Python also enable parallelisation with multiple processes 
+Python also enables parallelisation with multiple processes 
 via the `multiprocessing` module. It implements an API that is
-seemingly similar to threading:
+superficially similar to threading:
 
 ```python
 import random
