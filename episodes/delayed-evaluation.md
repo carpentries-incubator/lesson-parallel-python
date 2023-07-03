@@ -49,7 +49,7 @@ The `delayed` decorator builds a dependency graph from function calls:
 def add(a, b):
     result = a + b
     print(f"{a} + {b} = {result}")
-    return a + b
+    return result
 ~~~
 
 A `delayed` function stores the requested function call inside a **promise**. The function is not actually executed yet, and we get a value *promised*, which can be computed later.
@@ -201,7 +201,7 @@ It turns a list of promises into a promise of a list.
 This small example shows what `gather` does:
 
 ~~~python
-x_p = gather(*(add(n, n) for n in range(10))) # Shorthand for gather(add(1, 1), add(2, 2), ...)
+x_p = gather(*(delayed(add)(n, n) for n in range(10))) # Shorthand for gather(add(1, 1), add(2, 2), ...)
 x_p.visualize()
 ~~~
 
