@@ -226,7 +226,7 @@ async def main():
     ...
 
 if __name__ == "__main__":
-    asyncio.run(main)
+    asyncio.run(main())
 ```
 
 Asyncio is as contagious as Dask. Any higher-level code must be async once you have some async low-level code: [it's turtles all the way down](https://en.wikipedia.org/wiki/Turtles_all_the_way_down)! You may be tempted to implement `asyncio.run` in the middle of your code and interact with the asynchronous parts. Multiple active Asyncio run-times will get you into troubles, though. Mixing Asyncio and classic code is possible in principle, but is considered bad practice.
