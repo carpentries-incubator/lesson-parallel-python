@@ -77,7 +77,7 @@ bag.map(f).visualize()
 
 ### Filter
 
-A function returning a boolean is a useful illustration of the concept of `filter`.
+We need a predicate, that is a function returning either true or false, to illustrate the concept of `filter`.
 In this case, we use a function returning `True` if the argument contains the letter 'a',
 and `False` if it does not.
 
