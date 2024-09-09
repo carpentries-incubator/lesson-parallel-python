@@ -158,6 +158,7 @@ def printer():
   while True:
     x = yield
     print(f"{lineno:03} {x}")
+    lineno += 1
 ```
 ::::
 :::
