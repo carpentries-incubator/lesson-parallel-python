@@ -1,0 +1,4 @@
+version = "2.0"
+watch_list = ["episodes/**/*.md"]
+
+

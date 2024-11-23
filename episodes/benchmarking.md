@@ -76,6 +76,32 @@ print(f"Time taken: {time.average:.4f} s")
 
 Note that this metric does not tell you anything about memory consumption or efficiency.
 
+:::challenge
+## Timeit
+Use `timeit` to time the following snippets:
+
+```python
+[x**2 for x in range(100)]
+```
+
+```python
+map(lambda x: x**2, range(100))
+```
+
+Can you explain the difference? How about the following
+
+```python
+for x in range(100):
+    x**2
+```
+
+Is that faster than the first one? Why?
+
+::::solution
+Python's `map` function is lazy. It won't compute anything until you iterate it. Try `list(map(...))`. The third example doesn't allocate any memory, which makes it faster.
+::::
+:::
+
 # Memory profiling
 - **Benchmarking** is the action of systematically testing performance under different conditions.
 - **Profiling** is the analysis of which parts of a program contribute to the total performance, and the identification of possible bottlenecks.
