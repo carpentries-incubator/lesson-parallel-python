@@ -1,5 +1,5 @@
 ---
-title: 'Delayed evaluation'
+title: 'Delayed Evaluation'
 teaching: 10
 exercises: 2
 ---
@@ -10,12 +10,12 @@ exercises: 2
 :::
 
 :::objectives
-- Understand the abstraction of delayed evaluation
-- Use the `visualize` method to create dependency graphs
+- Understand the abstraction of delayed evaluation.
+- Use the `visualize` method to create dependency graphs.
 :::
 
 
-[Dask](https://dask.org/) is one of the many tools available for parallelizing Python code in a comfortable way. We've seen a basic example of `dask.array` in a previous episode. Now, we will focus on the `delayed` and `bag` sub-modules. Dask has a lot of other useful components, such as `dataframe` and `futures`, but we are not going to cover them in this lesson.
+[Dask](https://dask.org/) is one of many convenient tools available for parallelizing Python code. We have seen a basic example of `dask.array` in a previous episode. Now, we will focus on the `delayed` and `bag` sub-modules. Dask has other useful components that we do not cover in this lesson, such as `dataframe` and `futures`.
 
 See an overview below:
 
@@ -28,38 +28,37 @@ See an overview below:
 | `dask.futures`   | `concurrent.futures` | Control execution, low-level        | ❌      |
 
 # Dask Delayed
-A lot of the functionality in Dask is based on top of a concept known as *delayed evaluation*. Because this concept is so very important in understanding how Dask functions, we will go a bit deeper into `dask.delayed`.
+A lot of the functionalities in Dask are based on an important concept known as *delayed evaluation*. Hence we go a bit deeper into `dask.delayed`.
 
-By using `dask.delayed` we change the strategy by which our computation is evaluated. Normally in a computer, you expect commands to be run when you ask for them, and then when the job is complete, you can give the next command. When we use delayed evaluation, we don't wait around to formulate the next command. Instead we create the dependency graph of our complete computation without actually doing any work. When we know the full dependency graph, we can see which jobs can be done in parallel and give those to different workers.
+`dask.delayed` changes the strategy by which our computation is evaluated. Normally, you expect that a computer runs commands when you ask for them, and that you can give the next command when the current job is complete. With delayed evaluation we do not wait before formulating the next command. Instead, we create the dependency graph of our complete computation without actually doing any work. Once we build the full dependency graph, we can see which jobs can be done in parallel and have those scheduled to different workers.
 
-To express a computation in this world, we need to handle future objects *as if they're already there*. These objects may be refered to as *futures* or *promises*. 
+To express a computation in this world, we need to handle future objects *as if they're already there*. These objects may be referred to as either *futures* or *promises*. 
 
 :::callout
-Python has support for working with futures in several libraries, each time slightly different. The main difference between Python futures and Dask delayed objects is that futures are added to a queue from the first moment you define them, while delayed objects are silent until you ask to compute. We will refer to these 'live' futures as futures, and 'dead' futures (like delayed) as **promises**.
+Several Python libraries provide slightly different support for working with futures. The main difference between Python futures and Dask-delayed objects is that futures are added to a queue at the point of definition, while delayed objects are silent until you ask to compute. We will refer to such 'live' futures as futures proper, and to 'dead' futures (including the delayed) as **promises**.
 :::
 
 ~~~python
 from dask import delayed
 ~~~
 
-The `delayed` decorator builds a dependency graph from function calls.
+The `delayed` decorator builds a dependency graph from function calls:
 
 ~~~python
 @delayed
 def add(a, b):
     result = a + b
     print(f"{a} + {b} = {result}")
-    return a + b
+    return result
 ~~~
 
-A `delayed` function stores the requested function call inside a **promise**. The function is not actually executed yet, instead we
-are *promised* a value that can be computed later.
+A `delayed` function stores the requested function call inside a **promise**. The function is not actually executed yet, and we get a value *promised*, which can be computed later.
 
 ~~~python
 x_p = add(1, 2)
 ~~~
 
-We can check that `x_p` is now a `Delayed` value.
+We can check that `x_p` is now a `Delayed` value:
 
 ~~~python
 type(x_p)
@@ -68,12 +67,12 @@ type(x_p)
 [out]: dask.delayed.Delayed
 ~~~
 
-> ## Note
-> It is often a good idea to suffix variables that you know are promises with `_p`. That way you
+> ## Note on notation
+> It is good practice to suffix with `_p` variables that are promises. That way you
 > keep track of promises versus immediate values.
 {: .callout}
 
-Only when we evaluate the computation, do we get an output.
+Only when we ask to evaluate the computation do we get an output:
 
 ~~~python
 x_p.compute()
@@ -83,7 +82,7 @@ x_p.compute()
 [out]: 3
 ~~~
 
-From `Delayed` values we can create larger workflows and visualize them.
+From `Delayed` values we can create larger workflows and visualize them:
 
 ~~~python
 x_p = add(1, 2)
@@ -104,7 +103,7 @@ y_p = add(x_p, 3)
 z_p = add(x_p, -3)
 ```
 
-Visualize and compute `y_p` and `z_p` separately, how often is `x_p` evaluated?
+Visualize and compute `y_p` and `z_p` separately. How many times is `x_p` evaluated?
 
 Now change the workflow:
 
@@ -115,7 +114,7 @@ z_p = add(x_p, y_p)
 z_p.visualize(rankdir="LR")
 ```
 
-We pass the yet uncomputed promise `x_p` to both `y_p` and `z_p`. Now, only compute `z_p`, how often do you expect `x_p` to be evaluated? Run the workflow to check your answer.
+We pass the not-yet-computed promise `x_p` to both `y_p` and `z_p`. If you only compute `z_p`, how many times do you expect `x_p` to be evaluated? Run the workflow to check your answer.
 
 ::::solution
 ## Solution
@@ -128,11 +127,11 @@ z_p.compute()
 3 + 6 = 9
 [out]: 9
 ```
-The computation of `x_p` (1 + 2) appears only once. This should teach you to procrastinate calling `compute` as long as you can.
+The computation of `x_p` (1 + 2) appears only once. This should convince you to procrastinate the call `compute` as long as you can.
 ::::
 :::
 
-We can also make a promise by directly calling `delayed`
+We can also make a promise by directly calling `delayed`:
 
 ~~~python
 N = 10**7
@@ -143,7 +142,7 @@ It is now possible to call `visualize` or `compute` methods on `x_p`.
 
 :::callout
 ## Decorators
-In Python the decorator syntax is equivalent to passing a function through a function adapter (a.k.a. a higher order function or a functional). This adapter can change the behaviour of the function in many ways. The statement,
+In Python the decorator syntax is equivalent to passing a function through a function adapter, also known as a higher order function or a functional. This adapter can change the behaviour of the function in many ways. The statement
 
 ```python
 @delayed
@@ -163,7 +162,7 @@ sqr = delayed(sqr)
 
 :::callout
 ## Variadic arguments
-In Python you can define functions that take arbitrary number of arguments:
+In Python you can define functions taking arbitrary number of arguments:
 
 ```python
 def add(*args):
@@ -172,7 +171,7 @@ def add(*args):
 add(1, 2, 3, 4)   # => 10
 ```
 
-You can use tuple-unpacking to pass a sequence of arguments:
+You can then use tuple-unpacking to pass a sequence of arguments:
 
 ```python
 numbers = [1, 2, 3, 4]
@@ -180,7 +179,7 @@ add(*numbers)   # => 10
 ```
 :::
 
-We can build new primitives from the ground up. An important function that you will find in many different places where non-standard evaluation strategies are involved is `gather`. We can implement `gather` as follows:
+We can build new primitives from the ground up. An important function that is found frequently where non-standard evaluation strategies are involved is `gather`. We can implement `gather` as follows:
 
 ~~~python
 @delayed
@@ -191,7 +190,7 @@ def gather(*args):
 :::challenge
 ## Challenge: understand `gather`
 Can you describe what the `gather` function does in terms of lists and promises?
-hint: Suppose I have a list of promises, what does `gather` allow me to do?
+Hint: Suppose I have a list of promises, what does `gather` enable me to do?
 
 ::::solution
 ## Solution
@@ -199,28 +198,31 @@ It turns a list of promises into a promise of a list.
 :::
 ::::
 
-We can visualize what `gather` does by this small example.
+This small example shows what `gather` does:
 
 ~~~python
-x_p = gather(*(add(n, n) for n in range(10))) # Shorthand for gather(add(1, 1), add(2, 2), ...)
+x_p = gather(*(delayed(add)(n, n) for n in range(10))) # Shorthand for gather(add(1, 1), add(2, 2), ...)
 x_p.visualize()
 ~~~
 
 ![a gather pattern](fig/dask-gather-example.svg)
 {.output alt="boxes and arrows"}
 
-Computing the result,
+Computing the result
 
 ~~~python
 x_p.compute()
 ~~~
+
+gives
+
 ~~~output
 [out]: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
 ~~~
 
 :::challenge
-## Challenge: design a `mean` function and calculate pi
-Write a `delayed` function that computes the mean of its arguments. Use it to esimates pi several times and returns the mean of the results.
+## Challenge: design a `mean` function and calculate $\pi$
+Write a `delayed` function that computes the mean of its arguments. Use it to estimate $\pi$ several times and have it return the mean of the intermediate results.
 
 ```python
 >>> mean(1, 2, 3, 4).compute()
@@ -257,13 +259,13 @@ pi_p.compute()
 ::::
 :::
 
-You may not seed a significant speedup. This is because `dask delayed` uses threads by default and our native Python implementation of `calc_pi` does not circumvent the GIL. With for example the numba version of `calc_pi` you should see a more significant speedup.
+You may not see a significant speed-up. This is because `dask delayed` uses threads by default, and our native Python implementation of `calc_pi` does not circumvent the GIL. You should see a more significant speed-up with the Numba version of `calc_pi`, for example.  
 
-In practice you may not need to use `@delayed` functions too often, but it does offer ultimate flexibility. You can build complex computational workflows in this manner, sometimes replacing shell scripting, make files and the likes.
+In practice, you may not need to use `@delayed` functions frequently, but they do offer ultimate flexibility. You can build complex computational workflows in this manner, sometimes replacing shell scripting, make files, and suchlike.
 
 :::keypoints
 - We can change the strategy by which a computation is evaluated.
 - Nothing is computed until we run `compute()`.
-- By using delayed evaluation, Dask knows which jobs can be run in parallel.
+- With delayed evaluation Dask knows which jobs can be run in parallel.
 - Call `compute` only once at the end of your program to get the best results.
 :::

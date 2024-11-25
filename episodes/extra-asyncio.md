@@ -1,4 +1,4 @@
----
+do---
 title: 'Asyncio'
 teaching: 30
 exercises: 10
@@ -6,28 +6,28 @@ exercises: 10
 
 :::questions
 - What is Asyncio?
-- When is asyncio usefull?
+- When is Asyncio useful?
 :::
 
 :::objectives
-- Understand the difference between a coroutine and a function.
+- Understand the difference between a function and a coroutine.
 - Know the rudimentary basics of `asyncio`.
 - Perform parallel computations in `asyncio`.
 :::
 
 # Introduction to Asyncio
-Asyncio stands for "asynchronous IO", and as you might have guessed it has little to do with either asynchronous work or doing IO. In general, asynchronous is an adjective describing objects or events that are not coordinated in time. In fact, the `asyncio` system is more like a carefully tuned set of gears running a multitude of tasks *as if* you have a lot of OS threads running. In the end they are all powered by the same crank. The gears in `asyncio` are called **coroutines**, its teeth moving other coroutines wherever you find the `await` keyword.
+Asyncio stands for "asynchronous IO" and, as you might have guessed, has little to do with either asynchronous work or doing IO. In general, the adjective asynchronous describes objects or events not coordinated in time. In fact, the `asyncio` system is more like a set of gears carefully tuned to run a multitude of tasks *as if* a lot of OS threads were running. In the end, they are all powered by the same crank. The gears in `asyncio` are called **coroutines** and its teeth move other coroutines wherever you find the `await` keyword.
 
-The main application for `asyncio` is hosting back-ends for web services, where a lot of tasks may be waiting on each other, while the server still needs to be responsive to new events. In that respect, `asyncio` is a little bit outside the domain of computational science. Nevertheless, you may encounter async code in the wild, and you *can* do parallelism with `asyncio` if you want a higher level abstraction but don't want to depend on `dask` or a similar alternative.
+The main application for `asyncio` is hosting back-ends for web services, where a lot of tasks may be waiting for each other while the server remains responsive to new events. In that regard, `asyncio` is a little bit outside the domain of computational science. Nevertheless, you may encounter Asyncio code in the wild, and you *can* do parallelism with Asyncio if you want higher-level abstraction without `dask` or similar alternatives.
 
-Many modern programming languages have features that are very similar to `asyncio`.
+Many modern programming languages do have features very similar to `asyncio`.
 
 ## Run-time
-The main point of `asyncio` is that it offers a different formalism for doing work than what you're used to from functions. To see what that means, we need to understand functions a bit better.
+The distinctive point of `asyncio` is a formalism for carrying out work that is different from usual functions. We need to look deeper into functions to appreciate the distinction.
 
 ### Call stacks
-A function call is best understood in terms of a stack based system. When you call a function, you give it its arguments and forget for the moment what you were doing. Or rather, whatever you were doing, push it on a stack and forget about it. Then, with a clean sheet (called a stack frame), you start working on the given arguments until you arrive at a result. This result is what you remember, when you go back to the stack to see what you needed it for in the first place.
-In this manner, every function call pushes a frame to the stack, and every return statement, we pop back to the previous.
+A function call is best understood in terms of a stack-based system. When calling a function, you give it its arguments and temporarily forget what you were doing. Or, rather, you push on a stack and forget whatever you were doing. Then, you start working with the given arguments on a clean sheet (called a stack frame) until you obtain the function result. When you return to the stack, you remember only this result and recall what you originally needed it for.
+In this manner, every function call pushes a frame onto the stack and every return statement has us popping back to the previous frame.
 
 [![](https://mermaid.ink/img/pako:eNp1kL1Ow0AQhF9luSYgHApEdUUogpCoKRCSm8U3JpbtXXM_NlGUd-dMYgqkdKvb-Wb25mAqdTDWBHwlSIWnhj8996UQcRWbkSNoy10HPz-dpvVmc_ucJK9VLG01dY72mmjowAHEEiZ46mFp2nGkJlB9_X3zOBssWLZYn8wsvSMUFHd_YNY_3N9dinubLScOv8TgMTaawhm9GPFCTmUVqRWdCpqwGkGCMYeFQVsIfaBWj6uZF81f1nm30BCXk3TpxeFfM6YwPXzPjctFHmZJafJ1PUpj8-jYt6Up5Zh1nKK-7qUyNvqEwqTBZZ9z6cbW3AUcfwB5sYta?type=png)](https://mermaid.live/edit#pako:eNp1kL1Ow0AQhF9luSYgHApEdUUogpCoKRCSm8U3JpbtXXM_NlGUd-dMYgqkdKvb-Wb25mAqdTDWBHwlSIWnhj8996UQcRWbkSNoy10HPz-dpvVmc_ucJK9VLG01dY72mmjowAHEEiZ46mFp2nGkJlB9_X3zOBssWLZYn8wsvSMUFHd_YNY_3N9dinubLScOv8TgMTaawhm9GPFCTmUVqRWdCpqwGkGCMYeFQVsIfaBWj6uZF81f1nm30BCXk3TpxeFfM6YwPXzPjctFHmZJafJ1PUpj8-jYt6Up5Zh1nKK-7qUyNvqEwqTBZZ9z6cbW3AUcfwB5sYta)
 
@@ -43,14 +43,14 @@ sequenceDiagram
 ```
 </details>
 
-Crucially, when we pop back, we forget about the stack frame inside the function. This way, there is always a single concious stream of thought. Function calls can be evaluated by a single active agent.
+Crucially, when we pop back, we also forget the stack frame inside the function. This way of doing always keeps a single conscious stream of thought. Function calls can be evaluated by a single active agent.
 
 ### Coroutines
 :::instructor
-This section goes rather in depth on coroutines. This is meant to grow the correct mental model about what's going on with `asyncio`.
+This section goes rather in depth into coroutines. This is meant to nurture the correct mental model about what goes on with `asyncio`.
 :::
 
-When working with coroutines, things are a bit different. When a result is returned from a coroutine, the coroutine keeps existing, its context is not forgotten. Coroutines exist in Python in several forms, the simplest being a **generator**. The following generator produces all integers (if you wait long enough):
+Working with coroutines changes things a bit. The coroutine keeps on existing and its context is not forgotten when a coroutine returns a result. Python has several forms of coroutines and the simplest is a **generator**. For example, the following generator produces all integers (if you wait long enough):
 
 ```python
 def integers():
@@ -60,7 +60,7 @@ def integers():
     a += 1
 ```
 
-Then
+Then:
 
 ```python
 for i in integers():
@@ -69,7 +69,7 @@ for i in integers():
     break
 ```
 
-or
+or:
 
 ```python
 from itertools import islice
@@ -99,7 +99,7 @@ sequenceDiagram
 
 :::challenge
 ## Challenge: generate all even numbers
-Can you write a generator that generates all even numbers? Try to reuse `integers()`. Extra: Can you generate the Fibonacci numbers?
+Can you write a generator for all even numbers? Reuse `integers()`. Extra: Can you generate the Fibonacci sequence?
 
 ::::solution
 ```python
@@ -116,7 +116,7 @@ def even_integers():
   return (i for i in integers() if i % 2 == 0)
 ```
 
-For the Fibonacci numbers:
+For the Fibonacci series:
 
 ```python
 def fib():
@@ -128,9 +128,9 @@ def fib():
 ::::
 :::
 
-The generator gives away control, passing a value back, expecting, maybe, if faith has it, that control will be passed back to it in the future. The keyword `yield` applies in all its meanings: control is yielded, and we have a yield in terms of harvesting a crop.
+The generator gives away control, passing back a value and expecting to receive control one more time, if faith has it. All meanings of the keyword `yield` apply here: the coroutine yields control and produces a yield, as if we were harvesting a crop.
 
-A generator conceptually only has one-way traffic: we get output. We can also use `yield` the other way around: it can be used to send information to a coroutine. For instance: we can have a coroutine that prints whatever you send to it.
+Conceptually, a generator entails one-way traffic only: we get output. However, we can use `yield` also to send information to a coroutine. For example, this coroutine prints whatever you send to it:
 
 ```python
 def printer():
@@ -163,19 +163,19 @@ def printer():
 ::::
 :::
 
-In practice, the `send` form of coroutines is hardly ever used. Cases where you'd need it are rare, and chances are noone will understand your code. Where it was needed before, its use is now largely superceded by `asyncio`.
+In practice, the send-form of coroutines is hardly ever used. Cases for needing it are infrequent, and chances are that nobody will understand your code. Asyncio has largely superseded this usage.
 
-Now that you have seen coroutines, it is a small step towards `asyncio`. The idea is that you can use coroutines to build a collaborative multi-threading environment. In most modern operating systems, execution threads are given some time, and then when the OS needs to do something else, control is taken away pre-emptively. In **collaborative multi-tasking**, every worker knows it is part of a collaborative, and it voluntarily yields control to the scheduler. With coroutines and `yield` you should be able to see that it is possible to create such a system, but it is not so straight forward, especially when you start to consider the propagation of exceptions.
+The working of `asyncio` is only a small step farther than that of coroutines. The intuition is to use coroutines to build a collaborative multi-threading environment. Most modern operating systems assign some time to execution threads and take back control pre-emptively to do something else. In **collaborative multi-tasking**, every worker knows to be part of a collaborative environment and yields control to the scheduler voluntarily. Creating such a system with coroutines and `yield` is possible in principle, but is not straightforward especially owing to the propagation of exceptions.
 
 ## Syntax
-While `asyncio` itself is a library in standard Python, this library is actually a core component for using the associated async syntax. There are two keywords here: `async` and `await`.
+`asyncio` itself is a library in standard Python and is a core component for actually using the associated async syntax. Two keywords are especially relevant here: `async` and `await`.
 
-`async` Is a modifier keyword that modifies the behaviour of any subsequent syntax to behave in a manner that is consistent with the asynchronous run-time.
+`async` is a modifier keyword that makes any subsequent syntax behave consistently with the asynchronous run-time.
 
-`await` Is used inside a coroutine to wait for another coroutine to yield a result. Effectively, control is passed back to the scheduler, which may decide to give back control when a result is present.
+`await` is used inside a coroutine to wait until another coroutine yields a result. Effectively, the scheduler takes control again and may decide to return it when a result is present.
 
 # A first program
-Jupyter understands asynchronous code, so you can `await` futures in any cell.
+Jupyter understands asynchronous code, so you can `await` futures in any cell:
 
 ```python
 import asyncio
@@ -196,7 +196,7 @@ Venus      003
 Venus      004
 ```
 
-We can have coroutines work concurrently when we `gather` two coroutines.
+We can have coroutines work concurrently when we `gather` them:
 
 ```python
 await asyncio.gather(counter("Earth"), counter("Moon"))
@@ -216,7 +216,7 @@ Moon       004
 ````
 
 
-Note that, although the Earth counter and Moon counter seem to operate at the same time, in actuality they are alternated by the scheduler and still running in a single thread! If you work outside the confines of Jupyter, you need to make sure to create an asynchronous main function and run it using `asyncio.run`. A typical program will look like this:
+Note that, although the Earth counter and Moon counter seem to operate at the same time, the scheduler is actually alternating them in a single thread! If you work outside of Jupyter, you need an asynchronous main function and must run it using `asyncio.run`. A typical program will look like this:
 
 ```python
 import asyncio
@@ -230,13 +230,13 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-Asyncio, just like we saw with Dask, is contagious. Once you have async code at some low level, higher level code also needs to be async: [it's turtles all the way down](https://en.wikipedia.org/wiki/Turtles_all_the_way_down)! You may be tempted to do `asyncio.run` somewhere from the middle of your normal code to interact with the asyncronous parts. This can get you into trouble though, when you get multiple active asyncio run-times. While it is in principle possible to mix asyncio and classic code, it is in general considered bad practice to do so.
+Asyncio is as contagious as Dask. Any higher-level code must be async once you have some async low-level code: [it's turtles all the way down](https://en.wikipedia.org/wiki/Turtles_all_the_way_down)! You may be tempted to implement `asyncio.run` in the middle of your code and interact with the asynchronous parts. Multiple active Asyncio run-times will get you into troubles, though. Mixing Asyncio and classic code is possible in principle, but is considered bad practice.
 
 ## Timing asynchronous code
-While Jupyter works very well with `asyncio`, one thing that doesn't work is line or cell-magic. We'll have to write our own timer.
+Jupyter works very well with `asyncio` except for line magics and cell magics. We must then write our own timer.
 
 :::instructor
-It may be best to let participants copy paste this snippet from the collaborative document. You may want to explain what a context manager is, but don't overdo it. This is advanced code and may scare off novices.
+It may be best to have participants copy and paste this snippet from the collaborative document. You may want to explain what a context manager is, but don't overdo it. This is advanced code and may scare off novices.
 :::
 
 ``` {.python #async-timer}
@@ -271,10 +271,10 @@ print(f"that took {t.time} seconds")
 that took 0.20058414503000677 seconds
 ```
 
-These few snippets of code require advanced Python knowledge to understand. Rest assured that both classic coroutines and `asyncio` are a large topic to cover, and we're not going to cover all of it. At least, we can now time the execution of our code!
+Understanding these few snippets of code requires advanced knowledge of Python. Rest assured that both classic coroutines and `asyncio` are complex topics that we cannot cover completely. However, we can time the execution of our code now!
 
 ## Compute $\pi$ again
-As a reminder, here is our Numba code to compute $\pi$.
+As a reminder, here is our Numba code for computing $\pi$:
 
 ``` {.python #calc-pi-numba}
 import random
@@ -295,7 +295,7 @@ def calc_pi(N):
     return 4 * M / N
 ```
 
-We can send work to another thread with `asyncio.to_thread`.
+We can send this work to another thread with `asyncio.to_thread`:
 
 ```python
 async with timer() as t:
@@ -304,7 +304,7 @@ async with timer() as t:
 
 :::challenge
 ## Gather multiple outcomes
-We've seen that we can gather multiple coroutines using `asyncio.gather`. Now gather several `calc_pi` computations, and time them.
+We have already seen that `asyncio.gather` gathers multiple coroutines. Here, gather several `calc_pi` computations and time them.
 
 ::::solution
 ```python
@@ -324,7 +324,7 @@ async def calc_pi_split(N, M):
     return sum(lst) / M
 ```
 
-Now, see if we get a speed up.
+and then verify the speed-up that we get:
 
 ``` {.python #async-calc-pi-main}
 async with timer() as t:
@@ -353,14 +353,14 @@ that took 0.5876454019453377 seconds
 ```
 
 # Working with `asyncio` outside Jupyter
-Jupyter already has an asyncronous loop running for us. If you want to run scripts outside Jupyter you should write an asynchronous main function and call it using `asyncio.run`.
+Jupyter already has an asynchronous loop running for us. In order to run scripts outside Jupyter you should write an asynchronous main function and call it using `asyncio.run`.
 
 :::challenge
 ## Compute $\pi$ in a script
-Collect what we have done so far to compute $\pi$ in parallel into a script and run it.
+Collect in a script what we have done so far to compute $\pi$ in parallel, and run it.
 
 ::::solution
-Make sure that you create an `async` main function, and run it using `asyncio.run`. Create a small module called `calc_pi`.
+Ensure that you create an `async` main function, and run it using `asyncio.run`. Create a small module called `calc_pi`.
 
 ``` {.python file="src/calc_pi/__init__.py"}
 # file: calc_pi/__init__.py
@@ -375,7 +375,7 @@ Put the Numba code in a separate file `calc_pi/numba.py`.
 <<calc-pi-numba>>
 ```
 
-Put the async timer function in a separate file `async_timer.py`.
+Put the `async_timer` function in a separate file `async_timer.py`.
 
 ``` {.python file="src/async_timer.py"}
 # file: async_timer.py
@@ -400,13 +400,13 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-You may run this using `python -m calc_pi.async_pi`.
+You may run this script using `python -m calc_pi.async_pi`.
 ::::
 :::
 
 :::challenge
 ## Efficiency
-Play with different subdivisions for `calc_pi_split` such that `M*N` remains constant. How much overhead do you see?
+Play with different subdivisions in `calc_pi_split` keeping `M*N` constant. How much overhead do you see?
 
 ::::solution
 ``` {.python file="src/calc_pi/granularity.py"}
@@ -441,7 +441,7 @@ if __name__ == "__main__":
 
 ![timings](fig/asyncio-timings.svg){alt="a dip at njobs=10 and overhead ~0.1ms per task"}
 
-The work takes about 0.1s more when using 1000 tasks, so assuming that overhead scales linearly with the amount of tasks, we can learn that the overhead is around 0.1ms per task.
+The work takes about 0.1 s more when using 1000 tasks. So, assuming that the total overhead is distributed uniformly among the tasks, we observe that the overhead is around 0.1 ms per task.
 ::::
 :::
 
@@ -450,6 +450,6 @@ The work takes about 0.1s more when using 1000 tasks, so assuming that overhead 
 - Use `await` to call coroutines.
 - Use `asyncio.gather` to collect work.
 - Use `asyncio.to_thread` to perform CPU intensive tasks.
-- Inside a script: always make an asynchronous `main` function, and run it with `asyncio.run`.
+- Inside a script: always create an asynchronous `main` function, and run it with `asyncio.run`.
 :::
 

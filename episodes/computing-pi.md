@@ -12,27 +12,26 @@ exercises: 30
 
 :::objectives
 - Rewrite a program in a vectorized form.
-- Understand the difference between data and task-based parallel programming.
+- Understand the difference between data-based and task-based parallel programming.
 - Apply `numba.jit` to accelerate Python.
 :::
 
 # Parallelizing a Python application
-In order to recognize the advantages of parallelization we need an algorithm that is easy to parallelize, but still complex enough to take a few seconds of CPU time.
-To not scare away the interested reader, we need this algorithm to be understandable and, if possible, also interesting.
-We chose a classical algorithm for demonstrating parallel programming: estimating the value of number π.
+In order to recognize the advantages of parallelism we need an algorithm that is easy to parallelize, complex enough to take a few seconds of CPU time, understandable, and also interesting not to scare away the interested learner.
+Estimating the value of number $\pi$ is a classical problem to demonstrate parallel programming.
 
-The algorithm we present is one of the classical examples of the power of Monte-Carlo methods.
-This is an umbrella term for several algorithms that use random numbers to approximate exact results.
-We chose this algorithm because of its simplicity and straightforward geometrical interpretation.
+The algorithm we present is a classical demonstration of the power of Monte Carlo methods.
+This is a category of algorithms using random numbers to approximate exact results.
+This approach is simple and has a straightforward geometrical interpretation.
 
-We can compute the value of π using a random number generator. We count the points falling inside the blue circle M compared to the green square N.
-Then π is approximated by the ratio 4M/N.
+We can compute the value of $\pi$ using a random number generator. We count the points falling inside the blue circle M compared to the green square N.
+The ratio 4M/N then approximates $\pi$.
 
 ![Computing Pi](fig/calc_pi_3_wide.svg){alt="the area of a unit sphere contains a multiple of pi"}
 
 :::challenge
 ## Challenge: Implement the algorithm
-Use only standard Python and the function `random.uniform`. The function should have the following
+Use only standard Python and the method `random.uniform`. The function should have the following
 interface:
 
 ```python
@@ -46,7 +45,7 @@ def calc_pi(N):
     return ...
 ```
 
-Also make sure to time your function!
+Also, make sure to time your function!
 
 ::::solution
 ## Solution
@@ -75,11 +74,11 @@ def calc_pi(N):
 ::::
 :::
 
-Before we start to parallelize this program, we need to do our best to make the inner function as
-efficient as we can. We show two techniques for doing this: *vectorization* using `numpy` and
+Before we parallelize this program, the inner function must be as
+efficient as we can make it. We show two techniques for doing this: *vectorization* using `numpy`, and
 *native code generation* using `numba`.
 
-We first demonstrate a Numpy version of this algorithm.
+We first demonstrate a Numpy version of this algorithm:
 
 ```python
 import numpy as np
@@ -92,12 +91,9 @@ def calc_pi_numpy(N):
     return 4 * M / N
 ```
 
-This is a **vectorized** version of the original algorithm. It nicely demonstrates **data parallelization**,
-where a **single operation** is replicated over collections of data.
-It contrasts to **task parallelization**, where **different independent** procedures are performed in
-parallel (think for example about cutting the vegetables while simmering the split peas).
+This is a **vectorized** version of the original algorithm. A problem written in a vectorized form becomes amenable to **data parallelization**, where each single operation is replicated over a large collection of data. Data parallelism contrasts with **task parallelism**, where different independent procedures are performed in parallel. An example of task parallelism is the pea-soup recipe in the introduction.
 
-If we compare with the 'naive' implementation above, we see that our new one is much faster:
+This implementation is much faster than the 'naive' implementation above: 
 
 ```python
 %timeit calc_pi_numpy(10**6)
@@ -110,15 +106,15 @@ If we compare with the 'naive' implementation above, we see that our new one is 
 :::discussion
 ## Discussion: is this all better?
 What is the downside of the vectorized implementation?
-- It uses more memory
-- It is less intuitive
-- It is a more monolithic approach, i.e. you cannot break it up in several parts
+- It uses more memory.
+- It is less intuitive.
+- It is a more monolithic approach, i.e., you cannot break it up in several parts.
 :::
 
 :::challenge
 ## Challenge: Daskify
-Write `calc_pi_dask` to make the Numpy version parallel. Compare speed and memory performance with
-the Numpy version. NB: Remember that dask.array mimics the numpy API.
+Write `calc_pi_dask` to make the Numpy version parallel. Compare its speed and memory performance with
+the Numpy version. NB: Remember that the API of `dask.array` mimics that of the Numpy.
 
 ::::solution
 ## Solution
@@ -143,7 +139,7 @@ def calc_pi_dask(N):
 :::
 
 # Using Numba to accelerate Python code
-Numba makes it easier to create accelerated functions. You can use it with the decorator `numba.jit`.
+Numba makes it easier to create accelerated functions. You can activate it with the decorator `numba.jit`.
 
 ```python
 import numba
@@ -167,7 +163,7 @@ Let's time three versions of the same test. First, native Python iterators:
 190 ms ± 3.26 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
 ```
 
-Now with Numpy:
+Second, with Numpy:
 
 ```python
 %timeit np.arange(10**7).sum()
@@ -177,7 +173,7 @@ Now with Numpy:
 17.5 ms ± 138 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
 ```
 
-And with Numba:
+Third, with Numba:
 
 ```python
 %timeit sum_range_numba(10**7)
@@ -187,27 +183,24 @@ And with Numba:
 162 ns ± 0.885 ns per loop (mean ± std. dev. of 7 runs, 10000000 loops each)
 ```
 
-Numba is 100x faster in this case!  It gets this speedup with "just-in-time" compilation (JIT)—compiling the Python
-function into machine code just before it is called (that's what the `@numba.jit` decorator stands for).
-Not every Python and Numpy feature is supported, but a function may be a good candidate for Numba if it is written
-with a Python for-loop over a large range of values, as with `sum_range_numba()`.
+Numba is hundredfold faster in this case! It gets this speedup with "just-in-time" compilation (JIT) — that is, compiling the Python
+function into machine code just before it is called, as the `@numba.jit` decorator indicates.
+Numba does not support every Python and Numpy feature, but functions written with a for-loop with a large number of iterates, like in our `sum_range_numba()`, are good candidates.
 
 :::callout
 ## Just-in-time compilation speedup
 
-The first time you call a function decorated with `@numba.jit`, you may see little or no speedup. In
-subsequent calls, the function could be much faster. You may also see this warning when using `timeit`:
+The first time you call a function decorated with `@numba.jit`, you may see no or little speedup. The function can then be much faster in subsequent calls. Also, `timeit` may throw this warning:
 
 `The slowest run took 14.83 times longer than the fastest. This could mean that an intermediate result is being cached.`
 
 Why does this happen?
 On the first call, the JIT compiler needs to compile the function. On subsequent calls, it reuses the
-already-compiled function. The compiled function can *only* be reused if it is called with the same argument types
-(int, float, etc.).
+function previously compiled. The compiled function can *only* be reused if the types of its arguments (int, float, and the like) are the same as at the point of compilation.
 
-See this example where `sum_range_numba` is timed again, but now with a float argument instead of int:
+See this example, where `sum_range_numba` is timed once again with a float argument instead of an int:
 ```python
-%time sum_range_numba(10.**7)
+%time sum_range_numba(10**7)
 %time sum_range_numba(10.**7)
 ```
 ```output
@@ -248,17 +241,17 @@ def calc_pi_numba(N):
 :::
 
 :::callout
-## Measuring == knowing
+## Measuring = knowing
 Always profile your code to see which parallelization method works best.
 :::
 
 :::callout
-## `numba.jit` is not a magical command to solve are your problems
-Using numba to accelerate your code often outperforms other methods, but it is not always trivial to rewrite your code so that you can use numba with it.
+## `numba.jit` is not a magical command to solve your problems
+Accelerating your code with Numba often outperforms other methods, but rewriting code to reap the benefits of Numba is not always trivial.
 :::
 
 :::keypoints
-- Always profile your code to see which parallelization method works best
+- Always profile your code to see which parallelization method works best.
 - Vectorized algorithms are both a blessing and a curse.
-- Numba can help you speed up code
+- Numba can help you speed up code.
 :::

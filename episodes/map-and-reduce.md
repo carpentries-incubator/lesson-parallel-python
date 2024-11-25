@@ -1,30 +1,30 @@
 ---
-title: 'Map and reduce'
+title: 'Map and Reduce'
 teaching: 60
 exercises: 30
 ---
 
 :::questions
-- What abstractions does Dask offer?
-- What programming patterns exist in the parallel universe?
+- Which abstractions does Dask offer?
+- Which programming patterns exist in the parallel universe?
 :::
 
 :::objectives
-- Recognize `map`, `filter` and `reduce` patterns
-- Create programs using these building blocks
-- Use the `visualize` method to create dependency graphs
+- Recognize `map`, `filter` and `reduction` patterns.
+- Create programs using these building blocks.
+- Use the `visualize` method to create dependency graphs.
 :::
 
-In computer science *bags* refer to unordered collections of data. In Dask, a `bag` is a collection that is chunked internally. When you perform operations on a bag, these operations are automatically parallelized over the chunks inside the bag.
+In computer science *bags* are unordered collections of data. In Dask, a `bag` is a collection that gets chunked internally. Operations on a bag are automatically parallelized over the chunks inside the bag.
 
 Dask bags let you compose functionality using several primitive patterns: the most important of these are `map`, `filter`, `groupby`, `flatten`, and `reduction`.
 
 :::discussion
 ## Discussion
 Open the [Dask documentation on bags](https://docs.dask.org/en/latest/bag-api.html).
-Discuss the `map`, `filter`, `flatten` and `reduction` methods
+Discuss the `map`, `filter`, `flatten` and `reduction` methods.
 
-In this set of operations `reduction` is rather special. All other operations on bags could be written in terms of a reduction.
+In this set of operations `reduction` is rather special, because all operations on bags could be written in terms of a reduction.
 :::
 
 Operations on this level can be distinguished in several categories:
@@ -32,15 +32,15 @@ Operations on this level can be distinguished in several categories:
 - **map** (N to N) applies a function *one-to-one* on a list of arguments. This operation is **embarrassingly
   parallel**.
 - **filter** (N to &lt;N) selects a subset from the data.
-- **reduce** (N to 1) computes an aggregate from a sequence of data; if the operation permits it
-  (summing, maximizing, etc) this can be done in parallel by reducing chunks of data and then
+- **reduction** (N to 1) computes an aggregate from a sequence of data; if the operation permits it
+  (summing, maximizing, etc), this can be done in parallel by reducing chunks of data and then
   further processing the results of those chunks.
 - **groupby** (1 bag to N bags) groups data in subcategories.
 - **flatten** (N bags to 1 bag) combine many bags into one.
 
-Let's see an example of it in action:
+Let's see examples of them in action.
 
-First, let's create the `bag` containing the elements we want to work with (in this case, the numbers from 0 to 5).
+First, let's create the `bag` containing the elements we want to work with. In this case, the numbers from 0 to 5.
 
 ~~~python
 import dask.bag as db
@@ -51,8 +51,7 @@ bag = db.from_sequence(['mary', 'had', 'a', 'little', 'lamb'])
 
 ### Map
 
-To illustrate the concept of `map`, we'll need a mapping function.
-In the example below we'll just use a function that squares its argument:
+A function squaring its argument is a mapping function that illustrates the concept of `map`:
 
 ~~~python
 # Create a function for mapping
@@ -78,12 +77,12 @@ bag.map(f).visualize()
 
 ### Filter
 
-To illustrate the concept of `filter`, it is useful to have a function that returns a boolean.
-In this case, we'll use a function that returns `True` if the argument contains the letter 'a',
-and `False` if it doesn't.
+We need a predicate, that is a function returning either true or false, to illustrate the concept of `filter`.
+In this case, we use a function returning `True` if the argument contains the letter 'a',
+and `False` if it does not.
 
 ~~~python
-# Return True if x is even, False if not
+# Return True if x contains the letter 'a', else False
 def pred(x):
     return 'a' in x
 
@@ -96,7 +95,7 @@ bag.filter(pred).compute()
 
 :::challenge
 ## Difference between `filter` and `map`
-Without executing it, try to forecast what would be the output of `bag.map(pred).compute()`.
+Forecast the output of `bag.map(pred).compute()` without executing it. 
 
 ::::solution
 ## Solution
@@ -119,12 +118,12 @@ bag.reduction(count_chars, sum).visualize()
 
 :::challenge
 ## Challenge: consider `pluck`
-We previously discussed some generic operations on bags. In the documentation, lookup the `pluck` method. How would you implement this if `pluck` wasn't there?
+We previously discussed some generic operations on bags. In the documentation, lookup the `pluck` method. How would you implement `pluck` if it was not there?
 
-hint: Try `pluck` on some example data.
+Hint: Try `pluck` on some example data.
 
 ```python
-from dask import bags as db
+from dask import bag as db
 
 data = [
    { "name": "John", "age": 42 },
@@ -148,7 +147,7 @@ bag.map(partial(getitem, "name")).compute()
 ::::
 :::
 
-FIXME: find replacement for word counting example
+FIXME: find replacement for word counting example.
 
 :::challenge
 ## Challenge: Dask version of Pi estimation
@@ -169,7 +168,8 @@ def calc_pi(N):
         # take a sample
         x = random.uniform(-1, 1)
         y = random.uniform(-1, 1)
-        if x*x + y*y < 1.: M+=1
+        if x*x + y*y < 1.:
+            M += 1
     return 4 * M / N
 
 bag = dask.bag.from_sequence(repeat(10**7, 24))
@@ -182,10 +182,10 @@ estimate.compute()
 
 :::callout
 ## Note
-By default Dask runs a bag using multi-processing. This alleviates problems with the GIL, but also means a larger overhead.
+By default Dask runs a bag using multiprocessing. This alleviates problems with the GIL, but also entails a larger overhead.
 :::
 
 :::keypoints
-- Use abstractions to keep programs manageable
+- Use abstractions to keep programs manageable.
 :::
 
