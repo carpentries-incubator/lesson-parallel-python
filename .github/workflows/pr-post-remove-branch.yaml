@@ -9,12 +9,10 @@ on:
 jobs:
   delete:
     name: "Delete branch from Pull Request"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: >
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success'
-    permissions:
-      contents: write
     steps:
       - name: 'Download artifact'
         uses: carpentries/actions/download-workflow-artifact@main

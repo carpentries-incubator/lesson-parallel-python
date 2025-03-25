@@ -20,9 +20,9 @@ jobs:
   #  - no .github files were committed
   test-pr:
     name: "Test if pull request is valid"
-    runs-on: ubuntu-22.04
-    if: >
-      github.event.workflow_run.event == 'pull_request' &&
+    runs-on: ubuntu-latest
+    if: > 
+      github.event.workflow_run.event == 'pull_request' && 
       github.event.workflow_run.conclusion == 'success'
     outputs:
       is_valid: ${{ steps.check-pr.outputs.VALID }}
@@ -74,15 +74,13 @@ jobs:
   create-branch:
     name: "Create Git Branch"
     needs: test-pr
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: ${{ needs.test-pr.outputs.is_valid == 'true' }}
     env:
       NR: ${{ needs.test-pr.outputs.number }}
-    permissions:
-      contents: write
     steps:
       - name: 'Checkout md outputs'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           ref: md-outputs
           path: built
@@ -106,9 +104,9 @@ jobs:
           git config --local user.name "GitHub Actions"
           CURR_HEAD=$(git rev-parse HEAD)
           git checkout --orphan md-outputs-PR-${NR}
-          git add -A
+          git add -A 
           git commit -m "source commit: ${CURR_HEAD}"
-          ls -A | grep -v '^.git$' | xargs -I _ rm -r '_'
+          ls -A | grep -v '^.git$' | xargs rm -r
           cd ..
           unzip -o -d built built.zip
           cd built
@@ -120,12 +118,10 @@ jobs:
   comment-pr:
     name: "Comment on Pull Request"
     needs: [test-pr, create-branch]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: ${{ needs.test-pr.outputs.is_valid == 'true' }}
     env:
       NR: ${{ needs.test-pr.outputs.number }}
-    permissions:
-      pull-requests: write
     steps:
       - name: 'Download comment artifact'
         id: dl
@@ -133,7 +129,7 @@ jobs:
         with:
           run: ${{ github.event.workflow_run.id }}
           name: 'diff'
-
+          
       - if: ${{ steps.dl.outputs.success == 'true' }}
         run: unzip ${{ github.workspace }}/diff.zip
 
@@ -142,7 +138,7 @@ jobs:
         if: ${{ steps.dl.outputs.success == 'true' }}
         uses: carpentries/actions/comment-diff@main
         with:
-          pr: ${{ env.NR }}
+          pr: ${{ env.NR }} 
           path: ${{ github.workspace }}/diff.md
 
   # Comment if the PR is open and matches the SHA, but the workflow files have
@@ -150,13 +146,11 @@ jobs:
   comment-changed-workflow:
     name: "Comment if workflow files have changed"
     needs: test-pr
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     if: ${{ always() && needs.test-pr.outputs.is_valid == 'false' }}
     env:
       NR: ${{ github.event.workflow_run.pull_requests[0].number }}
       body: ${{ needs.test-pr.outputs.msg }}
-    permissions:
-      pull-requests: write
     steps:
       - name: 'Check for spoofing'
         id: dl
@@ -182,3 +176,4 @@ jobs:
         with:
           pr: ${{ env.NR }}
           body: ${{ env.body }}
+
