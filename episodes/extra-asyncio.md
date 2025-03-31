@@ -1,4 +1,4 @@
-do---
+---
 title: 'Asyncio'
 teaching: 30
 exercises: 10
@@ -213,7 +213,7 @@ Earth      003
 Moon       003
 Earth      004
 Moon       004
-````
+```§
 
 
 Note that, although the Earth counter and Moon counter seem to operate at the same time, the scheduler is actually alternating them in a single thread! If you work outside of Jupyter, you need an asynchronous main function and must run it using `asyncio.run`. A typical program will look like this:

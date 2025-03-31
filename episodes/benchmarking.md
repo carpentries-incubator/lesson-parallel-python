@@ -109,9 +109,9 @@ Python's `map` function is lazy. It won't compute anything until you iterate it.
 We will use the package [`memory_profiler`](https://github.com/pythonprofilers/memory_profiler) to track memory usage.
 It can be installed executing the code below in the console:
 
-~~~sh
+```sh
 pip install memory_profiler
-~~~
+```
 
 The memory usage of the serial and parallel versions of a code will vary. In Jupyter, type the following lines to see the effect in the code presented above (again, increase the baseline value `10**7` if needed):
 

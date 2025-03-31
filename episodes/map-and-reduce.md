@@ -42,36 +42,36 @@ Let's see examples of them in action.
 
 First, let's create the `bag` containing the elements we want to work with. In this case, the numbers from 0 to 5.
 
-~~~python
+```python
 import dask.bag as db
 
 bag = db.from_sequence(['mary', 'had', 'a', 'little', 'lamb'])
-~~~
+```
 {: .source}
 
 ### Map
 
 A function squaring its argument is a mapping function that illustrates the concept of `map`:
 
-~~~python
+```python
 # Create a function for mapping
 def f(x):
     return x.upper()
 
 # Create the map and compute it
 bag.map(f).compute()
-~~~
+```
 
-~~~output
+```output
 out: ['MARY', 'HAD', 'A', 'LITTLE', 'LAMB']
-~~~
+```
 
 We can also visualize the mapping:
 
-~~~python
+```python
 # Visualize the map
 bag.map(f).visualize()
-~~~
+```
 
 ![A map operation.](fig/dask-bag-map.svg){.output alt="boxes and arrows"}
 
@@ -81,21 +81,21 @@ We need a predicate, that is a function returning either true or false, to illus
 In this case, we use a function returning `True` if the argument contains the letter 'a',
 and `False` if it does not.
 
-~~~python
+```python
 # Return True if x contains the letter 'a', else False
 def pred(x):
     return 'a' in x
 
 bag.filter(pred).compute()
-~~~
+```
 
-~~~output
+```output
 [out]: ['mary', 'had', 'a', 'lamb']
-~~~
+```
 
 :::challenge
 ## Difference between `filter` and `map`
-Forecast the output of `bag.map(pred).compute()` without executing it. 
+Forecast the output of `bag.map(pred).compute()` without executing it.
 
 ::::solution
 ## Solution
@@ -105,14 +105,14 @@ The output will be `[True, True, True, False, True]`.
 
 ### Reduction
 
-~~~python
+```python
 def count_chars(x):
     per_word = [len(w) for w in x]
 
     return sum(per_word)
 
 bag.reduction(count_chars, sum).visualize()
-~~~
+```
 
 ![A reduction.](fig/dask-bag-reduction.svg){.output alt="boxes and arrows"}
 
@@ -156,7 +156,7 @@ Use `map` and `mean` functions on Dask bags to compute $\pi$.
 ::::solution
 ## Solution
 
-~~~python
+```python
 import dask.bag
 from numpy import repeat
 import random
@@ -176,7 +176,7 @@ bag = dask.bag.from_sequence(repeat(10**7, 24))
 shots = bag.map(calc_pi)
 estimate = shots.mean()
 estimate.compute()
-~~~
+```
 ::::
 :::
 

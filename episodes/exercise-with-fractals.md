@@ -1,3 +1,4 @@
+---
 title: 'Exercise with Fractals'
 teaching: 10
 exercises: 50
