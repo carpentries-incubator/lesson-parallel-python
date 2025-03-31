@@ -10,6 +10,9 @@
     <loc>https://template-source.github.io/NA/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://template-source.github.io/NA/aio.html</loc>
+  </url>
+  <url>
     <loc>https://template-source.github.io/NA/benchmarking.html</loc>
   </url>
   <url>
@@ -28,6 +31,9 @@
     <loc>https://template-source.github.io/NA/extra-external-c.html</loc>
   </url>
   <url>
+    <loc>https://template-source.github.io/NA/images.html</loc>
+  </url>
+  <url>
     <loc>https://template-source.github.io/NA/index.html</loc>
   </url>
   <url>
@@ -38,6 +44,9 @@
   </url>
   <url>
     <loc>https://template-source.github.io/NA/instructor/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://template-source.github.io/NA/instructor/aio.html</loc>
   </url>
   <url>
     <loc>https://template-source.github.io/NA/instructor/benchmarking.html</loc>
@@ -58,10 +67,19 @@
     <loc>https://template-source.github.io/NA/instructor/extra-external-c.html</loc>
   </url>
   <url>
+    <loc>https://template-source.github.io/NA/instructor/images.html</loc>
+  </url>
+  <url>
     <loc>https://template-source.github.io/NA/instructor/index.html</loc>
   </url>
   <url>
+    <loc>https://template-source.github.io/NA/instructor/instructor-notes.html</loc>
+  </url>
+  <url>
     <loc>https://template-source.github.io/NA/instructor/introduction.html</loc>
+  </url>
+  <url>
+    <loc>https://template-source.github.io/NA/instructor/key-points.html</loc>
   </url>
   <url>
     <loc>https://template-source.github.io/NA/instructor/map-and-reduce.html</loc>
@@ -76,7 +94,13 @@
     <loc>https://template-source.github.io/NA/instructor/workshops.html</loc>
   </url>
   <url>
+    <loc>https://template-source.github.io/NA/instructor-notes.html</loc>
+  </url>
+  <url>
     <loc>https://template-source.github.io/NA/introduction.html</loc>
+  </url>
+  <url>
+    <loc>https://template-source.github.io/NA/key-points.html</loc>
   </url>
   <url>
     <loc>https://template-source.github.io/NA/map-and-reduce.html</loc>
