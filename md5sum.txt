@@ -15,5 +15,5 @@
 "episodes/extra-asyncio.md" "a6c1c1a1b6a29c7488d39d5abc56fc1c" "site/built/extra-asyncio.md" "2025-03-31"
 "episodes/extra-external-c.md" "f9ef4ce4384da915cfdf442e5c762cf4" "site/built/extra-external-c.md" "2025-03-31"
 "instructors/instructor-notes.md" "9620cac923193deca04c1af8f4716147" "site/built/instructor-notes.md" "2025-03-31"
-"learners/setup.md" "6b2a45b7ea54fda515f4c92170e67c96" "site/built/setup.md" "2025-03-31"
+"learners/setup.md" "9e539b0437b26bee33a5129721d505a8" "site/built/setup.md" "2026-08-19"
 "profiles/learner-profiles.md" "60b93493cf1da06dfd63255d73854461" "site/built/learner-profiles.md" "2025-03-31"
