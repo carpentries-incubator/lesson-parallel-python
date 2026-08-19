@@ -11,10 +11,10 @@
 carpentry: 'incubator'
 
 # Overall title for pages.
-title: 'Lesson Title'
+title: 'Parallel Programming in Python'
 
 # Date the lesson was created (YYYY-MM-DD, this is empty by default)
-created: ~
+created: 2016-01-01
 
 # Comma-separated list of keywords for the lesson
 keywords: 'software, data, lesson, The Carpentries'
@@ -27,7 +27,7 @@ life_cycle: 'beta'
 license: 'CC-BY 4.0'
 
 # Link to the source repository for this lesson
-source: 'https://example.com/template-source'
+source: 'https://github.com/carpentries-incubator/lesson-parallel-python'
 
 # Default branch of your lesson
 branch: 'main'
