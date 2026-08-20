@@ -14,6 +14,10 @@ exercises: 30
 - Understand the difference between the `threading` and `multiprocessing` libraries in Python.
 :::
 
+We have previously mentioned the difference between **compiled** and **interpreted** languages, and explained that Python (although compiled to byte-code) is interpreted. In effect the Python interpreter creates an arena of computation with its own rules and boundaries, separate from "Please, let me run aucode on multiple processors now!". The arena of computation created by the Python interpreter always needs to be in a sane state, where every actor (i.e. your code) needs to agree on what is what. We will find that this can be a limiting factor to how effecient your code can run in parallel. This is why we need to distinguish between two major modes of parallelism in Python: **threads** and **processes**.
+
+Threads are ways of running operations in parallel within the same instance (i.e. computational arena) of the Python interpreter. When we talk about **multi-processing**, there will be multiple instances of the Python interpreter running in parallel. Both approaches have their own set of problems. If we run in multiple threads, we need to worry about **shared mutable state**, while with multiple processes, our main worry is the added complexity and run-time overhead of the **transfer of information** between processes.
+
 # Threading
 Another possibility of parallelizing code is to use the `threading` module.
 This module is built into Python. We will use it to estimate $\pi$
@@ -62,7 +66,7 @@ that can then be sent to the other process or, for example, stored to disk. This
 similar, and creates a large overhead.
 The alternative is to bring parts of our code outside Python.
 Numpy has many routines that are largely situated outside of the GIL.
-Trying out and profiling your application is the only way to know for sure. 
+Trying out and profiling your application is the only way to know for sure.
 
 There are several options to make your own routines not subjected to the GIL: fortunately, `numba` makes this very easy.
 
@@ -89,7 +93,7 @@ while the `nogil` argument disables the GIL during the execution of the function
 ## Use `nopython=True` or `@numba.njit`
 It is generally good practice to use `nopython=True` with `@numba.jit` to make sure the entire
 function is running without referencing Python objects, because that will dramatically slow
-down most Numba code. The decorator `@numba.njit` even has `nopython=True` by default. 
+down most Numba code. The decorator `@numba.njit` even has `nopython=True` by default.
 :::
 
 Now we can run the benchmark again, using `calc_pi_nogil` instead of `calc_pi`.
@@ -123,7 +127,7 @@ t2.join()
 :::
 
 # Multiprocessing
-Python also enables parallelisation with multiple processes 
+Python also enables parallelisation with multiple processes
 via the `multiprocessing` module. It implements an API that is
 superficially similar to threading:
 
