@@ -65,6 +65,7 @@ episodes:
 - threads-and-processes.md
 - delayed-evaluation.md
 - map-and-reduce.md
+- polars.md
 - exercise-with-fractals.md
 - extra-asyncio.md
 - extra-external-c.md
