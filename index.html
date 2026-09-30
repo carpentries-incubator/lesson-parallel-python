@@ -196,8 +196,7 @@
 
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
-        <ul><li><a href="#data-sets">Data Sets</a></li>
-<li><a href="#software-setup">Software Setup</a></li>
+        <ul><li><a href="#software-and-data-setup">Software and Data Setup</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
 
@@ -344,14 +343,21 @@ any links that you are not going to use.
  -->
 
 
-      <section id="setup"><p>Setup instructions live in this document. Please specify the tools
-and the data sets the Learner needs to have installed.</p>
-<section><h2 class="section-heading" id="data-sets">Data Sets<a class="anchor" aria-label="anchor" href="#data-sets"></a></h2>
-<hr class="half-width"><p>Clone the repository at <a href="https://github.com/esciencecenter-digital-skills/parallel-python-workshop" class="external-link">esciencecenter-digital-skills/parallel-python-workshop</a>.
-Follow software setup instructions there to setup the environment, and
-run the unit tests to see if your setup is working.</p>
-</section><section><h2 class="section-heading" id="software-setup">Software Setup<a class="anchor" aria-label="anchor" href="#software-setup"></a></h2>
-<hr class="half-width"><div id="details" class="callout discussion">
+      <section id="setup"><p>This is an intermediate level Python course. We expect familiarity
+with the command-line, and that you are comfortable working with a
+coding text editor (like for instance, <a href="https://code.visualstudio.com/" class="external-link">VS Code</a>).</p>
+<div class="section level3">
+<h3 id="data-sets">Data Sets<a class="anchor" aria-label="anchor" href="#data-sets"></a></h3>
+<p>The course uses the following data sets:</p>
+<ul><li>New York taxi data (<a href="https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page" class="external-link">description</a>).</li>
+</ul><p>The instructions below include downloading the data.</p>
+</div>
+<section><h2 class="section-heading" id="software-and-data-setup">Software and Data Setup<a class="anchor" aria-label="anchor" href="#software-and-data-setup"></a></h2>
+<hr class="half-width"><p>Clone the repository at <a href="https://github.com/esciencecenter-digital-skills/parallel-python-workshop" class="external-link">esciencecenter-digital-skills/parallel-python-workshop</a>.</p>
+<p>Follow software setup instructions there to set up the environment,
+download the data, and run the unit tests to see if your setup is
+working.</p>
+<div id="details" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
@@ -359,12 +365,9 @@ run the unit tests to see if your setup is working.</p>
 <div id="details" class="callout-inner">
 <h3 class="callout-title">Details</h3>
 <div class="callout-content">
-<p>This is an intermediate level Python course. We expect familiarity
-with the command-line, and that you are comfortable working with a
-coding text editor (like for instance, <a href="https://code.visualstudio.com/" class="external-link">VS Code</a>). We provide two
-choices for working environment: <strong>conda</strong> or
-<strong>poetry</strong>. If you are on <strong>Windows</strong> the
-prefered method is <strong>conda</strong>. On Linux or MacOS you should
+<p>We provide two choices for working environment: <strong>uv</strong>
+or <strong>conda</strong>. If you are on <strong>Windows</strong> the
+preferred method is <strong>conda</strong>. On Linux or MacOS you should
 be fine with either.</p>
 </div>
 </div>
@@ -373,27 +376,26 @@ be fine with either.</p>
 <div class="accordion-item">
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">
-  Conda
+  UV
   </h4>
 </button>
 <div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
-<p>From within the cloned repository root directory, run the following
-commands to create a conda environment from the environment.yml file and
-activate it</p>
+<p>UV is our recommended tool to manage the Python environment. Please
+follow the <a href="https://docs.astral.sh/uv/#installation" class="external-link">UV install
+instructions</a> if you haven’t already. Then, running from the
+directory where you cloned this repository, run the following
+command:</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1" aria-label="code-block-1-1"></a><span class="ex">$</span> conda env create <span class="at">-f</span> environment.yml <span class="at">--prefix</span> ./env</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1" aria-label="code-block-1-2"></a><span class="ex">$</span> conda activate ./env</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1" aria-label="code-block-1-1"></a><span class="ex">uv</span> sync</span></code></pre>
 </div>
-<p>Next, run pytest and see if it completes all tests without
-errors.</p>
-<div class="codewrapper sourceCode" id="cb2">
-<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="ex">$</span> pytest</span></code></pre>
-</div>
+<p>Then, download the New York taxi dataset:</p>
+<pre><code>uv run ny-taxi/download.py</code></pre>
+<p>Finally, run <code>pytest</code> and see if it completes all tests
+without errors.</p>
+<pre><code>uv run pytest</code></pre>
 </div>
 </div>
 </div>
@@ -402,12 +404,33 @@ errors.</p>
 <div class="accordion-item">
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">
-  Poetry
+  Conda
   </h4>
 </button>
 <div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
-
+<p>From within the cloned repository root directory, run the following
+commands to create a <code>conda</code> environment from the
+environment.yml file and activate it</p>
+<div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1" aria-label="code-block-4-1"></a><span class="ex">$</span> conda env create <span class="at">-f</span> environment.yml</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1" aria-label="code-block-4-2"></a><span class="ex">$</span> conda activate parallel-python</span></code></pre>
+</div>
+<p>Now, download the New York taxi data set:</p>
+<div class="codewrapper sourceCode" id="cb5">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1" aria-label="code-block-5-1"></a><span class="ex">$</span> python ny-taxi/download.py</span></code></pre>
+</div>
+<p>Finally, run <code>pytest</code> and see if it completes all tests
+without errors.</p>
+<div class="codewrapper sourceCode" id="cb6">
+<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1" aria-label="code-block-6-1"></a><span class="ex">$</span> pytest</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -467,8 +490,8 @@ any links that you are not going to use.
   "url": "https://carpentries-incubator.github.io/lesson-parallel-python/index.html",
   "identifier": "https://carpentries-incubator.github.io/lesson-parallel-python/index.html",
   "dateCreated": "2016-01-01",
-  "dateModified": "2026-09-29",
-  "datePublished": "2026-09-29"
+  "dateModified": "2026-09-30",
+  "datePublished": "2026-09-30"
 }
 
   </script><script>
