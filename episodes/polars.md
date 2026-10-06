@@ -9,7 +9,9 @@ exercises: 20
 :::
 
 :::objectives
-- ToDo
+- Weigh the advantages and disantvantages of different data formats.
+- Explain the concept of **Polars expressions** as another instance of lazy evaluation.
+- Explore the contents of a dataset using Polars.
 :::
 
 # The New York Taxi dataset
@@ -22,7 +24,26 @@ You can download the data yourself, or use the script provided in the `ny-taxi` 
 # Exploring the data
 We will use [Polars](https://pola.rs/), a package for data manipulation. It has many similarities with [Pandas](https://pandas.pydata.org/), however one main difference is that Polars is able to process data in parallel which is why it is used for this lesson.
 
-The data consist of one file per month in [Apache Parquet](https://parquet.apache.org/) format. Parquet is designed for efficient data storage and access. The actual data are stored in a column-oriented format, and compressed so they are not directly readable like text-oriented formats such as csv.
+The data consist of one file per month in [Apache Parquet](https://parquet.apache.org/) format. Parquet is designed for efficient data storage and access. The actual data are stored in a column-oriented format, and compressed so they are not directly readable like text-oriented formats such as CSV.
+
+:::discussion
+### Data formats
+
+Discuss the advantages and disadvantages of different data formats, at least CSV, Parquet, NPY (Numpy native data), and Pickle. What can you say with respect to performance, portability, flexibility and access to metadata?
+
+::::spoiler
+### Example table
+
+| Format | Performance | Portability | Flexibility | Metadata |
+|---|----|----|----|-----|
+| CSV | :x: | :heavy_check_mark: | :x: | :x: |
+| NPY | :heavy_check_mark: | :x: | :heavy_check_mark: | :x: |
+| Parquet | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| Pickle | :x: | :x: | :x: | :x: |
+| Add your favourite | ? | ? | ? | ? |
+
+::::
+:::
 
 The whole taxi dataset is quite large, so we start by having a look at the data of a single month:
 
@@ -30,7 +51,7 @@ The whole taxi dataset is quite large, so we start by having a look at the data 
 import polars
 
 data_jan = polars.read_parquet("ny-taxi/data/trip-data/yellow_tripdata_2025-01.parquet")
-print(data.shape)
+print(data_jan.shape)
 data_jan.head()
 ```
 
@@ -90,8 +111,7 @@ result.plot.line("day", "fare_max")
 
 This does not tell us much, there is an extreme outlier with a fare of over $800000 dollars! In real data, you should always check for outliers and issues in the data. For now we will simplify this by looking at the _median_ fare. Change the fare expression to use the median, and create a new plot:
 
-```
-python
+```python
 fare_median_expr = polars.col("fare_amount").median().alias("fare_median")
 result = data_jan.group_by(day_expr).agg(fare_median_expr).sort("day")
 result.plot.line("day", "fare_median")
@@ -124,7 +144,7 @@ Polars expressions can be combined to create much more complex workflows. As an 
 
 ```python
 trip_duration_expr = (polars.col("tpep_dropoff_datetime") - polars.col("tpep_pickup_datetime")).dt.total_minutes(fractional=True)
-data.select(trip_duration_expr)
+data_jan.select(trip_duration_expr)
 ```
 
 ```output
@@ -153,7 +173,7 @@ We can divide the fare mount by the trip duration expression to obtain our desir
 
 ```python
 price_per_min_expr = (polars.col("fare_amount") / trip_duration_expr).alias("price_per_min")
-result = data.select(price_per_min_expr)["price_per_min"]
+result = data_jan.select(price_per_min_expr)["price_per_min"]
 
 result.min(), result.mean(), result.max()
 ```
