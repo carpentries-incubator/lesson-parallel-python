@@ -325,8 +325,9 @@ def process(data):
 
     return data.group_by(day_expr).agg(ppm_finite_expr).sort("day")
 
-%timeit data = polars.read_parquet("ny-taxi/data/trip-data/yellow_tripdata_2025-01.parquet")
-%timeit process(data)
+data_jan = polars.read_parquet("ny-taxi/data/trip-data/yellow_tripdata_2025-01.parquet")
+%timeit polars.read_parquet("ny-taxi/data/trip-data/yellow_tripdata_2025-01.parquet")
+%timeit process(data_jan)
 ```
 
 ```output
@@ -369,7 +370,7 @@ result.collec()
 Let\'s time the lazy data loading and processing.
 
 ```python
-%timeit data_lazy = polars.scan_parquet("ny-taxi/data/trip-data/yellow_tripdata_2025-01.parquet")
+%timeit polars.scan_parquet("ny-taxi/data/trip-data/yellow_tripdata_2025-01.parquet")
 %timeit process(data_lazy).collect()
 ```
 
