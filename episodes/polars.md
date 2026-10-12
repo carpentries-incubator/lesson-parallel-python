@@ -266,7 +266,7 @@ There is a clear increase in price on the 5th, 12th, 19th, and 26th: These are s
 ::::
 :::
 
-# Parallelization in Polars
+## Parallelization in Polars
 Polars has been using multiple threads to process the data all along. The number of threads used by Polars can be obtains as follows.
 
 ```python
@@ -364,7 +364,7 @@ Instead of the output, we see Polar\'s plan on how to obtain it. This is very si
 
 ```python
 result = process(data_lazy)
-result.collec()
+result.collect()
 ```
 
 Let\'s time the lazy data loading and processing.
@@ -393,6 +393,7 @@ Use the memory profiler to investigate the difference in memory use between the 
 Important: due to some quirks in the memory profiler, it can only measure the memory usage properly _once_. If you need to run it again, first restart the Jupyter kernel. For similar reasons, ensure you _first_ profile the lazy processing version, and only then the eager one.
 
 Hint: Put the eager and lazy workflow in a function. Remember that the memory profiler can be used as follows to obtain data and create a plot:
+
 ```python
 from memory_profiler import memory_usage
 
@@ -441,9 +442,88 @@ The lazy mode uses ~4 times less memory than the eager mode.
 
 The lazy mode allows us to work on datasets that are too big in memory. Even if the data required for the computation is too big, it will stil work because Polars automatically chunks the data. Consider the same price per minute calculation, but aggregrated over each month of the year, instead of each day of January. We can again run the lazy and eager workflows. Warning: The eager mode requires a machine with >= 32 GB RAM. On machines with less memory, use e.g. just the first 6 months of data. This can be done by giving a list of input files to the `read_parquet` / `scan_parquet` functions, or by providing a wildcard like this: `"ny-taxi/data/trip-data/yellow_tripdata_2025-0[1-6].parquet"`.
 
+Here we provide three versions of a script running the memory profiler.
+
+::: tab
+
+### Only run Lazy
 
 ```python
+import polars
+from memory_profiler import memory_usage
+
 month_expr = polars.col("tpep_pickup_datetime").dt.month().alias("month")
+trip_duration_expr = (polars.col("tpep_dropoff_datetime") - polars.col("tpep_pickup_datetime")).dt.total_minutes(fractional=True)
+ppm_expr = polars.col("fare_amount") / trip_duration_expr
+ppm_finite_expr = ppm_expr.filter(ppm_expr.is_finite()).median().alias("price_per_min")
+
+data_files_glob = "ny-taxi/data/trip-data/*.parquet"
+
+def workflow_lazy_by_month():
+    data = polars.scan_parquet(data_files_glob)
+    return data.group_by(month_expr).agg(ppm_finite_expr).sort("month").collect()
+
+# Warning: Only inlude the full eager workflow on a machine with >= 32GB RAM
+def workflow_eager_by_month():
+    data = polars.read_parquet(data_files_glob)
+    return data.group_by(month_expr).agg(ppm_finite_expr).sort("month")
+
+memory_lazy = memory_usage(workflow_lazy_by_month, interval=.01)
+# memory_eager = memory_usage(workflow_eager_by_month, interval=.01)
+
+import matplotlib.pyplot as plt
+# plt.plot(memory_eager, label='eager')
+plt.plot(memory_lazy, label='lazy')
+plt.xlabel('Interval counter')
+plt.ylabel('Memory usage [MiB]')
+plt.legend()
+plt.show()
+```
+
+### I only have 16GB
+
+```python
+import polars
+from memory_profiler import memory_usage
+
+month_expr = polars.col("tpep_pickup_datetime").dt.month().alias("month")
+trip_duration_expr = (polars.col("tpep_dropoff_datetime") - polars.col("tpep_pickup_datetime")).dt.total_minutes(fractional=True)
+ppm_expr = polars.col("fare_amount") / trip_duration_expr
+ppm_finite_expr = ppm_expr.filter(ppm_expr.is_finite()).median().alias("price_per_min")
+
+data_files_glob = "ny-taxi/data/trip-data/yellow_tripdata_2025-0[1-6].parquet"
+
+def workflow_lazy_by_month():
+    data = polars.scan_parquet(data_files_glob)
+    return data.group_by(month_expr).agg(ppm_finite_expr).sort("month").collect()
+
+# Warning: Only inlude the full eager workflow on a machine with >= 32GB RAM
+def workflow_eager_by_month():
+    data = polars.read_parquet(data_files_glob)
+    return data.group_by(month_expr).agg(ppm_finite_expr).sort("month")
+
+memory_lazy = memory_usage(workflow_lazy_by_month, interval=.01)
+memory_eager = memory_usage(workflow_eager_by_month, interval=.01)
+
+import matplotlib.pyplot as plt
+plt.plot(memory_eager, label='eager')
+plt.plot(memory_lazy, label='lazy')
+plt.xlabel('Interval counter')
+plt.ylabel('Memory usage [MiB]')
+plt.legend()
+plt.show()
+```
+
+### I have &ge;32GB
+
+```python
+import polars
+from memory_profiler import memory_usage
+
+month_expr = polars.col("tpep_pickup_datetime").dt.month().alias("month")
+trip_duration_expr = (polars.col("tpep_dropoff_datetime") - polars.col("tpep_pickup_datetime")).dt.total_minutes(fractional=True)
+ppm_expr = polars.col("fare_amount") / trip_duration_expr
+ppm_finite_expr = ppm_expr.filter(ppm_expr.is_finite()).median().alias("price_per_min")
 
 def workflow_lazy_by_month():
     data = polars.scan_parquet("ny-taxi/data/trip-data/*.parquet")
@@ -465,6 +545,8 @@ plt.ylabel('Memory usage [MiB]')
 plt.legend()
 plt.show()
 ```
+
+:::
 
 ![](fig/ny-taxi-lazy-eager-full.svg)
 
