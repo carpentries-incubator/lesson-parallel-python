@@ -126,6 +126,26 @@ t2.join()
 ::::
 :::
 
+## Futures
+
+An easier way to get started with Python native threading, is to use the `ThreadPoolExecutor` from `concurrent.futures`. The following runs our `calc_pi_nogil` function in a parallel loop and also shows a nice progress bar.
+
+```python
+from concurrent.futures import ThreadPoolExecutor
+from itertools import repeat
+from tqdm import tqdm
+
+n_threads = 8
+n_samples_per_job = 10**7
+n_jobs = 100
+
+with ThreadPoolExecutor(max_workers=n_threads) as exec:
+    pi_f = exec.map(calc_pi_nogil, repeat(n_samples_per_job, n_jobs))
+    print(f"Pi: {sum(tqdm(pi_f, total=n_jobs)) / n_jobs}")
+```
+
+Python's `concurrent.futures` offer a quick way run a parallel loop, but should not be used for more complex problems.
+
 # Multiprocessing
 Python also enables parallelisation with multiple processes
 via the `multiprocessing` module. It implements an API that is
@@ -329,4 +349,3 @@ if __name__ == "__main__":
 - If your code disables the GIL, threading will be more efficient than multiprocessing.
 - If your code keeps the GIL, some of your code is still in Python and you are wasting precious compute time!
 :::
-
