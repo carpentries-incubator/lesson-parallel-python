@@ -204,7 +204,7 @@ Now, let\'s look at the price per minute grouped per day of the month as we did 
 
 ```python
 price_per_min_mean_expr = (polars.col("fare_amount") / trip_duration_expr).mean().alias("price_per_min")
-data_jan.group_by(day_expr).agg(price_per_min_expr).sort("day")
+data_jan.group_by(day_expr).agg(price_per_min_mean_expr).sort("day")
 ```
 
 ```output
