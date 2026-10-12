@@ -18,7 +18,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxslt1-dev \
     libssl-dev \
     libtiff-dev \
+    locales \
     && rm -rf /var/lib/apt/lists/*
+
+RUN sed -i '/en_GB.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen
 
 RUN printf '%s\n' \
     'local({' \
@@ -35,5 +39,8 @@ RUN printf '%s\n' \
     '})' \
     >> /root/.Rprofile
 
-
 RUN R --no-save -e 'install.packages(c("sandpaper", "varnish", "pegboard"))'
+
+WORKDIR /lesson
+ENV LANG en_GB.UTF-8
+CMD ["R", "--vanilla", "-e", "sandpaper::serve()"]
