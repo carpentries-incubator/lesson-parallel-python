@@ -85,6 +85,9 @@
     <loc>https://carpentries-incubator.github.io/lesson-parallel-python/instructor/map-and-reduce.html</loc>
   </url>
   <url>
+    <loc>https://carpentries-incubator.github.io/lesson-parallel-python/instructor/polars.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries-incubator.github.io/lesson-parallel-python/instructor/profiles.html</loc>
   </url>
   <url>
@@ -104,6 +107,9 @@
   </url>
   <url>
     <loc>https://carpentries-incubator.github.io/lesson-parallel-python/map-and-reduce.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries-incubator.github.io/lesson-parallel-python/polars.html</loc>
   </url>
   <url>
     <loc>https://carpentries-incubator.github.io/lesson-parallel-python/profiles.html</loc>

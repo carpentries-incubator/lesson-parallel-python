@@ -314,7 +314,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="exercise-with-fractals.html">7. Exercise with Fractals</a>
+        <a href="polars.html">7. Data Science with Polars</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -326,7 +326,7 @@
 <div class="accordion accordion-flush" id="accordionFlush9">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading9">
-        <a href="extra-asyncio.html">8. Asyncio</a>
+        <a href="exercise-with-fractals.html">8. Exercise with Fractals</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -338,7 +338,19 @@
 <div class="accordion accordion-flush" id="accordionFlush10">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading10">
-        <a href="extra-external-c.html">9. Calling External C and C++ Libraries from Python</a>
+        <a href="extra-asyncio.html">9. Asyncio</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush11">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading11">
+        <a href="extra-external-c.html">10. Calling External C and C++ Libraries from Python</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -982,7 +994,7 @@ consumption or efficiency.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Python’s <code>map</code> function is lazy. It won’t compute anything
 until you iterate it. Try <code>list(map(...))</code>. The third example
@@ -1063,7 +1075,7 @@ if needed):</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Chunking! Dask chunks the large array so that the data is never
 entirely in memory.</p>
@@ -2288,7 +2300,7 @@ evaluated? Run the workflow to check your answer.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -2410,7 +2422,7 @@ does <code>gather</code> enable me to do?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>It turns a list of promises into a promise of a list.</p>
 </div>
@@ -2468,7 +2480,7 @@ promise.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -2699,7 +2711,7 @@ executing it.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>The output will be <code>[True, True, True, False, True]</code>.</p>
 </div>
@@ -2757,7 +2769,7 @@ implement <code>pluck</code> if it was not there?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>The <code>pluck</code> method is a mapping. The input is supposed to
 be a bag of dictionaries.</p>
@@ -2791,7 +2803,7 @@ compute <span class="math inline">\(\pi\)</span>.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -2842,6 +2854,972 @@ problems with the GIL, but also entails a larger overhead.</p>
 <div class="callout-content">
 <ul>
 <li>Use abstractions to keep programs manageable.</li>
+</ul>
+</div>
+</div>
+</div>
+<!--
+Place links that you need to refer to multiple times across pages here. Delete
+any links that you are not going to use.
+ -->
+</div></section><section id="aio-polars"><p>Content from <a href="polars.html">Data Science with Polars</a></p>
+<hr>
+<p>Last updated on 2026-10-12 |
+
+        <a href="https://github.com/carpentries-incubator/lesson-parallel-python/edit/main/episodes/polars.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
+<p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 60 minutes</p>
+<div class="text-end">
+          <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
+        </div>
+<div class="overview card">
+<h2 class="card-header">Overview</h2>
+<div class="row g-0">
+<div class="col-md-4">
+<div class="card-body">
+<div class="inner">
+<h3 class="card-title">Questions</h3>
+<ul>
+<li>Dask’s <code>dataframes</code> interface looks nice, but can it go
+any faster?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="col-md-8">
+<div class="card-body">
+<div class="inner bordered">
+<h3 class="card-title">Objectives</h3>
+<ul>
+<li>Weigh the advantages and disantvantages of different data
+formats.</li>
+<li>Explain the concept of <strong>Polars expressions</strong> as
+another instance of lazy evaluation.</li>
+<li>Explore the contents of a dataset using Polars.</li>
+<li>Use Polars to process a dataset that doesn’t fit in memory.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section level1">
+<h1 id="the-new-york-taxi-dataset">The New York Taxi dataset<a class="anchor" aria-label="anchor" href="#the-new-york-taxi-dataset"></a>
+</h1>
+<p>This chapter focuses on working with data rather than parallel
+computation. For this we will make use of the <a href="https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page" class="external-link">New
+York Taxi dataset</a>, specifically the Yellow Taxi Trip Records of
+2025.</p>
+<div id="callout1" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div class="callout-inner">
+<div class="callout-content">
+<p>You can download the data yourself, or use the script provided in the
+<code>ny-taxi</code> folder of the <code>parallel-python-workshop</code>
+repository that you downloaded as part of the setup for this course.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section level1">
+<h1 id="exploring-the-data">Exploring the data<a class="anchor" aria-label="anchor" href="#exploring-the-data"></a>
+</h1>
+<p>We will use <a href="https://pola.rs/" class="external-link">Polars</a>, a package for data
+manipulation. It has many similarities with <a href="https://pandas.pydata.org/" class="external-link">Pandas</a>, however one main
+difference is that Polars is able to process data in parallel which is
+why it is used for this lesson.</p>
+<p>The data consist of one file per month in <a href="https://parquet.apache.org/" class="external-link">Apache Parquet</a> format. Parquet is
+designed for efficient data storage and access. The actual data are
+stored in a column-oriented format, and compressed so they are not
+directly readable like text-oriented formats such as CSV.</p>
+<div id="data-formats" class="callout discussion">
+<div class="callout-square">
+<i class="callout-icon" data-feather="message-circle"></i>
+</div>
+<span class="callout-header">Discussion</span>
+<div id="data-formats" class="callout-inner">
+<h3 class="callout-title">Data formats</h3>
+<div class="callout-content">
+<p>Discuss the advantages and disadvantages of different data formats,
+at least CSV, Parquet, NPY (Numpy native data), and Pickle. What can you
+say with respect to performance, portability, flexibility and access to
+metadata?</p>
+<div id="accordionSpoiler1" class="accordion spoiler-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
+  <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Example table </h3>
+</button>
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div class="accordion-body">
+<table class="table">
+<colgroup>
+<col width="15%">
+<col width="20%">
+<col width="20%">
+<col width="20%">
+<col width="25%">
+</colgroup>
+<thead><tr>
+<th>Format</th>
+<th>Performance</th>
+<th>Portability</th>
+<th>Flexibility</th>
+<th>Metadata</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>CSV</td>
+<td><span class="emoji" data-emoji="x">❌</span></td>
+<td><span class="emoji" data-emoji="heavy_check_mark">✔️</span></td>
+<td><span class="emoji" data-emoji="x">❌</span></td>
+<td><span class="emoji" data-emoji="x">❌</span></td>
+</tr>
+<tr>
+<td>NPY</td>
+<td><span class="emoji" data-emoji="heavy_check_mark">✔️</span></td>
+<td><span class="emoji" data-emoji="x">❌</span></td>
+<td><span class="emoji" data-emoji="heavy_check_mark">✔️</span></td>
+<td><span class="emoji" data-emoji="x">❌</span></td>
+</tr>
+<tr>
+<td>Parquet</td>
+<td><span class="emoji" data-emoji="heavy_check_mark">✔️</span></td>
+<td><span class="emoji" data-emoji="heavy_check_mark">✔️</span></td>
+<td><span class="emoji" data-emoji="heavy_check_mark">✔️</span></td>
+<td><span class="emoji" data-emoji="heavy_check_mark">✔️</span></td>
+</tr>
+<tr>
+<td>Pickle</td>
+<td><span class="emoji" data-emoji="x">❌</span></td>
+<td><span class="emoji" data-emoji="x">❌</span></td>
+<td><span class="emoji" data-emoji="x">❌</span></td>
+<td><span class="emoji" data-emoji="x">❌</span></td>
+</tr>
+<tr>
+<td>Add your favourite</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+<td>?</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>The whole taxi dataset is quite large, so we start by having a look
+at the data of a single month:</p>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" tabindex="-1" aria-label="code-block-1-1"></a><span class="im">import</span> polars</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1" aria-label="code-block-1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1" aria-label="code-block-1-3"></a>data_jan <span class="op">=</span> polars.read_parquet(<span class="st">"ny-taxi/data/trip-data/yellow_tripdata_2025-01.parquet"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1" aria-label="code-block-1-4"></a><span class="bu">print</span>(data_jan.shape)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1" aria-label="code-block-1-5"></a>data_jan.head()</span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>(3475226, 20)
+
+ shape: (5, 20)
+VendorID	tpep_pickup_datetime	tpep_dropoff_datetime	passenger_count	trip_distance	RatecodeID	store_and_fwd_flag	PULocationID	DOLocationID	payment_type	fare_amount	extra	mta_tax	tip_amount	tolls_amount	improvement_surcharge	total_amount	congestion_surcharge	Airport_fee	cbd_congestion_fee
+i32		datetime[us]		datetime[us]		i64		f64		i64		str			i32		i32		i64		f64		f64	f64	f64		f64		f64			f64		f64			f64		f64
+1		2025-01-01 00:18:38	2025-01-01 00:26:59	1		1.6		1		"N"			229		237		1		10.0		3.5	0.5	3.0		0.0		1.0			18.0		2.5			0.0		0.0
+1		2025-01-01 00:32:40	2025-01-01 00:35:13	1		0.5		1		"N"			236		237		1		5.1		3.5	0.5	2.02		0.0		1.0			12.12		2.5			0.0		0.0
+1		2025-01-01 00:44:04	2025-01-01 00:46:01	1		0.6		1		"N"			141		141		1		5.1		3.5	0.5	2.0		0.0		1.0			12.1		2.5			0.0		0.0
+2		2025-01-01 00:14:27	2025-01-01 00:20:01	3		0.52		1		"N"			244		244		2		7.2		1.0	0.5	0.0		0.0		1.0			9.7		0.0			0.0		0.0
+2		2025-01-01 00:21:34	2025-01-01 00:25:06	3		0.66		1		"N"			244		116		2		5.8		1.0	0.5	0.0		0.0		1.0			8.3		0.0			0.0		0.0</code></pre>
+</div>
+<p>There are quite a few columns to work with. For an explanation of the
+columns and their contents see "Data Dictionaries and MetaData" on the
+<a href="https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page" class="external-link">dataset
+webpage</a>.</p>
+</div>
+<div class="section level1">
+<h1 id="grouping-and-aggregating">Grouping and aggregating<a class="anchor" aria-label="anchor" href="#grouping-and-aggregating"></a>
+</h1>
+<p>Let's say we want to know the highest fare on each day of the month.
+There is no column that describes just the day of the month, only the
+exact pickup time as a datetime object. Polars provides tools to work
+with datetime objects. We will use these to create an
+<em>expression</em> that describes how to obtain the day of the month
+from the <code>tpep_pickup_datetime</code> column:</p>
+<div class="codewrapper sourceCode" id="cb3">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" tabindex="-1" aria-label="code-block-3-1"></a>day_expr <span class="op">=</span> polars.col(<span class="st">"tpep_pickup_datetime"</span>).dt.day().alias(<span class="st">"day"</span>)</span></code></pre>
+</div>
+<p>This tells Polars that:</p>
+<ol style="list-style-type: decimal">
+<li>There is a column named <code>tpep_pickup_datetime</code>
+</li>
+<li>This is a datetime object</li>
+<li>Extract the day</li>
+<li>Rename the new column to <code>day</code>
+</li>
+</ol>
+<div id="callout2" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div class="callout-inner">
+<div class="callout-content">
+<p>We did not access the actual dataset when creating this expression.
+We could even have done this before loading any data at all. An
+expression only describes <em>how</em> to process the data, without
+actually <em>executing</em> it. Polars also supports Pandas-like syntax
+(<code>data["column_name"]</code>), however this requires loading the
+dataset first.</p>
+</div>
+</div>
+</div>
+<p>Next, we will create another expession to obtain the highest fare
+from the <code>fare_amount</code> column:</p>
+<div class="codewrapper sourceCode" id="cb4">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" tabindex="-1" aria-label="code-block-4-1"></a>fare_max_expr <span class="op">=</span> polars.col(<span class="st">"fare_amount"</span>).<span class="bu">max</span>().alias(<span class="st">"fare_max"</span>)</span></code></pre>
+</div>
+<p>Finally, we can apply these expressions to the data. We first group
+the data by day of the month, then we aggregate on the max fare.
+Finally, we sort the output by the day of the month column:</p>
+<div class="codewrapper sourceCode" id="cb5">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" tabindex="-1" aria-label="code-block-5-1"></a>result <span class="op">=</span> data_jan.group_by(day_expr).agg(fare_max_expr).sort(<span class="st">"day"</span>)</span></code></pre>
+</div>
+<p>Polars has some builtin plotting tools. A line plot can be created
+like this:</p>
+<div class="codewrapper sourceCode" id="cb6">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" tabindex="-1" aria-label="code-block-6-1"></a>result.plot.line(<span class="st">"day"</span>, <span class="st">"fare_max"</span>)</span></code></pre>
+</div>
+<figure><img src="../fig/ny-taxi-max-fare.svg" class="figure mx-auto d-block"></figure><p>This does not tell us much, there is an extreme outlier with a fare
+of over $800000 dollars! In real data, you should always check for
+outliers and issues in the data. For now we will simplify this by
+looking at the <em>median</em> fare. Change the fare expression to use
+the median, and create a new plot:</p>
+<div class="codewrapper sourceCode" id="cb7">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a>fare_median_expr <span class="op">=</span> polars.col(<span class="st">"fare_amount"</span>).median().alias(<span class="st">"fare_median"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1" aria-label="code-block-7-2"></a>result <span class="op">=</span> data_jan.group_by(day_expr).agg(fare_median_expr).sort(<span class="st">"day"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1" aria-label="code-block-7-3"></a>result.plot.line(<span class="st">"day"</span>, <span class="st">"fare_median"</span>)</span></code></pre>
+</div>
+<figure><img src="../fig/ny-taxi-median-fare.svg" class="figure mx-auto d-block"></figure><div id="saving-plots" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="saving-plots" class="callout-inner">
+<h3 class="callout-title">Saving plots</h3>
+<div class="callout-content">
+<p>Polars uses the Altair package for plotting, see <a href="https://docs.pola.rs/api/python/stable/reference/dataframe/plot.html" class="external-link">here</a>.
+<code>df.plot.line("foo", "bar")</code> is an alias for
+<code>altair.Chart(df).mark_line(tooltip=True).encode(x="foo", y="bar").interactive()</code>.
+To save a figure, use the <code>.save("filename")</code> method in place
+of <code>.interactive()</code>.</p>
+</div>
+</div>
+</div>
+<div id="median-trip-distance-per-hour" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="median-trip-distance-per-hour" class="callout-inner">
+<h3 class="callout-title">Median trip distance per hour</h3>
+<div class="callout-content">
+<p>Create a plot showing the median trip distance at each hour of the
+day, averaged over the entire month.</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
+  <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
+</button>
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div class="accordion-body">
+<div class="codewrapper sourceCode" id="cb8">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" tabindex="-1" aria-label="code-block-8-1"></a>hour_expr <span class="op">=</span> polars.col(<span class="st">"tpep_pickup_datetime"</span>).dt.hour().alias(<span class="st">"hour"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1" aria-label="code-block-8-2"></a>dist_expr <span class="op">=</span> polars.col(<span class="st">"trip_distance"</span>).median().alias(<span class="st">"trip_distance_median"</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1" aria-label="code-block-8-3"></a>result <span class="op">=</span> data_jan.group_by(hour_expr).agg(dist_expr).sort(<span class="st">"hour"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1" aria-label="code-block-8-4"></a>result.plot.line(<span class="st">"hour"</span>, <span class="st">"trip_distance_median"</span>)</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section level1">
+<h1 id="arithmetic-and-filtering">Arithmetic and filtering<a class="anchor" aria-label="anchor" href="#arithmetic-and-filtering"></a>
+</h1>
+<p>Polars expressions can be combined to create much more complex
+workflows. As an example, we will compute the cost of a taxi trip in
+dollars per minute for all trips in the January data. The cost of the
+trip is already in the dataset, but we need to create our own expression
+to compute the trip duration in minutes. For this we combine the pickup
+and dropoff time columns.</p>
+<div class="codewrapper sourceCode" id="cb9">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" tabindex="-1" aria-label="code-block-9-1"></a>trip_duration_expr <span class="op">=</span> (polars.col(<span class="st">"tpep_dropoff_datetime"</span>) <span class="op">-</span> polars.col(<span class="st">"tpep_pickup_datetime"</span>)).dt.total_minutes(fractional<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1" aria-label="code-block-9-2"></a>data_jan.select(trip_duration_expr)</span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>shape: (3_475_226, 1)
+tpep_dropoff_datetime
+f64
+8.35
+2.55
+1.95
+5.566667
+3.533333
+...
+14.683333
+26.966667
+16.033333
+20.3
+10.75</code></pre>
+</div>
+<div id="column-naming" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div id="column-naming" class="callout-inner">
+<h3 class="callout-title">Column naming</h3>
+<div class="callout-content">
+<p>Note that if you do not specify an alias for an expression, the first
+column name in the expression is reused.</p>
+</div>
+</div>
+</div>
+<p>We can divide the fare mount by the trip duration expression to
+obtain our desired result, and look at some statistics.</p>
+<div class="codewrapper sourceCode" id="cb11">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" tabindex="-1" aria-label="code-block-11-1"></a>price_per_min_expr <span class="op">=</span> (polars.col(<span class="st">"fare_amount"</span>) <span class="op">/</span> trip_duration_expr).alias(<span class="st">"price_per_min"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1" aria-label="code-block-11-2"></a>result <span class="op">=</span> data_jan.select(price_per_min_expr)[<span class="st">"price_per_min"</span>]</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1" aria-label="code-block-11-3"></a></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1" aria-label="code-block-11-4"></a>result.<span class="bu">min</span>(), result.mean(), result.<span class="bu">max</span>()</span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>(-inf, nan, inf)</code></pre>
+</div>
+<div id="discussion2" class="callout discussion">
+<div class="callout-square">
+<i class="callout-icon" data-feather="message-circle"></i>
+</div>
+<span class="callout-header">Discussion</span>
+<div class="callout-inner">
+<div class="callout-content">
+<p>Where do these non-finite values come from? The trip duration is
+sometimes zero, and diving by zero results in an infinite price per
+minute. Some fare amounts are actually negative, resulting in minus
+infinity. The mean of an array including infinities cannot be computed
+and results in NaN (not a number).</p>
+</div>
+</div>
+</div>
+<p>We can introduce a filter to select only the finite values.</p>
+<div class="codewrapper sourceCode" id="cb13">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" tabindex="-1" aria-label="code-block-13-1"></a>result_finite <span class="op">=</span> result.<span class="bu">filter</span>(result.is_finite())</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1" aria-label="code-block-13-2"></a></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1" aria-label="code-block-13-3"></a>result_finite.<span class="bu">min</span>(), result_finite.mean(), result_finite.<span class="bu">max</span>()</span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>(-10500.0, 3.2354157502472707, 159883.72592592592)</code></pre>
+</div>
+<p>There are still clearly wrong values in the data. How you want to
+filter these out would depend a lot on your dataset and use case.</p>
+<p>Now, let's look at the price per minute grouped per day of the month
+as we did before. First, we build the expression in the same way as
+before to illustrate the problem.</p>
+<div class="codewrapper sourceCode" id="cb15">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" tabindex="-1" aria-label="code-block-15-1"></a>price_per_min_mean_expr <span class="op">=</span> (polars.col(<span class="st">"fare_amount"</span>) <span class="op">/</span> trip_duration_expr).mean().alias(<span class="st">"price_per_min"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1" aria-label="code-block-15-2"></a>data_jan.group_by(day_expr).agg(price_per_min_mean_expr).sort(<span class="st">"day"</span>)</span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>shape: (31, 2)
+day	price_per_min
+i8	f64
+1	NaN
+2	NaN
+3	NaN
+4	inf
+5	inf
+...	...
+27	NaN
+28	inf
+29	inf
+30	NaN
+31	NaN</code></pre>
+</div>
+<p>Here we once again see the NaN and inf values. These already appear
+when calling <code>mean</code>, if we would filter out the non-finite
+values as a last step, there would be nothing left. Instead, we have to
+filter by finite values <em>before</em> taking the mean. We can do this
+by building up our expression in multiple steps. We can also switch to
+the median again to avoid outliers.</p>
+<div class="codewrapper sourceCode" id="cb17">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" tabindex="-1" aria-label="code-block-17-1"></a>ppm_expr <span class="op">=</span> polars.col(<span class="st">"fare_amount"</span>) <span class="op">/</span> trip_duration_expr</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1" aria-label="code-block-17-2"></a>ppm_finite_expr <span class="op">=</span> ppm_expr.<span class="bu">filter</span>(ppm_expr.is_finite()).median().alias(<span class="st">"price_per_min"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1" aria-label="code-block-17-3"></a></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1" aria-label="code-block-17-4"></a>result <span class="op">=</span> data_jan.group_by(day_expr).agg(ppm_finite_expr).sort(<span class="st">"day"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1" aria-label="code-block-17-5"></a>result</span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>shape: (31, 2)
+day	price_per_min
+i8	f64
+1	1.208481
+2	1.156069
+3	1.149425
+4	1.167421
+5	1.258065
+...	...
+27	1.148936
+28	1.11194
+29	1.1133
+30	1.100917
+31	1.104876</code></pre>
+</div>
+<div id="analyze-the-pricing" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="analyze-the-pricing" class="callout-inner">
+<h3 class="callout-title">Analyze the pricing</h3>
+<div class="callout-content">
+<p>Make a plot. Investigate the pricing outliers: what is special about
+these days?</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
+  <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
+</button>
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div class="accordion-body">
+<div class="codewrapper sourceCode" id="cb19">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" tabindex="-1" aria-label="code-block-19-1"></a>result.plot.line(<span class="st">"day"</span>, <span class="st">"price_per_min"</span>)</span></code></pre>
+</div>
+<figure><img src="../fig/ny-taxi-price-per-min.svg" class="figure mx-auto d-block"></figure><p>There is a clear increase in price on the 5th, 12th, 19th, and 26th:
+These are sundays. There is another peak on the 20th, which happens to
+be the presidential inauguration day.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="parallelization-in-polars">Parallelization in Polars<a class="anchor" aria-label="anchor" href="#parallelization-in-polars"></a>
+</h2>
+<p>Polars has been using multiple threads to process the data all along.
+The number of threads used by Polars can be obtains as follows.</p>
+<div class="codewrapper sourceCode" id="cb20">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" tabindex="-1" aria-label="code-block-20-1"></a>polars.thread_pool_size()</span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code><span><span class="fl">10</span></span></code></pre>
+</div>
+<p>There is no function to the number of threads. Instead, this can be
+done through an <em>environment variable</em>. In Linux, this is
+typically done when launching a script through the terminal,
+e.g. <code>ENV_VAR=value python script_name.py</code>. In Python, you
+can also set them using the <code>os</code> module.</p>
+<div id="callout5" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<span class="callout-header">Callout</span>
+<div class="callout-inner">
+<div class="callout-content">
+<p>Polars reads its environment variable when you import it. Setting it
+when Polars is already imported has no effect. When using Jupyter Lab or
+similar, restart the kernel before executing the following code
+block.</p>
+</div>
+</div>
+</div>
+<div class="codewrapper sourceCode" id="cb22">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" tabindex="-1" aria-label="code-block-22-1"></a><span class="im">import</span> os</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1" aria-label="code-block-22-2"></a>os.environ[<span class="st">"POLARS_MAX_THREADS"</span>] <span class="op">=</span> <span class="st">"1"</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1" aria-label="code-block-22-3"></a><span class="im">import</span> polars</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1" aria-label="code-block-22-4"></a>polars.thread_pool_size()</span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code><span><span class="fl">1</span></span></code></pre>
+</div>
+<div id="discussion" class="callout discussion">
+<div class="callout-square">
+<i class="callout-icon" data-feather="message-circle"></i>
+</div>
+<span class="callout-header">Discussion</span>
+<div id="discussion" class="callout-inner">
+<h3 class="callout-title">Discussion</h3>
+<div class="callout-content">
+<p>How much speedup do you get on the price per minute calculation with
+parallelization enabled vs disabled? What happens when you manually
+increase the number of threads beyond the default? The speedup depends
+not only on the CPU but also I/O performance. At some point addin more
+threads does not give more performance.</p>
+</div>
+</div>
+</div>
+<p>Before continuing, set the thread pool size back to the default by
+restarting the jupyter kernel and importing polars <em>without</em>
+changing <code>os.environ</code>.</p>
+<div class="codewrapper sourceCode" id="cb24">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" tabindex="-1" aria-label="code-block-24-1"></a><span class="im">import</span> polars</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1" aria-label="code-block-24-2"></a>polars.thread_pool_size()</span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code><span><span class="fl">10</span></span></code></pre>
+</div>
+</div>
+</div>
+<div class="section level1">
+<h1 id="eager-and-lazy-processing">Eager and Lazy processing<a class="anchor" aria-label="anchor" href="#eager-and-lazy-processing"></a>
+</h1>
+<p>Polars supports <em>lazy</em> loading of data. In this mode, it only
+scans a dataset's metadata. This allows Polars to work on datasets that
+are very large, and might not even fit in your computer's memory. The
+opposite of lazy loading is <em>eager</em> loading, which is what we
+have done so far with the <code>read_parquet</code> function.</p>
+<p>Before we get further into lazy loading, we will do some profiling in
+eager mode so we can assess the difference with lazy mode later.</p>
+<div class="codewrapper sourceCode" id="cb26">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" tabindex="-1" aria-label="code-block-26-1"></a><span class="kw">def</span> process(data):</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1" aria-label="code-block-26-2"></a>    day_expr <span class="op">=</span> polars.col(<span class="st">"tpep_pickup_datetime"</span>).dt.day().alias(<span class="st">"day"</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1" aria-label="code-block-26-3"></a>    trip_duration_expr <span class="op">=</span> (polars.col(<span class="st">"tpep_dropoff_datetime"</span>) <span class="op">-</span> polars.col(<span class="st">"tpep_pickup_datetime"</span>)).dt.total_minutes(fractional<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1" aria-label="code-block-26-4"></a>    ppm_expr <span class="op">=</span> polars.col(<span class="st">"fare_amount"</span>) <span class="op">/</span> trip_duration_expr</span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1" aria-label="code-block-26-5"></a>    ppm_finite_expr <span class="op">=</span> ppm_expr.<span class="bu">filter</span>(ppm_expr.is_finite()).median().alias(<span class="st">"price_per_min"</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1" aria-label="code-block-26-6"></a></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1" aria-label="code-block-26-7"></a>    <span class="cf">return</span> data.group_by(day_expr).agg(ppm_finite_expr).sort(<span class="st">"day"</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1" aria-label="code-block-26-8"></a></span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1" aria-label="code-block-26-9"></a>data_jan <span class="op">=</span> polars.read_parquet(<span class="st">"ny-taxi/data/trip-data/yellow_tripdata_2025-01.parquet"</span>)</span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1" aria-label="code-block-26-10"></a><span class="op">%</span>timeit polars.read_parquet(<span class="st">"ny-taxi/data/trip-data/yellow_tripdata_2025-01.parquet"</span>)</span>
+<span id="cb26-11"><a href="#cb26-11" tabindex="-1" aria-label="code-block-26-11"></a><span class="op">%</span>timeit process(data_jan)</span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>57.1 ms ± 4.29 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+157 ms ± 10.5 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
+</div>
+<p>Now we can do the same for the lazy loading mode. Lazily loading data
+is done with the <code>scan_parquet</code> function.</p>
+<div class="codewrapper sourceCode" id="cb28">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" tabindex="-1" aria-label="code-block-28-1"></a>data_lazy <span class="op">=</span> polars.scan_parquet(<span class="st">"ny-taxi/data/trip-data/yellow_tripdata_2025-01.parquet"</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1" aria-label="code-block-28-2"></a>process(data_lazy)</span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
+
+SORT BY [col("day")]
+
+AGGREGATE[maintain_order: false]
+
+[[(col("fare_amount")) / ([(col("tpep_dropoff_datetime")) - (col("tpep_pickup_datetime"))].dt.total_minutes())].filter([(col("fare_amount")) / ([(col("tpep_dropoff_datetime")) - (col("tpep_pickup_datetime"))].dt.total_minutes())].is_finite()).median().alias("price_per_min")] BY [col("tpep_pickup_datetime").dt.day().alias("day")]
+
+FROM
+
+Parquet SCAN [ny-taxi/data/trip-data/yellow_tripdata_2025-01.parquet]
+
+PROJECT */20 COLUMNS
+
+ESTIMATED ROWS: 347522</code></pre>
+</div>
+<p>Instead of the output, we see Polar's plan on how to obtain it. This
+is very similar to how e.g. Dask.delayed functions. In order to execute
+the commands, the <code>collect</code> method is used.</p>
+<div class="codewrapper sourceCode" id="cb30">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" tabindex="-1" aria-label="code-block-30-1"></a>result <span class="op">=</span> process(data_lazy)</span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1" aria-label="code-block-30-2"></a>result.collect()</span></code></pre>
+</div>
+<p>Let's time the lazy data loading and processing.</p>
+<div class="codewrapper sourceCode" id="cb31">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" tabindex="-1" aria-label="code-block-31-1"></a><span class="op">%</span>timeit polars.scan_parquet(<span class="st">"ny-taxi/data/trip-data/yellow_tripdata_2025-01.parquet"</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1" aria-label="code-block-31-2"></a><span class="op">%</span>timeit process(data_lazy).collect()</span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>6.5 us ± 130 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)
+164 ms ± 12.5 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
+</div>
+<p>Not only is scanning the dataset near-instant, the actual processing
+is faster too, from a total of ~214 ms to ~164 ms.</p>
+<div id="discussion4" class="callout discussion">
+<div class="callout-square">
+<i class="callout-icon" data-feather="message-circle"></i>
+</div>
+<span class="callout-header">Discussion</span>
+<div class="callout-inner">
+<div class="callout-content">
+<p>Why is the overall processing time be lower than in the eager case?
+With lazy processing, only the data that are actually needed are loaded
+from disk. Most columns are not used in this example, and are never
+loaded.</p>
+</div>
+</div>
+</div>
+<div id="similarities-to-futures-and-dask" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="similarities-to-futures-and-dask" class="callout-inner">
+<h3 class="callout-title">Similarities to Futures and Dask</h3>
+<div class="callout-content">
+<p>We find again that using a library gives us ways to abstract and
+compose computations into promises. Can you describe the similarities
+(and differences!) with <code>concurrent.futures</code> and
+<code>dask.delayed</code>?.</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution3" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
+  <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
+</button>
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div class="accordion-body">
+<p>Futures are eager, whereas <code>dask.delayed</code> and Polars
+expressions are lazy. Pythons <code>concurrent.futures</code> also don’t
+let you chain tasks easily.</p>
+<table class="table">
+<thead><tr>
+<th>Concept</th>
+<th>Futures</th>
+<th>Dask</th>
+<th>Polars</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Work</td>
+<td>Functions</td>
+<td>Workflows</td>
+<td>Expressions</td>
+</tr>
+<tr>
+<td>Primitives</td>
+<td><code>.submit()</code></td>
+<td><code>@delayed</code></td>
+<td>Polars primitives</td>
+</tr>
+<tr>
+<td>Composition</td>
+<td>no</td>
+<td>using functions</td>
+<td>method chaining</td>
+</tr>
+<tr>
+<td>Application</td>
+<td><code>.result()</code></td>
+<td><code>.compute()</code></td>
+<td><code>.collect()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Dask and Polars share the idea that computations are composable and
+live in a separate universe created by using one of their primitives.
+This veil is then lifted once you call <code>.compute()</code> or
+<code>.collect()</code>.</p>
+<p>What sets Dask and Polars apart from standard concurrent loops is
+their context-aware execution pipeline. In concurrent.futures, passing a
+future to another function requires manual tracking and unpacking. Dask
+and Polars use an abstraction layer where the operations themselves
+understand their dependencies. They wrap your data in a continuous
+pipeline, meaning you can natively chain step B to step A, and the
+underlying framework automatically handles the scheduling, state
+transitions, and data flow behind the scenes.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="lazy-vs-eager-memory-use" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<span class="callout-header">Challenge</span>
+<div id="lazy-vs-eager-memory-use" class="callout-inner">
+<h3 class="callout-title">Lazy vs eager memory use</h3>
+<div class="callout-content">
+<p>Use the memory profiler to investigate the difference in memory use
+between the lazy and eager evaluation mode.</p>
+<p>Important: due to some quirks in the memory profiler, it can only
+measure the memory usage properly <em>once</em>. If you need to run it
+again, first restart the Jupyter kernel. For similar reasons, ensure you
+<em>first</em> profile the lazy processing version, and only then the
+eager one.</p>
+<p>Hint: Put the eager and lazy workflow in a function. Remember that
+the memory profiler can be used as follows to obtain data and create a
+plot:</p>
+<div class="codewrapper sourceCode" id="cb33">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" tabindex="-1" aria-label="code-block-33-1"></a><span class="im">from</span> memory_profiler <span class="im">import</span> memory_usage</span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1" aria-label="code-block-33-2"></a></span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1" aria-label="code-block-33-3"></a>memory <span class="op">=</span> memory_usage(function_name, interval<span class="op">=</span><span class="fl">.01</span>)</span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1" aria-label="code-block-33-4"></a>plt.plot(memory)</span>
+<span id="cb33-5"><a href="#cb33-5" tabindex="-1" aria-label="code-block-33-5"></a>plt.xlabel(<span class="st">'Interval counter'</span>)</span>
+<span id="cb33-6"><a href="#cb33-6" tabindex="-1" aria-label="code-block-33-6"></a>plt.ylabel(<span class="st">'Memory usage [MiB]'</span>)</span>
+<span id="cb33-7"><a href="#cb33-7" tabindex="-1" aria-label="code-block-33-7"></a>plt.show()</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="accordionSolution4" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
+  <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
+</button>
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div class="accordion-body">
+<div class="codewrapper sourceCode" id="cb34">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" tabindex="-1" aria-label="code-block-34-1"></a><span class="im">import</span> polars</span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1" aria-label="code-block-34-2"></a><span class="im">from</span> memory_profiler <span class="im">import</span> memory_usage</span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1" aria-label="code-block-34-3"></a></span>
+<span id="cb34-4"><a href="#cb34-4" tabindex="-1" aria-label="code-block-34-4"></a>trip_duration_expr <span class="op">=</span> (polars.col(<span class="st">"tpep_dropoff_datetime"</span>) <span class="op">-</span> polars.col(<span class="st">"tpep_pickup_datetime"</span>)).dt.total_minutes(fractional<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" tabindex="-1" aria-label="code-block-34-5"></a>day_expr <span class="op">=</span> polars.col(<span class="st">"tpep_pickup_datetime"</span>).dt.day().alias(<span class="st">"day"</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" tabindex="-1" aria-label="code-block-34-6"></a>ppm_expr <span class="op">=</span> polars.col(<span class="st">"fare_amount"</span>) <span class="op">/</span> trip_duration_expr</span>
+<span id="cb34-7"><a href="#cb34-7" tabindex="-1" aria-label="code-block-34-7"></a>ppm_finite_expr <span class="op">=</span> ppm_expr.<span class="bu">filter</span>(ppm_expr.is_finite()).median().alias(<span class="st">"price_per_min"</span>)</span>
+<span id="cb34-8"><a href="#cb34-8" tabindex="-1" aria-label="code-block-34-8"></a></span>
+<span id="cb34-9"><a href="#cb34-9" tabindex="-1" aria-label="code-block-34-9"></a><span class="kw">def</span> workflow_eager():</span>
+<span id="cb34-10"><a href="#cb34-10" tabindex="-1" aria-label="code-block-34-10"></a>    data <span class="op">=</span> polars.read_parquet(<span class="st">"ny-taxi/data/trip-data/yellow_tripdata_2025-01.parquet"</span>)</span>
+<span id="cb34-11"><a href="#cb34-11" tabindex="-1" aria-label="code-block-34-11"></a>    <span class="cf">return</span> data.group_by(day_expr).agg(ppm_finite_expr).sort(<span class="st">"day"</span>)</span>
+<span id="cb34-12"><a href="#cb34-12" tabindex="-1" aria-label="code-block-34-12"></a></span>
+<span id="cb34-13"><a href="#cb34-13" tabindex="-1" aria-label="code-block-34-13"></a><span class="kw">def</span> workflow_lazy():</span>
+<span id="cb34-14"><a href="#cb34-14" tabindex="-1" aria-label="code-block-34-14"></a>    data <span class="op">=</span> polars.scan_parquet(<span class="st">"ny-taxi/data/trip-data/yellow_tripdata_2025-01.parquet"</span>)</span>
+<span id="cb34-15"><a href="#cb34-15" tabindex="-1" aria-label="code-block-34-15"></a>    <span class="cf">return</span> data.group_by(day_expr).agg(ppm_finite_expr).sort(<span class="st">"day"</span>).collect()</span>
+<span id="cb34-16"><a href="#cb34-16" tabindex="-1" aria-label="code-block-34-16"></a></span>
+<span id="cb34-17"><a href="#cb34-17" tabindex="-1" aria-label="code-block-34-17"></a>memory_lazy <span class="op">=</span> memory_usage(workflow_lazy, interval<span class="op">=</span><span class="fl">.01</span>)</span>
+<span id="cb34-18"><a href="#cb34-18" tabindex="-1" aria-label="code-block-34-18"></a>memory_eager <span class="op">=</span> memory_usage(workflow_eager, interval<span class="op">=</span><span class="fl">.01</span>)</span>
+<span id="cb34-19"><a href="#cb34-19" tabindex="-1" aria-label="code-block-34-19"></a></span>
+<span id="cb34-20"><a href="#cb34-20" tabindex="-1" aria-label="code-block-34-20"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb34-21"><a href="#cb34-21" tabindex="-1" aria-label="code-block-34-21"></a>plt.plot(memory_eager, label<span class="op">=</span><span class="st">'eager'</span>)</span>
+<span id="cb34-22"><a href="#cb34-22" tabindex="-1" aria-label="code-block-34-22"></a>plt.plot(memory_lazy, label<span class="op">=</span><span class="st">'lazy'</span>)</span>
+<span id="cb34-23"><a href="#cb34-23" tabindex="-1" aria-label="code-block-34-23"></a>plt.xlabel(<span class="st">'Interval counter'</span>)</span>
+<span id="cb34-24"><a href="#cb34-24" tabindex="-1" aria-label="code-block-34-24"></a>plt.ylabel(<span class="st">'Memory usage [MiB]'</span>)</span>
+<span id="cb34-25"><a href="#cb34-25" tabindex="-1" aria-label="code-block-34-25"></a>plt.legend()</span>
+<span id="cb34-26"><a href="#cb34-26" tabindex="-1" aria-label="code-block-34-26"></a>plt.show()</span></code></pre>
+</div>
+<figure><img src="../fig/ny-taxi-lazy-eager.svg" class="figure mx-auto d-block"></figure><p>The lazy mode uses ~4 times less memory than the eager mode.</p>
+</div>
+</div>
+</div>
+</div>
+<p>The lazy mode allows us to work on datasets that are too big in
+memory. Even if the data required for the computation is too big, it
+will stil work because Polars automatically chunks the data. Consider
+the same price per minute calculation, but aggregrated over each month
+of the year, instead of each day of January. We can again run the lazy
+and eager workflows. Warning: The eager mode requires a machine with
+&gt;= 32 GB RAM. On machines with less memory, use e.g. just the first 6
+months of data. This can be done by giving a list of input files to the
+<code>read_parquet</code> / <code>scan_parquet</code> functions, or by
+providing a wildcard like this:
+<code>"ny-taxi/data/trip-data/yellow_tripdata_2025-0[1-6].parquet"</code>.</p>
+<p>Here we provide three versions of a script running the memory
+profiler.</p>
+<div class="tabs">
+<nav><div id="nav-tab-1" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-1-1" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-1" type="button" role="tab" aria-controls="nav-tabpanel-1-1" aria-selected="true">
+  <h3 class="tab-header" id="nav-tab-heading-1-1">
+  Only run Lazy
+  </h3>
+</button>
+<button class="nav-link" id="nav-tab-1-2" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-2" type="button" role="tab" aria-controls="nav-tabpanel-1-2" aria-selected="false">
+  <h3 class="tab-header" id="nav-tab-heading-1-2">
+  I only have 16GB
+  </h3>
+</button>
+<button class="nav-link" id="nav-tab-1-3" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-3" type="button" role="tab" aria-controls="nav-tabpanel-1-3" aria-selected="false">
+  <h3 class="tab-header" id="nav-tab-heading-1-3">
+  I have ≥32GB
+  </h3>
+</button>
+</div>
+</nav><div id="nav-tabContent-1" class="tab-content">
+<div id="nav-tabpanel-1-1" class="tab-pane show active" aria-labelledby="nav-tab-1-1" role="tabpanel">
+<div class="codewrapper sourceCode" id="cb35">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" tabindex="-1" aria-label="code-block-35-1"></a><span class="im">import</span> polars</span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1" aria-label="code-block-35-2"></a><span class="im">from</span> memory_profiler <span class="im">import</span> memory_usage</span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1" aria-label="code-block-35-3"></a></span>
+<span id="cb35-4"><a href="#cb35-4" tabindex="-1" aria-label="code-block-35-4"></a>month_expr <span class="op">=</span> polars.col(<span class="st">"tpep_pickup_datetime"</span>).dt.month().alias(<span class="st">"month"</span>)</span>
+<span id="cb35-5"><a href="#cb35-5" tabindex="-1" aria-label="code-block-35-5"></a>trip_duration_expr <span class="op">=</span> (polars.col(<span class="st">"tpep_dropoff_datetime"</span>) <span class="op">-</span> polars.col(<span class="st">"tpep_pickup_datetime"</span>)).dt.total_minutes(fractional<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb35-6"><a href="#cb35-6" tabindex="-1" aria-label="code-block-35-6"></a>ppm_expr <span class="op">=</span> polars.col(<span class="st">"fare_amount"</span>) <span class="op">/</span> trip_duration_expr</span>
+<span id="cb35-7"><a href="#cb35-7" tabindex="-1" aria-label="code-block-35-7"></a>ppm_finite_expr <span class="op">=</span> ppm_expr.<span class="bu">filter</span>(ppm_expr.is_finite()).median().alias(<span class="st">"price_per_min"</span>)</span>
+<span id="cb35-8"><a href="#cb35-8" tabindex="-1" aria-label="code-block-35-8"></a></span>
+<span id="cb35-9"><a href="#cb35-9" tabindex="-1" aria-label="code-block-35-9"></a>data_files_glob <span class="op">=</span> <span class="st">"ny-taxi/data/trip-data/*.parquet"</span></span>
+<span id="cb35-10"><a href="#cb35-10" tabindex="-1" aria-label="code-block-35-10"></a></span>
+<span id="cb35-11"><a href="#cb35-11" tabindex="-1" aria-label="code-block-35-11"></a><span class="kw">def</span> workflow_lazy_by_month():</span>
+<span id="cb35-12"><a href="#cb35-12" tabindex="-1" aria-label="code-block-35-12"></a>    data <span class="op">=</span> polars.scan_parquet(data_files_glob)</span>
+<span id="cb35-13"><a href="#cb35-13" tabindex="-1" aria-label="code-block-35-13"></a>    <span class="cf">return</span> data.group_by(month_expr).agg(ppm_finite_expr).sort(<span class="st">"month"</span>).collect()</span>
+<span id="cb35-14"><a href="#cb35-14" tabindex="-1" aria-label="code-block-35-14"></a></span>
+<span id="cb35-15"><a href="#cb35-15" tabindex="-1" aria-label="code-block-35-15"></a><span class="co"># Warning: Only inlude the full eager workflow on a machine with &gt;= 32GB RAM</span></span>
+<span id="cb35-16"><a href="#cb35-16" tabindex="-1" aria-label="code-block-35-16"></a><span class="kw">def</span> workflow_eager_by_month():</span>
+<span id="cb35-17"><a href="#cb35-17" tabindex="-1" aria-label="code-block-35-17"></a>    data <span class="op">=</span> polars.read_parquet(data_files_glob)</span>
+<span id="cb35-18"><a href="#cb35-18" tabindex="-1" aria-label="code-block-35-18"></a>    <span class="cf">return</span> data.group_by(month_expr).agg(ppm_finite_expr).sort(<span class="st">"month"</span>)</span>
+<span id="cb35-19"><a href="#cb35-19" tabindex="-1" aria-label="code-block-35-19"></a></span>
+<span id="cb35-20"><a href="#cb35-20" tabindex="-1" aria-label="code-block-35-20"></a>memory_lazy <span class="op">=</span> memory_usage(workflow_lazy_by_month, interval<span class="op">=</span><span class="fl">.01</span>)</span>
+<span id="cb35-21"><a href="#cb35-21" tabindex="-1" aria-label="code-block-35-21"></a><span class="co"># memory_eager = memory_usage(workflow_eager_by_month, interval=.01)</span></span>
+<span id="cb35-22"><a href="#cb35-22" tabindex="-1" aria-label="code-block-35-22"></a></span>
+<span id="cb35-23"><a href="#cb35-23" tabindex="-1" aria-label="code-block-35-23"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb35-24"><a href="#cb35-24" tabindex="-1" aria-label="code-block-35-24"></a><span class="co"># plt.plot(memory_eager, label='eager')</span></span>
+<span id="cb35-25"><a href="#cb35-25" tabindex="-1" aria-label="code-block-35-25"></a>plt.plot(memory_lazy, label<span class="op">=</span><span class="st">'lazy'</span>)</span>
+<span id="cb35-26"><a href="#cb35-26" tabindex="-1" aria-label="code-block-35-26"></a>plt.xlabel(<span class="st">'Interval counter'</span>)</span>
+<span id="cb35-27"><a href="#cb35-27" tabindex="-1" aria-label="code-block-35-27"></a>plt.ylabel(<span class="st">'Memory usage [MiB]'</span>)</span>
+<span id="cb35-28"><a href="#cb35-28" tabindex="-1" aria-label="code-block-35-28"></a>plt.legend()</span>
+<span id="cb35-29"><a href="#cb35-29" tabindex="-1" aria-label="code-block-35-29"></a>plt.show()</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-1-2" class="tab-pane" aria-labelledby="nav-tab-1-2" role="tabpanel">
+<div class="codewrapper sourceCode" id="cb36">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" tabindex="-1" aria-label="code-block-36-1"></a><span class="im">import</span> polars</span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1" aria-label="code-block-36-2"></a><span class="im">from</span> memory_profiler <span class="im">import</span> memory_usage</span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1" aria-label="code-block-36-3"></a></span>
+<span id="cb36-4"><a href="#cb36-4" tabindex="-1" aria-label="code-block-36-4"></a>month_expr <span class="op">=</span> polars.col(<span class="st">"tpep_pickup_datetime"</span>).dt.month().alias(<span class="st">"month"</span>)</span>
+<span id="cb36-5"><a href="#cb36-5" tabindex="-1" aria-label="code-block-36-5"></a>trip_duration_expr <span class="op">=</span> (polars.col(<span class="st">"tpep_dropoff_datetime"</span>) <span class="op">-</span> polars.col(<span class="st">"tpep_pickup_datetime"</span>)).dt.total_minutes(fractional<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" tabindex="-1" aria-label="code-block-36-6"></a>ppm_expr <span class="op">=</span> polars.col(<span class="st">"fare_amount"</span>) <span class="op">/</span> trip_duration_expr</span>
+<span id="cb36-7"><a href="#cb36-7" tabindex="-1" aria-label="code-block-36-7"></a>ppm_finite_expr <span class="op">=</span> ppm_expr.<span class="bu">filter</span>(ppm_expr.is_finite()).median().alias(<span class="st">"price_per_min"</span>)</span>
+<span id="cb36-8"><a href="#cb36-8" tabindex="-1" aria-label="code-block-36-8"></a></span>
+<span id="cb36-9"><a href="#cb36-9" tabindex="-1" aria-label="code-block-36-9"></a>data_files_glob <span class="op">=</span> <span class="st">"ny-taxi/data/trip-data/yellow_tripdata_2025-0[1-6].parquet"</span></span>
+<span id="cb36-10"><a href="#cb36-10" tabindex="-1" aria-label="code-block-36-10"></a></span>
+<span id="cb36-11"><a href="#cb36-11" tabindex="-1" aria-label="code-block-36-11"></a><span class="kw">def</span> workflow_lazy_by_month():</span>
+<span id="cb36-12"><a href="#cb36-12" tabindex="-1" aria-label="code-block-36-12"></a>    data <span class="op">=</span> polars.scan_parquet(data_files_glob)</span>
+<span id="cb36-13"><a href="#cb36-13" tabindex="-1" aria-label="code-block-36-13"></a>    <span class="cf">return</span> data.group_by(month_expr).agg(ppm_finite_expr).sort(<span class="st">"month"</span>).collect()</span>
+<span id="cb36-14"><a href="#cb36-14" tabindex="-1" aria-label="code-block-36-14"></a></span>
+<span id="cb36-15"><a href="#cb36-15" tabindex="-1" aria-label="code-block-36-15"></a><span class="co"># Warning: Only inlude the full eager workflow on a machine with &gt;= 32GB RAM</span></span>
+<span id="cb36-16"><a href="#cb36-16" tabindex="-1" aria-label="code-block-36-16"></a><span class="kw">def</span> workflow_eager_by_month():</span>
+<span id="cb36-17"><a href="#cb36-17" tabindex="-1" aria-label="code-block-36-17"></a>    data <span class="op">=</span> polars.read_parquet(data_files_glob)</span>
+<span id="cb36-18"><a href="#cb36-18" tabindex="-1" aria-label="code-block-36-18"></a>    <span class="cf">return</span> data.group_by(month_expr).agg(ppm_finite_expr).sort(<span class="st">"month"</span>)</span>
+<span id="cb36-19"><a href="#cb36-19" tabindex="-1" aria-label="code-block-36-19"></a></span>
+<span id="cb36-20"><a href="#cb36-20" tabindex="-1" aria-label="code-block-36-20"></a>memory_lazy <span class="op">=</span> memory_usage(workflow_lazy_by_month, interval<span class="op">=</span><span class="fl">.01</span>)</span>
+<span id="cb36-21"><a href="#cb36-21" tabindex="-1" aria-label="code-block-36-21"></a>memory_eager <span class="op">=</span> memory_usage(workflow_eager_by_month, interval<span class="op">=</span><span class="fl">.01</span>)</span>
+<span id="cb36-22"><a href="#cb36-22" tabindex="-1" aria-label="code-block-36-22"></a></span>
+<span id="cb36-23"><a href="#cb36-23" tabindex="-1" aria-label="code-block-36-23"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb36-24"><a href="#cb36-24" tabindex="-1" aria-label="code-block-36-24"></a>plt.plot(memory_eager, label<span class="op">=</span><span class="st">'eager'</span>)</span>
+<span id="cb36-25"><a href="#cb36-25" tabindex="-1" aria-label="code-block-36-25"></a>plt.plot(memory_lazy, label<span class="op">=</span><span class="st">'lazy'</span>)</span>
+<span id="cb36-26"><a href="#cb36-26" tabindex="-1" aria-label="code-block-36-26"></a>plt.xlabel(<span class="st">'Interval counter'</span>)</span>
+<span id="cb36-27"><a href="#cb36-27" tabindex="-1" aria-label="code-block-36-27"></a>plt.ylabel(<span class="st">'Memory usage [MiB]'</span>)</span>
+<span id="cb36-28"><a href="#cb36-28" tabindex="-1" aria-label="code-block-36-28"></a>plt.legend()</span>
+<span id="cb36-29"><a href="#cb36-29" tabindex="-1" aria-label="code-block-36-29"></a>plt.show()</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-1-3" class="tab-pane" aria-labelledby="nav-tab-1-3" role="tabpanel">
+<div class="codewrapper sourceCode" id="cb37">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" tabindex="-1" aria-label="code-block-37-1"></a><span class="im">import</span> polars</span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1" aria-label="code-block-37-2"></a><span class="im">from</span> memory_profiler <span class="im">import</span> memory_usage</span>
+<span id="cb37-3"><a href="#cb37-3" tabindex="-1" aria-label="code-block-37-3"></a></span>
+<span id="cb37-4"><a href="#cb37-4" tabindex="-1" aria-label="code-block-37-4"></a>month_expr <span class="op">=</span> polars.col(<span class="st">"tpep_pickup_datetime"</span>).dt.month().alias(<span class="st">"month"</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" tabindex="-1" aria-label="code-block-37-5"></a>trip_duration_expr <span class="op">=</span> (polars.col(<span class="st">"tpep_dropoff_datetime"</span>) <span class="op">-</span> polars.col(<span class="st">"tpep_pickup_datetime"</span>)).dt.total_minutes(fractional<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb37-6"><a href="#cb37-6" tabindex="-1" aria-label="code-block-37-6"></a>ppm_expr <span class="op">=</span> polars.col(<span class="st">"fare_amount"</span>) <span class="op">/</span> trip_duration_expr</span>
+<span id="cb37-7"><a href="#cb37-7" tabindex="-1" aria-label="code-block-37-7"></a>ppm_finite_expr <span class="op">=</span> ppm_expr.<span class="bu">filter</span>(ppm_expr.is_finite()).median().alias(<span class="st">"price_per_min"</span>)</span>
+<span id="cb37-8"><a href="#cb37-8" tabindex="-1" aria-label="code-block-37-8"></a></span>
+<span id="cb37-9"><a href="#cb37-9" tabindex="-1" aria-label="code-block-37-9"></a><span class="kw">def</span> workflow_lazy_by_month():</span>
+<span id="cb37-10"><a href="#cb37-10" tabindex="-1" aria-label="code-block-37-10"></a>    data <span class="op">=</span> polars.scan_parquet(<span class="st">"ny-taxi/data/trip-data/*.parquet"</span>)</span>
+<span id="cb37-11"><a href="#cb37-11" tabindex="-1" aria-label="code-block-37-11"></a>    <span class="cf">return</span> data.group_by(month_expr).agg(ppm_finite_expr).sort(<span class="st">"month"</span>).collect()</span>
+<span id="cb37-12"><a href="#cb37-12" tabindex="-1" aria-label="code-block-37-12"></a></span>
+<span id="cb37-13"><a href="#cb37-13" tabindex="-1" aria-label="code-block-37-13"></a><span class="co"># Warning: Only inlude the full eager workflow on a machine with &gt;= 32GB RAM</span></span>
+<span id="cb37-14"><a href="#cb37-14" tabindex="-1" aria-label="code-block-37-14"></a><span class="kw">def</span> workflow_eager_by_month():</span>
+<span id="cb37-15"><a href="#cb37-15" tabindex="-1" aria-label="code-block-37-15"></a>    data <span class="op">=</span> polars.read_parquet(<span class="st">"ny-taxi/data/trip-data/*.parquet"</span>)</span>
+<span id="cb37-16"><a href="#cb37-16" tabindex="-1" aria-label="code-block-37-16"></a>    <span class="cf">return</span> data.group_by(month_expr).agg(ppm_finite_expr).sort(<span class="st">"month"</span>)</span>
+<span id="cb37-17"><a href="#cb37-17" tabindex="-1" aria-label="code-block-37-17"></a></span>
+<span id="cb37-18"><a href="#cb37-18" tabindex="-1" aria-label="code-block-37-18"></a>memory_lazy <span class="op">=</span> memory_usage(workflow_lazy_by_month, interval<span class="op">=</span><span class="fl">.01</span>)</span>
+<span id="cb37-19"><a href="#cb37-19" tabindex="-1" aria-label="code-block-37-19"></a>memory_eager <span class="op">=</span> memory_usage(workflow_eager_by_month, interval<span class="op">=</span><span class="fl">.01</span>)</span>
+<span id="cb37-20"><a href="#cb37-20" tabindex="-1" aria-label="code-block-37-20"></a></span>
+<span id="cb37-21"><a href="#cb37-21" tabindex="-1" aria-label="code-block-37-21"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb37-22"><a href="#cb37-22" tabindex="-1" aria-label="code-block-37-22"></a>plt.plot(memory_eager, label<span class="op">=</span><span class="st">'eager'</span>)</span>
+<span id="cb37-23"><a href="#cb37-23" tabindex="-1" aria-label="code-block-37-23"></a>plt.plot(memory_lazy, label<span class="op">=</span><span class="st">'lazy'</span>)</span>
+<span id="cb37-24"><a href="#cb37-24" tabindex="-1" aria-label="code-block-37-24"></a>plt.xlabel(<span class="st">'Interval counter'</span>)</span>
+<span id="cb37-25"><a href="#cb37-25" tabindex="-1" aria-label="code-block-37-25"></a>plt.ylabel(<span class="st">'Memory usage [MiB]'</span>)</span>
+<span id="cb37-26"><a href="#cb37-26" tabindex="-1" aria-label="code-block-37-26"></a>plt.legend()</span>
+<span id="cb37-27"><a href="#cb37-27" tabindex="-1" aria-label="code-block-37-27"></a>plt.show()</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<figure><img src="../fig/ny-taxi-lazy-eager-full.svg" class="figure mx-auto d-block"></figure><div id="keypoints1" class="callout keypoints">
+<div class="callout-square">
+<i class="callout-icon" data-feather="key"></i>
+</div>
+<span class="callout-header">Key Points</span>
+<div class="callout-inner">
+<div class="callout-content">
+<ul>
+<li>Polars is similar in usage to Pandas, but usually offers superior
+performance</li>
+<li>I/O performance can be an important factor in paralellization</li>
 </ul>
 </div>
 </div>
@@ -4381,7 +5359,7 @@ blog by Christopher Swenson</a>.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Insert a line <code>if i%3==0:</code> in the code for
 <code>sum_range_numba</code> and rename it to
@@ -4666,8 +5644,8 @@ any links that you are not going to use.
   "url": "https://carpentries-incubator.github.io/lesson-parallel-python/instructor/aio.html",
   "identifier": "https://carpentries-incubator.github.io/lesson-parallel-python/instructor/aio.html",
   "dateCreated": "2016-01-01",
-  "dateModified": "2026-10-06",
-  "datePublished": "2026-10-06"
+  "dateModified": "2026-10-12",
+  "datePublished": "2026-10-12"
 }
 
   </script><script>
