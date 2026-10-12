@@ -5,13 +5,14 @@ exercises: 20
 ---
 
 :::questions
-- ToDo
+- Dask's `dataframes` interface looks nice, but can it go any faster?
 :::
 
 :::objectives
 - Weigh the advantages and disantvantages of different data formats.
 - Explain the concept of **Polars expressions** as another instance of lazy evaluation.
 - Explore the contents of a dataset using Polars.
+- Use Polars to process a dataset that doesn't fit in memory.
 :::
 
 # The New York Taxi dataset
