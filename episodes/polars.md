@@ -385,9 +385,28 @@ Not only is scanning the dataset near-instant, the actual processing is faster t
 Why is the overall processing time be lower than in the eager case? With lazy processing, only the data that are actually needed are loaded from disk. Most columns are not used in this example, and are never loaded.
 :::
 
+:::challenge
+### Similarities to Futures and Dask
+We find again that using a library gives us ways to abstract and compose computations into promises. Can you describe the similarities (and differences!) with `concurrent.futures` and `dask.delayed`?.
+
+::::solution
+Futures are eager, whereas `dask.delayed` and Polars expressions are lazy. Pythons `concurrent.futures` also don't let you chain tasks easily.
+
+| Concept | Futures | Dask | Polars |
+|---|---|---|---|
+| Work | Functions | Workflows | Expressions |
+| Primitives | `.submit()` | `@delayed` | Polars primitives |
+| Composition | no | using functions | method chaining |
+| Application | `.result()` | `.compute()` | `.collect()` |
+
+Dask and Polars share the idea that computations are composable and live in a separate universe created by using one of their primitives. This veil is then lifted once you call `.compute()` or `.collect()`.
+
+What sets Dask and Polars apart from standard concurrent loops is their context-aware execution pipeline. In concurrent.futures, passing a future to another function requires manual tracking and unpacking. Dask and Polars use an abstraction layer where the operations themselves understand their dependencies. They wrap your data in a continuous pipeline, meaning you can natively chain step B to step A, and the underlying framework automatically handles the scheduling, state transitions, and data flow behind the scenes.
+::::
+:::
 
 :::challenge
-## Lazy vs eager memory use
+### Lazy vs eager memory use
 Use the memory profiler to investigate the difference in memory use between the lazy and eager evaluation mode.
 
 Important: due to some quirks in the memory profiler, it can only measure the memory usage properly _once_. If you need to run it again, first restart the Jupyter kernel. For similar reasons, ensure you _first_ profile the lazy processing version, and only then the eager one.
