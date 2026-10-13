@@ -369,7 +369,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Threads And Processes</h1>
-        <p>Last updated on 2025-03-31 |
+        <p>Last updated on 2026-10-13 |
 
         <a href="https://github.com/carpentries-incubator/lesson-parallel-python/edit/main/episodes/threads-and-processes.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -405,6 +405,27 @@
 </div>
 </div>
 </div>
+<p>We have previously mentioned the difference between
+<strong>compiled</strong> and <strong>interpreted</strong> languages,
+and explained that Python (although compiled to byte-code) is
+interpreted. In effect the Python interpreter creates an arena of
+computation with its own rules and boundaries, separate from “Please,
+let me run aucode on multiple processors now!”. The arena of computation
+created by the Python interpreter always needs to be in a sane state,
+where every actor (i.e. your code) needs to agree on what is what. We
+will find that this can be a limiting factor to how effecient your code
+can run in parallel. This is why we need to distinguish between two
+major modes of parallelism in Python: <strong>threads</strong> and
+<strong>processes</strong>.</p>
+<p>Threads are ways of running operations in parallel within the same
+instance (i.e. computational arena) of the Python interpreter. When we
+talk about <strong>multi-processing</strong>, there will be multiple
+instances of the Python interpreter running in parallel. Both approaches
+have their own set of problems. If we run in multiple threads, we need
+to worry about <strong>shared mutable state</strong>, while with
+multiple processes, our main worry is the added complexity and run-time
+overhead of the <strong>transfer of information</strong> between
+processes.</p>
 <div class="section level1">
 <h1 id="threading">Threading<a class="anchor" aria-label="anchor" href="#threading"></a></h1>
 <p>Another possibility of parallelizing code is to use the
@@ -561,42 +582,67 @@ generated arrays using <code>numpy.sort</code> in parallel.</p>
 </div>
 </div>
 </div>
+<div class="section level2">
+<h2 id="futures">Futures<a class="anchor" aria-label="anchor" href="#futures"></a></h2>
+<p>An easier way to get started with Python native threading, is to use
+the <code>ThreadPoolExecutor</code> from
+<code>concurrent.futures</code>. The following runs our
+<code>calc_pi_nogil</code> function in a parallel loop and also shows a
+nice progress bar.</p>
+<div class="codewrapper sourceCode" id="cb6">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" tabindex="-1" aria-label="code-block-6-1"></a><span class="im">from</span> concurrent.futures <span class="im">import</span> ThreadPoolExecutor</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1" aria-label="code-block-6-2"></a><span class="im">from</span> itertools <span class="im">import</span> repeat</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1" aria-label="code-block-6-3"></a><span class="im">from</span> tqdm <span class="im">import</span> tqdm</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1" aria-label="code-block-6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1" aria-label="code-block-6-5"></a>n_threads <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1" aria-label="code-block-6-6"></a>n_samples_per_job <span class="op">=</span> <span class="dv">10</span><span class="op">**</span><span class="dv">7</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1" aria-label="code-block-6-7"></a>n_jobs <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1" aria-label="code-block-6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1" aria-label="code-block-6-9"></a><span class="cf">with</span> ThreadPoolExecutor(max_workers<span class="op">=</span>n_threads) <span class="im">as</span> <span class="bu">exec</span>:</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1" aria-label="code-block-6-10"></a>    pi_f <span class="op">=</span> <span class="bu">exec</span>.<span class="bu">map</span>(calc_pi_nogil, repeat(n_samples_per_job, n_jobs))</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1" aria-label="code-block-6-11"></a>    <span class="bu">print</span>(<span class="ss">f"Pi: </span><span class="sc">{</span><span class="bu">sum</span>(tqdm(pi_f, total<span class="op">=</span>n_jobs)) <span class="op">/</span> n_jobs<span class="sc">}</span><span class="ss">"</span>)</span></code></pre>
+</div>
+<p>Python’s <code>concurrent.futures</code> offer a quick way run a
+parallel loop, but should not be used for more complex problems.</p>
+</div>
 </div>
 <div class="section level1">
 <h1 id="multiprocessing">Multiprocessing<a class="anchor" aria-label="anchor" href="#multiprocessing"></a></h1>
 <p>Python also enables parallelisation with multiple processes via the
 <code>multiprocessing</code> module. It implements an API that is
 superficially similar to threading:</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" tabindex="-1" aria-label="code-block-6-1"></a><span class="im">import</span> random</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1" aria-label="code-block-6-2"></a><span class="im">from</span> multiprocessing <span class="im">import</span> Process</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1" aria-label="code-block-6-3"></a></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1" aria-label="code-block-6-4"></a><span class="co"># function in plain Python</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1" aria-label="code-block-6-5"></a><span class="kw">def</span> calc_pi(N):</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1" aria-label="code-block-6-6"></a>    M <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1" aria-label="code-block-6-7"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1" aria-label="code-block-6-8"></a>        <span class="co"># Simulate impact coordinates</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1" aria-label="code-block-6-9"></a>        x <span class="op">=</span> random.uniform(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1" aria-label="code-block-6-10"></a>        y <span class="op">=</span> random.uniform(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1" aria-label="code-block-6-11"></a></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1" aria-label="code-block-6-12"></a>        <span class="co"># True if impact happens inside the circle</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1" aria-label="code-block-6-13"></a>        <span class="cf">if</span> x<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> y<span class="op">**</span><span class="dv">2</span> <span class="op">&lt;</span> <span class="fl">1.0</span>:</span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1" aria-label="code-block-6-14"></a>            M <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1" aria-label="code-block-6-15"></a>    <span class="cf">return</span> (<span class="dv">4</span> <span class="op">*</span> M <span class="op">/</span> N, N)  <span class="co"># result, iterations</span></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1" aria-label="code-block-6-16"></a></span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1" aria-label="code-block-6-17"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">'__main__'</span>:</span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1" aria-label="code-block-6-18"></a></span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1" aria-label="code-block-6-19"></a>    n <span class="op">=</span> <span class="dv">10</span><span class="op">**</span><span class="dv">7</span></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1" aria-label="code-block-6-20"></a>    p1 <span class="op">=</span> Process(target<span class="op">=</span>calc_pi, args<span class="op">=</span>(n,))</span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1" aria-label="code-block-6-21"></a>    p2 <span class="op">=</span> Process(target<span class="op">=</span>calc_pi, args<span class="op">=</span>(n,))</span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1" aria-label="code-block-6-22"></a></span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1" aria-label="code-block-6-23"></a>    p1.start()</span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1" aria-label="code-block-6-24"></a>    p2.start()</span>
-<span id="cb6-25"><a href="#cb6-25" tabindex="-1" aria-label="code-block-6-25"></a></span>
-<span id="cb6-26"><a href="#cb6-26" tabindex="-1" aria-label="code-block-6-26"></a>    p1.join()</span>
-<span id="cb6-27"><a href="#cb6-27" tabindex="-1" aria-label="code-block-6-27"></a>    p2.join()</span></code></pre>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a><span class="im">import</span> random</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1" aria-label="code-block-7-2"></a><span class="im">from</span> multiprocessing <span class="im">import</span> Process</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1" aria-label="code-block-7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1" aria-label="code-block-7-4"></a><span class="co"># function in plain Python</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1" aria-label="code-block-7-5"></a><span class="kw">def</span> calc_pi(N):</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1" aria-label="code-block-7-6"></a>    M <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1" aria-label="code-block-7-7"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1" aria-label="code-block-7-8"></a>        <span class="co"># Simulate impact coordinates</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1" aria-label="code-block-7-9"></a>        x <span class="op">=</span> random.uniform(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1" aria-label="code-block-7-10"></a>        y <span class="op">=</span> random.uniform(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1" aria-label="code-block-7-11"></a></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1" aria-label="code-block-7-12"></a>        <span class="co"># True if impact happens inside the circle</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1" aria-label="code-block-7-13"></a>        <span class="cf">if</span> x<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> y<span class="op">**</span><span class="dv">2</span> <span class="op">&lt;</span> <span class="fl">1.0</span>:</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1" aria-label="code-block-7-14"></a>            M <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1" aria-label="code-block-7-15"></a>    <span class="cf">return</span> (<span class="dv">4</span> <span class="op">*</span> M <span class="op">/</span> N, N)  <span class="co"># result, iterations</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1" aria-label="code-block-7-16"></a></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1" aria-label="code-block-7-17"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">'__main__'</span>:</span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1" aria-label="code-block-7-18"></a></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1" aria-label="code-block-7-19"></a>    n <span class="op">=</span> <span class="dv">10</span><span class="op">**</span><span class="dv">7</span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1" aria-label="code-block-7-20"></a>    p1 <span class="op">=</span> Process(target<span class="op">=</span>calc_pi, args<span class="op">=</span>(n,))</span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1" aria-label="code-block-7-21"></a>    p2 <span class="op">=</span> Process(target<span class="op">=</span>calc_pi, args<span class="op">=</span>(n,))</span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1" aria-label="code-block-7-22"></a></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1" aria-label="code-block-7-23"></a>    p1.start()</span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1" aria-label="code-block-7-24"></a>    p2.start()</span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1" aria-label="code-block-7-25"></a></span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1" aria-label="code-block-7-26"></a>    p1.join()</span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1" aria-label="code-block-7-27"></a>    p2.join()</span></code></pre>
 </div>
 <p>However, under the hood, processes are very different from threads. A
 new process is created by generating a fresh “copy” of the Python
@@ -621,11 +667,11 @@ process.</p>
 <div class="callout-content">
 <p>A module should be safely importable. Any code that creates
 processes, pools, or managers should be protected with:</p>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" tabindex="-1" aria-label="code-block-7-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1" aria-label="code-block-7-2"></a>    ...</span></code></pre>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" tabindex="-1" aria-label="code-block-8-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1" aria-label="code-block-8-2"></a>    ...</span></code></pre>
 </div>
 </div>
 </div>
@@ -634,18 +680,18 @@ processes, pools, or managers should be protected with:</p>
 acquire a <code>context</code> and work within that context. This
 ensures that your application does not interfere with any other
 processes that might be in use:</p>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" tabindex="-1" aria-label="code-block-8-1"></a><span class="im">import</span> multiprocessing <span class="im">as</span> mp</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1" aria-label="code-block-8-2"></a></span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1" aria-label="code-block-8-3"></a><span class="kw">def</span> calc_pi(N):</span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1" aria-label="code-block-8-4"></a>    ...</span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1" aria-label="code-block-8-5"></a></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1" aria-label="code-block-8-6"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">'__main__'</span>:</span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1" aria-label="code-block-8-7"></a>    <span class="co"># mp.set_start_method("spawn")  # if not using a context</span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1" aria-label="code-block-8-8"></a>    ctx <span class="op">=</span> mp.get_context(<span class="st">"spawn"</span>)</span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1" aria-label="code-block-8-9"></a>	...</span></code></pre>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" tabindex="-1" aria-label="code-block-9-1"></a><span class="im">import</span> multiprocessing <span class="im">as</span> mp</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1" aria-label="code-block-9-2"></a></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1" aria-label="code-block-9-3"></a><span class="kw">def</span> calc_pi(N):</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1" aria-label="code-block-9-4"></a>    ...</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1" aria-label="code-block-9-5"></a></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1" aria-label="code-block-9-6"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">'__main__'</span>:</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1" aria-label="code-block-9-7"></a>    <span class="co"># mp.set_start_method("spawn")  # if not using a context</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1" aria-label="code-block-9-8"></a>    ctx <span class="op">=</span> mp.get_context(<span class="st">"spawn"</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1" aria-label="code-block-9-9"></a>	...</span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="passing-objects-and-sharing-state">Passing objects and sharing state<a class="anchor" aria-label="anchor" href="#passing-objects-and-sharing-state"></a></h2>
@@ -674,43 +720,43 @@ use a queue to return the result</h3>
 </button>
 <div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" tabindex="-1" aria-label="code-block-9-1"></a><span class="im">import</span> multiprocessing <span class="im">as</span> mp</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1" aria-label="code-block-9-2"></a><span class="im">import</span> random</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1" aria-label="code-block-9-3"></a></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1" aria-label="code-block-9-4"></a></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1" aria-label="code-block-9-5"></a><span class="kw">def</span> calc_pi(N, que):</span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1" aria-label="code-block-9-6"></a>    M <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1" aria-label="code-block-9-7"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1" aria-label="code-block-9-8"></a>        <span class="co"># Simulate impact coordinates</span></span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1" aria-label="code-block-9-9"></a>        x <span class="op">=</span> random.uniform(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1" aria-label="code-block-9-10"></a>        y <span class="op">=</span> random.uniform(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1" aria-label="code-block-9-11"></a></span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1" aria-label="code-block-9-12"></a>        <span class="co"># True if impact happens inside the circle</span></span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1" aria-label="code-block-9-13"></a>        <span class="cf">if</span> x<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> y<span class="op">**</span><span class="dv">2</span> <span class="op">&lt;</span> <span class="fl">1.0</span>:</span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1" aria-label="code-block-9-14"></a>            M <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1" aria-label="code-block-9-15"></a>    que.put((<span class="dv">4</span> <span class="op">*</span> M <span class="op">/</span> N, N))  <span class="co"># result, iterations</span></span>
-<span id="cb9-16"><a href="#cb9-16" tabindex="-1" aria-label="code-block-9-16"></a></span>
-<span id="cb9-17"><a href="#cb9-17" tabindex="-1" aria-label="code-block-9-17"></a></span>
-<span id="cb9-18"><a href="#cb9-18" tabindex="-1" aria-label="code-block-9-18"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
-<span id="cb9-19"><a href="#cb9-19" tabindex="-1" aria-label="code-block-9-19"></a></span>
-<span id="cb9-20"><a href="#cb9-20" tabindex="-1" aria-label="code-block-9-20"></a>    ctx <span class="op">=</span> mp.get_context(<span class="st">"spawn"</span>)</span>
-<span id="cb9-21"><a href="#cb9-21" tabindex="-1" aria-label="code-block-9-21"></a>    que <span class="op">=</span> ctx.Queue()</span>
-<span id="cb9-22"><a href="#cb9-22" tabindex="-1" aria-label="code-block-9-22"></a></span>
-<span id="cb9-23"><a href="#cb9-23" tabindex="-1" aria-label="code-block-9-23"></a>    n <span class="op">=</span> <span class="dv">10</span><span class="op">**</span><span class="dv">7</span></span>
-<span id="cb9-24"><a href="#cb9-24" tabindex="-1" aria-label="code-block-9-24"></a>    p1 <span class="op">=</span> ctx.Process(target<span class="op">=</span>calc_pi, args<span class="op">=</span>(n, que))</span>
-<span id="cb9-25"><a href="#cb9-25" tabindex="-1" aria-label="code-block-9-25"></a>    p2 <span class="op">=</span> ctx.Process(target<span class="op">=</span>calc_pi, args<span class="op">=</span>(n, que))</span>
-<span id="cb9-26"><a href="#cb9-26" tabindex="-1" aria-label="code-block-9-26"></a></span>
-<span id="cb9-27"><a href="#cb9-27" tabindex="-1" aria-label="code-block-9-27"></a>    p1.start()</span>
-<span id="cb9-28"><a href="#cb9-28" tabindex="-1" aria-label="code-block-9-28"></a>    p2.start()</span>
-<span id="cb9-29"><a href="#cb9-29" tabindex="-1" aria-label="code-block-9-29"></a></span>
-<span id="cb9-30"><a href="#cb9-30" tabindex="-1" aria-label="code-block-9-30"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
-<span id="cb9-31"><a href="#cb9-31" tabindex="-1" aria-label="code-block-9-31"></a>        <span class="bu">print</span>(que.get())</span>
-<span id="cb9-32"><a href="#cb9-32" tabindex="-1" aria-label="code-block-9-32"></a></span>
-<span id="cb9-33"><a href="#cb9-33" tabindex="-1" aria-label="code-block-9-33"></a>    p1.join()</span>
-<span id="cb9-34"><a href="#cb9-34" tabindex="-1" aria-label="code-block-9-34"></a>    p2.join()</span></code></pre>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" tabindex="-1" aria-label="code-block-10-1"></a><span class="im">import</span> multiprocessing <span class="im">as</span> mp</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1" aria-label="code-block-10-2"></a><span class="im">import</span> random</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1" aria-label="code-block-10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1" aria-label="code-block-10-4"></a></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1" aria-label="code-block-10-5"></a><span class="kw">def</span> calc_pi(N, que):</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1" aria-label="code-block-10-6"></a>    M <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1" aria-label="code-block-10-7"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1" aria-label="code-block-10-8"></a>        <span class="co"># Simulate impact coordinates</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1" aria-label="code-block-10-9"></a>        x <span class="op">=</span> random.uniform(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1" aria-label="code-block-10-10"></a>        y <span class="op">=</span> random.uniform(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1" aria-label="code-block-10-11"></a></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1" aria-label="code-block-10-12"></a>        <span class="co"># True if impact happens inside the circle</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1" aria-label="code-block-10-13"></a>        <span class="cf">if</span> x<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> y<span class="op">**</span><span class="dv">2</span> <span class="op">&lt;</span> <span class="fl">1.0</span>:</span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1" aria-label="code-block-10-14"></a>            M <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1" aria-label="code-block-10-15"></a>    que.put((<span class="dv">4</span> <span class="op">*</span> M <span class="op">/</span> N, N))  <span class="co"># result, iterations</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1" aria-label="code-block-10-16"></a></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1" aria-label="code-block-10-17"></a></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1" aria-label="code-block-10-18"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1" aria-label="code-block-10-19"></a></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1" aria-label="code-block-10-20"></a>    ctx <span class="op">=</span> mp.get_context(<span class="st">"spawn"</span>)</span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1" aria-label="code-block-10-21"></a>    que <span class="op">=</span> ctx.Queue()</span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1" aria-label="code-block-10-22"></a></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1" aria-label="code-block-10-23"></a>    n <span class="op">=</span> <span class="dv">10</span><span class="op">**</span><span class="dv">7</span></span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1" aria-label="code-block-10-24"></a>    p1 <span class="op">=</span> ctx.Process(target<span class="op">=</span>calc_pi, args<span class="op">=</span>(n, que))</span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1" aria-label="code-block-10-25"></a>    p2 <span class="op">=</span> ctx.Process(target<span class="op">=</span>calc_pi, args<span class="op">=</span>(n, que))</span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1" aria-label="code-block-10-26"></a></span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1" aria-label="code-block-10-27"></a>    p1.start()</span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1" aria-label="code-block-10-28"></a>    p2.start()</span>
+<span id="cb10-29"><a href="#cb10-29" tabindex="-1" aria-label="code-block-10-29"></a></span>
+<span id="cb10-30"><a href="#cb10-30" tabindex="-1" aria-label="code-block-10-30"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
+<span id="cb10-31"><a href="#cb10-31" tabindex="-1" aria-label="code-block-10-31"></a>        <span class="bu">print</span>(que.get())</span>
+<span id="cb10-32"><a href="#cb10-32" tabindex="-1" aria-label="code-block-10-32"></a></span>
+<span id="cb10-33"><a href="#cb10-33" tabindex="-1" aria-label="code-block-10-33"></a>    p1.join()</span>
+<span id="cb10-34"><a href="#cb10-34" tabindex="-1" aria-label="code-block-10-34"></a>    p2.join()</span></code></pre>
 </div>
 </div>
 </div>
@@ -730,11 +776,11 @@ way is to use shared memory via <code>Value</code> or
 <code>.value</code> property. Note, you should explicitly acquire a lock
 before performing an operation that is not atomic (which cannot be done
 in one step, e.g., using the <code>+=</code> operator):</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" tabindex="-1" aria-label="code-block-10-1"></a><span class="cf">with</span> var.get_lock():</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1" aria-label="code-block-10-2"></a>    var.value <span class="op">+=</span> <span class="dv">1</span></span></code></pre>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" tabindex="-1" aria-label="code-block-11-1"></a><span class="cf">with</span> var.get_lock():</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1" aria-label="code-block-11-2"></a>    var.value <span class="op">+=</span> <span class="dv">1</span></span></code></pre>
 </div>
 <p>Since Python 3.8, you can also create a Numpy array backed by a
 shared memory buffer (<a href="https://docs.python.org/3/library/multiprocessing.shared_memory.html" class="external-link"><code>multiprocessing.shared_memory.SharedMemory</code></a>),
@@ -781,38 +827,38 @@ with that claim.</li>
 </button>
 <div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" tabindex="-1" aria-label="code-block-11-1"></a><span class="im">from</span> itertools <span class="im">import</span> repeat</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1" aria-label="code-block-11-2"></a><span class="im">import</span> multiprocessing <span class="im">as</span> mp</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1" aria-label="code-block-11-3"></a><span class="im">import</span> random</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1" aria-label="code-block-11-4"></a><span class="im">from</span> timeit <span class="im">import</span> timeit</span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1" aria-label="code-block-11-5"></a></span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1" aria-label="code-block-11-6"></a></span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1" aria-label="code-block-11-7"></a><span class="kw">def</span> calc_pi(N):</span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1" aria-label="code-block-11-8"></a>    M <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1" aria-label="code-block-11-9"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1" aria-label="code-block-11-10"></a>        <span class="co"># Simulate impact coordinates</span></span>
-<span id="cb11-11"><a href="#cb11-11" tabindex="-1" aria-label="code-block-11-11"></a>        x <span class="op">=</span> random.uniform(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb11-12"><a href="#cb11-12" tabindex="-1" aria-label="code-block-11-12"></a>        y <span class="op">=</span> random.uniform(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
-<span id="cb11-13"><a href="#cb11-13" tabindex="-1" aria-label="code-block-11-13"></a></span>
-<span id="cb11-14"><a href="#cb11-14" tabindex="-1" aria-label="code-block-11-14"></a>        <span class="co"># True if impact happens inside the circle</span></span>
-<span id="cb11-15"><a href="#cb11-15" tabindex="-1" aria-label="code-block-11-15"></a>        <span class="cf">if</span> x<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> y<span class="op">**</span><span class="dv">2</span> <span class="op">&lt;</span> <span class="fl">1.0</span>:</span>
-<span id="cb11-16"><a href="#cb11-16" tabindex="-1" aria-label="code-block-11-16"></a>            M <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb11-17"><a href="#cb11-17" tabindex="-1" aria-label="code-block-11-17"></a>    <span class="cf">return</span> (<span class="dv">4</span> <span class="op">*</span> M <span class="op">/</span> N, N)  <span class="co"># result, iterations</span></span>
-<span id="cb11-18"><a href="#cb11-18" tabindex="-1" aria-label="code-block-11-18"></a></span>
-<span id="cb11-19"><a href="#cb11-19" tabindex="-1" aria-label="code-block-11-19"></a></span>
-<span id="cb11-20"><a href="#cb11-20" tabindex="-1" aria-label="code-block-11-20"></a><span class="kw">def</span> submit(ctx, N):</span>
-<span id="cb11-21"><a href="#cb11-21" tabindex="-1" aria-label="code-block-11-21"></a>    <span class="cf">with</span> ctx.Pool() <span class="im">as</span> pool:</span>
-<span id="cb11-22"><a href="#cb11-22" tabindex="-1" aria-label="code-block-11-22"></a>        pool.starmap(calc_pi, repeat((N,), <span class="dv">4</span>))</span>
-<span id="cb11-23"><a href="#cb11-23" tabindex="-1" aria-label="code-block-11-23"></a></span>
-<span id="cb11-24"><a href="#cb11-24" tabindex="-1" aria-label="code-block-11-24"></a></span>
-<span id="cb11-25"><a href="#cb11-25" tabindex="-1" aria-label="code-block-11-25"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
-<span id="cb11-26"><a href="#cb11-26" tabindex="-1" aria-label="code-block-11-26"></a>    ctx <span class="op">=</span> mp.get_context(<span class="st">"spawn"</span>)</span>
-<span id="cb11-27"><a href="#cb11-27" tabindex="-1" aria-label="code-block-11-27"></a>    <span class="cf">for</span> i <span class="kw">in</span> (<span class="dv">1_000</span>, <span class="dv">100_000</span>, <span class="dv">10_000_000</span>):</span>
-<span id="cb11-28"><a href="#cb11-28" tabindex="-1" aria-label="code-block-11-28"></a>        res <span class="op">=</span> timeit(<span class="kw">lambda</span>: submit(ctx, i), number<span class="op">=</span><span class="dv">5</span>)</span>
-<span id="cb11-29"><a href="#cb11-29" tabindex="-1" aria-label="code-block-11-29"></a>        <span class="bu">print</span>(i, res)</span></code></pre>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" tabindex="-1" aria-label="code-block-12-1"></a><span class="im">from</span> itertools <span class="im">import</span> repeat</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1" aria-label="code-block-12-2"></a><span class="im">import</span> multiprocessing <span class="im">as</span> mp</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1" aria-label="code-block-12-3"></a><span class="im">import</span> random</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1" aria-label="code-block-12-4"></a><span class="im">from</span> timeit <span class="im">import</span> timeit</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1" aria-label="code-block-12-5"></a></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1" aria-label="code-block-12-6"></a></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1" aria-label="code-block-12-7"></a><span class="kw">def</span> calc_pi(N):</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1" aria-label="code-block-12-8"></a>    M <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1" aria-label="code-block-12-9"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1" aria-label="code-block-12-10"></a>        <span class="co"># Simulate impact coordinates</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1" aria-label="code-block-12-11"></a>        x <span class="op">=</span> random.uniform(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1" aria-label="code-block-12-12"></a>        y <span class="op">=</span> random.uniform(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1" aria-label="code-block-12-13"></a></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1" aria-label="code-block-12-14"></a>        <span class="co"># True if impact happens inside the circle</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1" aria-label="code-block-12-15"></a>        <span class="cf">if</span> x<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> y<span class="op">**</span><span class="dv">2</span> <span class="op">&lt;</span> <span class="fl">1.0</span>:</span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1" aria-label="code-block-12-16"></a>            M <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1" aria-label="code-block-12-17"></a>    <span class="cf">return</span> (<span class="dv">4</span> <span class="op">*</span> M <span class="op">/</span> N, N)  <span class="co"># result, iterations</span></span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1" aria-label="code-block-12-18"></a></span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1" aria-label="code-block-12-19"></a></span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1" aria-label="code-block-12-20"></a><span class="kw">def</span> submit(ctx, N):</span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1" aria-label="code-block-12-21"></a>    <span class="cf">with</span> ctx.Pool() <span class="im">as</span> pool:</span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1" aria-label="code-block-12-22"></a>        pool.starmap(calc_pi, repeat((N,), <span class="dv">4</span>))</span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1" aria-label="code-block-12-23"></a></span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1" aria-label="code-block-12-24"></a></span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1" aria-label="code-block-12-25"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb12-26"><a href="#cb12-26" tabindex="-1" aria-label="code-block-12-26"></a>    ctx <span class="op">=</span> mp.get_context(<span class="st">"spawn"</span>)</span>
+<span id="cb12-27"><a href="#cb12-27" tabindex="-1" aria-label="code-block-12-27"></a>    <span class="cf">for</span> i <span class="kw">in</span> (<span class="dv">1_000</span>, <span class="dv">100_000</span>, <span class="dv">10_000_000</span>):</span>
+<span id="cb12-28"><a href="#cb12-28" tabindex="-1" aria-label="code-block-12-28"></a>        res <span class="op">=</span> timeit(<span class="kw">lambda</span>: submit(ctx, i), number<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb12-29"><a href="#cb12-29" tabindex="-1" aria-label="code-block-12-29"></a>        <span class="bu">print</span>(i, res)</span></code></pre>
 </div>
 </div>
 </div>
@@ -903,7 +949,7 @@ any links that you are not going to use.
   "url": "https://carpentries-incubator.github.io/lesson-parallel-python/threads-and-processes.html",
   "identifier": "https://carpentries-incubator.github.io/lesson-parallel-python/threads-and-processes.html",
   "dateCreated": "2016-01-01",
-  "dateModified": "2025-03-31",
+  "dateModified": "2026-10-13",
   "datePublished": "2026-10-13"
 }
 
