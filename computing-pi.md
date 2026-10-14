@@ -86,9 +86,9 @@ import numpy as np
 def calc_pi_numpy(N):
     # Simulate impact coordinates
     pts = np.random.uniform(-1, 1, (2, N))
-    # Count number of impacts inside the circle
-    M = np.count_nonzero((pts**2).sum(axis=0) < 1)
-    return 4 * M / N
+    # Count fraction of impacts inside the circle (i.e. M / N)
+    frac_in_circle = np.mean((pts**2).sum(axis=0) < 1)
+    return 4 * frac_in_circle
 ```
 
 This is a **vectorized** version of the original algorithm. A problem written in a vectorized form becomes amenable to **data parallelization**, where each single operation is replicated over a large collection of data. Data parallelism contrasts with **task parallelism**, where different independent procedures are performed in parallel. An example of task parallelism is the pea-soup recipe in the introduction.
